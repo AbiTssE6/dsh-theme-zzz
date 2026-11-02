@@ -1,0 +1,16 @@
+# scratch captures and one-off patch scripts (regenerable, hundreds of MB)
+.scratch/
+.backups/
+
+# screenshot galleries and design-mock images (reference only, not source)
+示例截图/
+素材/字体/
+素材/参考/*.png
+
+# unrelated analysis material
+思维导图/
+
+node_modules/
+*.log
+Thumbs.db
+desktop.ini

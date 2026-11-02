@@ -1,0 +1,41 @@
+{
+  "name": "dsh-theme-zzz",
+  "version": "0.1.0",
+  "description": "Zenless Zone Zero style theme for DeepSeek Harness: palette, typography, brand chrome.",
+  "type": "module",
+  "private": false,
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "fonts/*",
+    "assets/*",
+    "FONT-LICENSES.md",
+    "CHANGES.md",
+    "tools",
+    "AUDIT-2026-11-02.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  }
+}
