@@ -55,7 +55,7 @@ window.__ModuleLoader__.load({
     /* the last cool-grey in the palette: #adb2b8 tints selected rims, the context
        meter and caption text. Neutralised to keep R=G=B everywhere. */
     '--dsw-static-neutral-bluish-400': '#b0b0b0',
-      '--dsw-menu-backdrop-filter': 'none',
+      '--dsw-menu-backdrop-filter': 'var(--zzz-glass-blur)',
     '--dsw-alias-settings-card-fill': 'var(--zzz-glass-fill)',
     '--dsw-alias-settings-card-stroke': 'transparent',
       '--dsw-specific-tip': '#242424',
@@ -501,6 +501,15 @@ html[${MARKER}] [data-sidebar-right-guide-entry]{
     0 0 0 3px #000,
     inset 0 0 0 0.5px rgba(0,0,0,.6),
     inset 0 0 10px rgba(0,0,0,.35) !important;
+}
+/* dialogs keep the frame but read as frosted glass again: the card rule above fills
+   them opaque, which hid the host's own backdrop-filter (it reads
+   --dsw-menu-backdrop-filter).  Fill + blur come from the glass tokens. */
+html[${MARKER}] [role="dialog"]:not([data-shortcut-modal]),
+html[${MARKER}] [role="alertdialog"]{
+  background-color:var(--zzz-glass-fill-strong) !important;
+  backdrop-filter:var(--zzz-glass-blur) !important;
+  -webkit-backdrop-filter:var(--zzz-glass-blur) !important;
 }
 /* host metrics measured with the theme switched off: content box is kept as is
    and the 9.75px frame grows the card outwards (padding - 8.75, height + 17.5) */

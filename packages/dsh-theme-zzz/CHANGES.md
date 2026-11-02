@@ -924,3 +924,12 @@ epeating-linear-gradient。
 ### zoom 1.2x, canvas 680 (2026-11-03)
 
 - zoomTarget 1.1 -> 1.2; canvas/stage 640 -> 680 (radius 340) so (R+149)*1.2 = 339.6 still fits.
+
+### dialog frosted glass restored (2026-11-03)
+
+- Root cause 1: '--dsw-menu-backdrop-filter' was bound to 'none', and host dialogs/popovers read that
+  token for their backdrop-filter, so all of them lost the blur.
+- Root cause 2: the card rule paints [role="dialog"] with an opaque #282828, which hides any blur behind it.
+- Fix: token -> var(--zzz-glass-blur); a later dialog rule sets --zzz-glass-fill-strong + glass blur while
+  keeping the ZZZ frame. Menus stay flat (their material rule still forces backdrop-filter:none).
+- check-theme baseline !important 635 -> 638 (3 overrides must out-rank the card fill).

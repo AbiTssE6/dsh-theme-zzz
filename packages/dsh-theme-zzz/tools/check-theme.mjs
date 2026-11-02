@@ -19,8 +19,9 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
 // Measured 2026-10-29 after the stale-hash cleanup and observer merge.
+// 2026-11-03: +3 for the dialog glass surface (it must out-rank the card fill).
 const BASELINE = {
-  important: 635,
+  important: 638,
   idHacks: 9,
 }
 
