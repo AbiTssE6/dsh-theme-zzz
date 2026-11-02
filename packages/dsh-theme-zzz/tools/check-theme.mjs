@@ -107,6 +107,74 @@ for (const name of ['DARK', 'LIGHT']) {
   else report.push(`palette ${name}: ${seen.size} keys, no duplicates`)
 }
 
+// ---- 6. void geometry / interaction invariants -----------------------------
+const voidStart = source.indexOf('const VOID = {')
+let voidCfg = null
+if (voidStart < 0) {
+  problems.push('void: VOID tunables table not found')
+} else {
+  let depth = 0
+  let end = -1
+  for (let i = source.indexOf('{', voidStart); i < source.length; i++) {
+    if (source[i] === '{') depth++
+    else if (source[i] === '}') {
+      depth--
+      if (depth === 0) { end = i; break }
+    }
+  }
+  if (end < 0) {
+    problems.push('void: VOID table is not closed')
+  } else {
+    const literal = source.slice(source.indexOf('{', voidStart), end + 1)
+    try {
+      voidCfg = new Function('return (' + literal + ')')()
+    } catch (error) {
+      problems.push('void: VOID is not a plain object literal: ' + error.message)
+    }
+  }
+}
+
+if (voidCfg) {
+  const need = [
+    'SIZE', 'RADIUS', 'BAND_W', 'SHADOW_W', 'SHADOW_ALPHA', 'SHADOW_DEBUG_ALPHA',
+    'ZOOM', 'ZOOM_TAU', 'FPS', 'FPS_ZOOM', 'FPS_LOW', 'FPS_LOW_ZOOM',
+    'DPR', 'DPR_LOW', 'FRES_SIZE', 'FRES_SIZE_LOW', 'FRES_SPEED',
+    'FRES_HOLE', 'FRES_HOLE_W', 'FRES_ALPHA_EXP', 'GLOW_DIV',
+    'BLUR_IN', 'BLUR_OUT', 'BLUR_TIGHT', 'ALPHA_IN', 'ALPHA_OUT', 'ALPHA_TIGHT',
+    'TICKS', 'WHITE_SMOOTH',
+  ]
+  const missing = need.filter((k) => !(k in voidCfg))
+  if (missing.length) problems.push('void: VOID missing ' + missing.join(', '))
+
+  const ratio = voidCfg.BAND_W / voidCfg.SHADOW_W
+  if (Math.abs(ratio - 0.618) > 0.002) {
+    problems.push(`void: band/shadow ratio ${ratio.toFixed(3)} is not 0.618`)
+  }
+
+  const reach = (voidCfg.RADIUS + 149) * voidCfg.ZOOM
+  if (reach > voidCfg.SIZE / 2) {
+    problems.push(`void: ${voidCfg.ZOOM}x outer glow reaches ${reach.toFixed(1)} > canvas half ${voidCfg.SIZE / 2}`)
+  }
+
+  if (voidCfg.DPR_LOW > voidCfg.DPR) problems.push('void: DPR_LOW is larger than DPR')
+  if (voidCfg.FRES_SIZE_LOW > voidCfg.FRES_SIZE) problems.push('void: FRES_SIZE_LOW is larger than FRES_SIZE')
+  if (voidCfg.FPS_LOW > voidCfg.FPS) problems.push('void: FPS_LOW is higher than FPS')
+  if (voidCfg.FPS_LOW_ZOOM > voidCfg.FPS_ZOOM) problems.push('void: FPS_LOW_ZOOM is higher than FPS_ZOOM')
+  if (voidCfg.FRES_HOLE + voidCfg.FRES_HOLE_W >= 1) problems.push('void: fresnel hole + transition exceeds the radius')
+
+  const cssSized = (source.match(new RegExp('width:' + voidCfg.SIZE + 'px', 'g')) || []).length
+  if (cssSized < 2) problems.push('void: stage/band CSS width does not match VOID.SIZE')
+
+  report.push(`void: band ${voidCfg.BAND_W}px, shadow ${voidCfg.SHADOW_W}px (ratio ${ratio.toFixed(3)}), zoom ${voidCfg.ZOOM}x fits ${voidCfg.SIZE / 2}px`)
+}
+
+if (/scale\(\.62\)/.test(source)) problems.push('void: stale scale(.62) transform found')
+if (/repeating-radial-gradient/.test(source)) problems.push('void: repeating-radial-gradient present in the hollow')
+if (!source.includes("name: 'settings.section', id: 'zzz-theme'")) {
+  problems.push('void: official settings.section registration missing')
+}
+if (!source.includes('w = VOID.BAND_W')) problems.push('void: band width does not read VOID.BAND_W')
+
 console.log(report.join('\n'))
 if (problems.length) {
   console.error('\nFAILED:\n- ' + problems.join('\n- '))
