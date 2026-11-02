@@ -2357,18 +2357,62 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       })
 
       // ===== zzz void: conversation-area background =====
+      // Single source of truth for the hollow's tunables. The design spec quotes
+      // these numbers; change them here and nowhere else.
+      const VOID = {
+        SIZE: 680,              // stage / band canvas side, CSS px
+        RADIUS: 134,            // band centreline radius
+        BAND_W: 8.54,           // band width: constant under zoom
+        SHADOW_W: 13.82,        // outer contact shadow width (= BAND_W / 0.618)
+        SHADOW_ALPHA: 'rgba(0,0,0,.50)',
+        SHADOW_DEBUG_ALPHA: 'rgba(255,0,0,.60)',
+        ZOOM: 1.2,              // press-and-hold scale
+        ZOOM_TAU: 110,          // ms
+        FPS: 24,
+        FPS_ZOOM: 60,
+        FPS_LOW: 20,
+        FPS_LOW_ZOOM: 40,
+        DPR: 1.5,
+        DPR_LOW: 1.0,
+        FRES_SIZE: 128,
+        FRES_SIZE_LOW: 96,
+        FRES_SPEED: 0.30 / 275, // noise z units per ms
+        FRES_HOLE: 0.10,        // fully transparent core radius (ratio of R)
+        FRES_HOLE_W: 0.03,      // hole transition width
+        FRES_ALPHA_EXP: 1.6,
+        GLOW_DIV: 2,            // glow layers render at 1/GLOW_DIV resolution
+        BLUR_IN: 10.5,
+        BLUR_OUT: 5.5,
+        BLUR_TIGHT: 2.5,
+        ALPHA_IN: 1.00,
+        ALPHA_OUT: 0.95,
+        ALPHA_TIGHT: 0.78,
+        TICKS: 1200,
+        WHITE_SMOOTH: 20,       // circular smoothing half-window
+      }
       ctx.effect(() => {
         const reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-        const W = 680, R = 134, C = 340, TAU = Math.PI * 2
-        // low-power mode: fewer cores / less memory, or ?voidlow
-        const LOW = location.search.indexOf('voidlow') >= 0 ||
+        const W = VOID.SIZE, R = VOID.RADIUS, C = W / 2, TAU = Math.PI * 2
+        // One place for the void's debug switches:
+        //   ?voidhide=outer,inner,tight,band,canvas,fresnel,dome,shadow
+        //   ?nofollow  ?voidshadow  ?voidlow  ?voidfres=96
+        const DEBUG = (() => {
+          const q = new URLSearchParams(location.search)
+          return {
+            hide: (q.get('voidhide') || '').split(',').map((x) => x.trim()).filter(Boolean),
+            nofollow: q.has('nofollow'),
+            shadow: q.has('voidshadow'),
+            low: q.has('voidlow'),
+            fres: q.get('voidfres'),
+          }
+        })()
+        const on = (name) => DEBUG.hide.indexOf(name) < 0
+        // low-power mode: ?voidlow, the settings toggle, or a small machine
+        const LOW = DEBUG.low ||
           (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4 || voidPrefs.low
-        const DPR = Math.min(window.devicePixelRatio || 1, LOW ? 1.0 : 1.5)
+        const DPR = Math.min(window.devicePixelRatio || 1, LOW ? VOID.DPR_LOW : VOID.DPR)
         // live check: the settings toggle can enter low mode without a reload
         const lowNow = () => LOW || voidPrefs.low
-        // debug ablation: ?voidhide=outer,inner,tight,band,canvas,fresnel,dome
-        const hid = (new URLSearchParams(location.search).get('voidhide') || '').split(',').map((x) => x.trim()).filter(Boolean)
-        const on = (name) => hid.indexOf(name) < 0
 
         const layer = document.createElement('div')
         layer.className = 'zzz-void'
@@ -2484,7 +2528,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         // spherical fresnel: colours on a sphere surface, precomputed as a short
         // frame loop so the colour pattern can flow radially (outside -> inside).
         const FS = Math.max(32, Math.min(1024,
-          parseInt(new URLSearchParams(location.search).get('voidfres') || (LOW ? '96' : '128'), 10) || (LOW ? 96 : 128)))
+          parseInt(DEBUG.fres || String(LOW ? VOID.FRES_SIZE_LOW : VOID.FRES_SIZE), 10) || (LOW ? VOID.FRES_SIZE_LOW : VOID.FRES_SIZE)))
         fres.width = fres.height = FS
         const fctx = fres.getContext('2d')
 
@@ -2501,16 +2545,16 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
             const z = Math.sqrt(1 - r2)
             // spherical projection alpha, plus a fast fade to fully transparent
             // inside the central 0.1R
-            const hg = Math.max(0, Math.min(1, (rr - 0.10) / 0.03))
+            const hg = Math.max(0, Math.min(1, (rr - VOID.FRES_HOLE) / VOID.FRES_HOLE_W))
             const hole = hg * hg * (3 - 2 * hg)
-            const av = Math.pow(1 - z, 1.6) * hole
+            const av = Math.pow(1 - z, VOID.FRES_ALPHA_EXP) * hole
             fresAlpha[y * FS + x] = Math.max(0, Math.min(255, av * 255 + Math.random()))
           }
         }
 
         // continuous radial flow: the noise field is sampled along z every frame,
         // so the colours keep travelling from the rim inward without a loop seam
-        const FRES_SPEED = 0.30 / 275   // z units per ms
+        const FRES_SPEED = VOID.FRES_SPEED   // z units per ms
         const fresImg = fctx.createImageData(FS, FS)
         const fresX = new Float32Array(FS * FS)
         const fresY = new Float32Array(FS * FS)
@@ -2567,7 +2611,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         // glow layers are built at half resolution: three blurred full-size canvases
         // per frame were the frame-time bottleneck; for a soft glow the upscaled
         // result is visually identical and about 4x cheaper.
-        const GW = Math.max(64, Math.ceil(cvs.width / 2))
+        const GW = Math.max(64, Math.ceil(cvs.width / VOID.GLOW_DIV))
         const gIn = document.createElement('canvas'); gIn.width = gIn.height = GW
         const gOut = document.createElement('canvas'); gOut.width = gOut.height = GW
         const gTight = document.createElement('canvas'); gTight.width = gTight.height = GW
@@ -2610,7 +2654,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         glowMasks.set(gOut, makeGlowMask([[R - 6, 0], [R + 9, 1], [R + 56, .85], [R + 149, 0]]))
         glowMasks.set(gTight, makeGlowMask([[R - 28, 0], [R - 6, .90], [R + 12, .90], [R + 43, 0]]))
 
-        const N = 1200
+        const N = VOID.TICKS
 
         function drawBand(ph, z) {
           const rot = ph * TAU * 6
@@ -2638,8 +2682,9 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
             const tmp = new Float32Array(N)
             for (let i = 0; i < N; i++) {
               let sum = 0
-              for (let k = -20; k <= 20; k++) sum += whArr[(i + k + N) % N]
-              tmp[i] = sum / 41
+              const ws = VOID.WHITE_SMOOTH
+              for (let k = -ws; k <= ws; k++) sum += whArr[(i + k + N) % N]
+              tmp[i] = sum / (2 * ws + 1)
             }
             whArr.set(tmp)
           }
@@ -2656,7 +2701,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
               cg += (244 - cg) * wh * 0.85
               cb += (225 - cb) * wh * 0.85
             }
-            const r = R * z, w = 8.54
+            const r = R * z, w = VOID.BAND_W
             const ri = r - w / 2, ro = r + w / 2
             const col = 'rgb(' + (cr | 0) + ',' + (cg | 0) + ',' + (cb | 0) + ')'
             bc.strokeStyle = col
@@ -2700,21 +2745,21 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
             fresTick = (fresTick + 1) & 1
             if (!lowNow() || fresTick === 0) drawFresnel(performance.now() * FRES_SPEED)
           }
-          if (on('inner')) buildGlow(gIn, 10.5, R + 43, [
+          if (on('inner')) buildGlow(gIn, VOID.BLUR_IN, R + 43, [
             [0, 'rgba(255,255,255,0)'],
             [(R - 68) / (R + 43), 'rgba(255,255,255,0)'],
             [(R - 37) / (R + 43), 'rgba(255,255,255,.70)'],
             [(R - 6) / (R + 43), 'rgba(255,255,255,1)'],
             [1, 'rgba(255,255,255,0)']
           ], z)
-          if (on('outer')) buildGlow(gOut, 5.5, R + 149, [
+          if (on('outer')) buildGlow(gOut, VOID.BLUR_OUT, R + 149, [
             [0, 'rgba(255,255,255,0)'],
             [(R - 6) / (R + 149), 'rgba(255,255,255,0)'],
             [(R + 9) / (R + 149), 'rgba(255,255,255,1)'],
             [(R + 56) / (R + 149), 'rgba(255,255,255,.85)'],
             [1, 'rgba(255,255,255,0)']
           ], z)
-          if (on('tight') && !lowNow()) buildGlow(gTight, 2.5, R + 43, [
+          if (on('tight') && !lowNow()) buildGlow(gTight, VOID.BLUR_TIGHT, R + 43, [
             [0, 'rgba(255,255,255,0)'],
             [(R - 28) / (R + 43), 'rgba(255,255,255,0)'],
             [(R - 6) / (R + 43), 'rgba(255,255,255,.9)'],
@@ -2728,20 +2773,20 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           if (on('shadow')) {
             g.save()
             g.beginPath()
-            g.arc(C, C, (R + 13.82) * z, 0, TAU)
+            g.arc(C, C, (R + VOID.SHADOW_W) * z, 0, TAU)
             g.arc(C, C, R * z, 0, TAU, true)
             // ?voidshadow paints the ring red so the layer can be inspected alone
-            g.fillStyle = location.search.indexOf('voidshadow') >= 0
-              ? 'rgba(255,0,0,.60)'
-              : 'rgba(0,0,0,.50)'
+            g.fillStyle = DEBUG.shadow
+              ? VOID.SHADOW_DEBUG_ALPHA
+              : VOID.SHADOW_ALPHA
             g.fill()
             g.restore()
           }
 
           g.globalCompositeOperation = 'lighter'
-          if (on('inner')) { g.globalAlpha = 1.00; g.drawImage(gIn, 0, 0, W, W) }
-          if (on('outer')) { g.globalAlpha = 0.95; g.drawImage(gOut, 0, 0, W, W) }
-          if (on('tight') && !lowNow()) { g.globalAlpha = 0.78; g.drawImage(gTight, 0, 0, W, W) }
+          if (on('inner')) { g.globalAlpha = VOID.ALPHA_IN; g.drawImage(gIn, 0, 0, W, W) }
+          if (on('outer')) { g.globalAlpha = VOID.ALPHA_OUT; g.drawImage(gOut, 0, 0, W, W) }
+          if (on('tight') && !lowNow()) { g.globalAlpha = VOID.ALPHA_TIGHT; g.drawImage(gTight, 0, 0, W, W) }
           g.globalCompositeOperation = 'source-over'
           if (on('band')) { g.globalAlpha = 1; g.drawImage(band, 0, 0, W, W) }
           const scaleCss = 'translate(-50%,-50%) scale(' + z.toFixed(4) + ')'
@@ -2778,7 +2823,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         watchVisibility()
 
         // pointer follow with a spring (lag/drag feel), no follow under reduced motion
-        const follow = !reduced && location.search.indexOf('nofollow') < 0
+        const follow = !reduced && !DEBUG.nofollow
         let ox = 0, oy = 0, tx = 0, ty = 0
         const onMove = (e) => {
           const col = layer.parentElement
@@ -2800,7 +2845,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         let zoom = 1
         let zoomTarget = 1
         const onPress = (e) => {
-          if (e.button === 0 || e.button === 2) zoomTarget = 1.2
+          if (e.button === 0 || e.button === 2) zoomTarget = VOID.ZOOM
         }
         const onRelease = (e) => {
           if (!e || e.buttons === 0) zoomTarget = 1
@@ -2822,10 +2867,12 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
             stageEl.style.transform = 'translate(-50%,-50%) translate(' +
               ox.toFixed(2) + 'px,' + oy.toFixed(2) + 'px)'
           }
-          zoom += (zoomTarget - zoom) * (1 - Math.exp(-dt / 110))
+          zoom += (zoomTarget - zoom) * (1 - Math.exp(-dt / VOID.ZOOM_TAU))
           if (Math.abs(zoomTarget - zoom) < 0.0002) zoom = zoomTarget
           const animating = Math.abs(zoomTarget - zoom) > 0.0005
-          const fps = animating ? (lowNow() ? 40 : 60) : (lowNow() ? 20 : 24)
+          const fps = animating
+            ? (lowNow() ? VOID.FPS_LOW_ZOOM : VOID.FPS_ZOOM)
+            : (lowNow() ? VOID.FPS_LOW : VOID.FPS)
           if (t - last < 1000 / fps) return
           last = t
           render((t / 60000) % 1, zoom)
