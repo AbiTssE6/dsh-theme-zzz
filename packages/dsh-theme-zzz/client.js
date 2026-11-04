@@ -356,6 +356,10 @@ html[${MARKER}] [role="menu"] [role="menuitem"]{
 /* blank-session hero headline ("探索未至之境"): the host draws it with a 26px
    medium body face; give the title span the real bold display face. The preview
    badge next to it keeps its own styling. */
+html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]){
+  font-family:'ZZZ Display','ZZZ Secondary',system-ui,sans-serif;
+  font-weight:700;
+}
 html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]) [class*="_titleGroup"] > span:first-child{
   font-family:'ZZZ Display','ZZZ Secondary',system-ui,sans-serif !important;
   font-weight:700 !important;

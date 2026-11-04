@@ -940,3 +940,10 @@ epeating-linear-gradient。
   'ZZZ Display' + font-weight 700 (selector: _headline:has(_previewBadge) _titleGroup > span:first-child).
 - The preview badge beside it keeps its own styling.
 - check-theme !important baseline 638 -> 640.
+
+### hero headline: confirmed inpin hongmengti (2026-11-04)
+
+- FONT-LICENSES.md: ZZZ Display = inpin-bold.woff2 = 印品鸿蒙体 (Bold 700);
+  ZZZ Secondary = inpin-d40.woff2 = 印品鸿蒙体 D40 (500).
+- Added a container-level rule on _headline so the whole headline block resolves to the display face;
+  the title span keeps the !important pair so the host's medium body face cannot win.
