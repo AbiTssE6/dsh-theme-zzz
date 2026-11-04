@@ -933,3 +933,10 @@ epeating-linear-gradient。
 - Fix: token -> var(--zzz-glass-blur); a later dialog rule sets --zzz-glass-fill-strong + glass blur while
   keeping the ZZZ frame. Menus stay flat (their material rule still forces backdrop-filter:none).
 - check-theme baseline !important 635 -> 638 (3 overrides must out-rank the card fill).
+
+### blank-session hero headline: bold display face (2026-11-04)
+
+- The host renders '探索未至之境' with a 26px medium body face; the title span now uses
+  'ZZZ Display' + font-weight 700 (selector: _headline:has(_previewBadge) _titleGroup > span:first-child).
+- The preview badge beside it keeps its own styling.
+- check-theme !important baseline 638 -> 640.
