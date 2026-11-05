@@ -7,10 +7,10 @@
 
 ```powershell
 # GitHub 发布分支（无需 npm）
-dsh plugin --profile web add <owner>/dsh-theme-zzz#dist
+dsh plugin --profile web add AbiTssE6/dsh-theme-zzz#dist
 ```
 
-或在 **设置 → 插件 → 发现** 添加索引源 `https://<owner>.github.io/dsh-theme-zzz/market-index.json`
+或在 **设置 → 插件 → 发现** 添加索引源 `https://abitisse6.github.io/dsh-theme-zzz/market-index.json`
 后搜索安装。同一时刻只启用一个主题，装好后重启 Harness。
 
 ## 字体

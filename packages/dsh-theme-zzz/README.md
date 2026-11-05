@@ -15,7 +15,7 @@
 
 1. 打开 **设置 → 插件 → 发现**；
 2. **添加索引源**，粘贴本仓库的索引地址：
-   `https://<你的用户名>.github.io/dsh-theme-zzz/market-index.json`
+   `https://abitisse6.github.io/dsh-theme-zzz/market-index.json`
 3. 搜索「绝区零 / ZZZ」，点 **安装**。
 
 > 索引源只需添加一次，之后搜索和安装都是一键。

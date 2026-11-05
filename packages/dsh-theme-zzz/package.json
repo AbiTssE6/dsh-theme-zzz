@@ -5,6 +5,15 @@
   "type": "module",
   "private": false,
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbiTssE6/dsh-theme-zzz.git",
+    "directory": "packages/dsh-theme-zzz"
+  },
+  "homepage": "https://github.com/AbiTssE6/dsh-theme-zzz",
+  "bugs": {
+    "url": "https://github.com/AbiTssE6/dsh-theme-zzz/issues"
+  },
   "keywords": [
     "dsh",
     "deepseek-harness",

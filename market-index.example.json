@@ -33,9 +33,9 @@
       },
       "icon": "./icon.svg",
       "author": "dsh-theme-zzz contributors",
-      "homepage": "https://github.com/example/dsh-theme-zzz",
+      "homepage": "https://github.com/AbiTssE6/dsh-theme-zzz",
       "repository": {
-        "url": "https://github.com/example/dsh-theme-zzz",
+        "url": "https://github.com/AbiTssE6/dsh-theme-zzz",
         "directory": "packages/dsh-theme-zzz"
       },
       "metadata": {
@@ -53,10 +53,10 @@
       "versions": [
         {
           "version": "0.1.0",
-          "publishTimestamp": 1793867171,
+          "publishTimestamp": 1793867562,
           "source": {
             "type": "git",
-            "url": "https://github.com/example/dsh-theme-zzz",
+            "url": "https://github.com/AbiTssE6/dsh-theme-zzz",
             "commit": "0123456789abcdef0123456789abcdef01234567",
             "path": "dist"
           },
