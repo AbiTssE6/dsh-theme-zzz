@@ -26,11 +26,11 @@
     "voidSizeDesc": "空洞的默认直径（420–920 px）。",
     "voidSpeed": "动画速度",
     "voidSpeedDesc": "光带流动速度的倍数（0.3–2.5）。",
-    "voidZoom": "点按放大",
+    "voidZoom": "点按缩放",
     "voidZoomDesc": "按住鼠标时的缩放倍数，小于 1 会缩小（0.5–1.6）。",
     "voidFollow": "跟随速度",
     "voidFollowDesc": "越大越紧跟鼠标（0.2–3.0）。",
     "voidReset": "重置空洞参数",
-    "voidResetDesc": "恢复 680px / 1.0x / 1.2x / 1.0x。"
+    "voidResetDesc": "恢复 680px / 1.0x / 0.7x / 1.0x。"
   }
 }

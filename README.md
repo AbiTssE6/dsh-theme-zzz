@@ -1,6 +1,6 @@
 # dsh-theme-zzz · 绝区零主题 for DeepSeek Harness
 
-《绝区零》风格的 DSH Web 主题插件，除了在ui上模仿了绝区零的风格以外，还在背景上添加了跟随鼠标、按下放大的~~动态RGB LED圈圈！~~「空洞」。
+《绝区零》风格的 DSH Web 主题插件，除了在ui上模仿了绝区零的风格以外，还在背景上添加了跟随鼠标、按下缩放的~~动态RGB LED圈圈！~~「空洞」。
 
 <p align="center">
   <img src="docs/preview.png" width="100%" alt="">
@@ -9,7 +9,7 @@
 <p align="center">
   <img src="docs/hollow.gif" width="58%" alt="">
 </p>
-<p align="center"><sub>动态「空洞」：随鼠标移动、按下放大</sub></p>
+<p align="center"><sub>动态「空洞」：随鼠标移动、按下缩放</sub></p>
 
 ## 快速开始
 

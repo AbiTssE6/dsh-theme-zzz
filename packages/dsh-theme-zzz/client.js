@@ -2259,7 +2259,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         low: typeof saved.low === 'boolean' ? saved.low : false,
         voidSize: clampNum(saved.voidSize, 420, 920, 680),
         voidSpeed: clampNum(saved.voidSpeed, 0.3, 2.5, 1),
-        voidZoom: clampNum(saved.voidZoom, 0.5, 1.6, 1.2),
+        voidZoom: clampNum(saved.voidZoom, 0.5, 1.6, 0.7),
         voidFollow: clampNum(saved.voidFollow, 0.2, 3, 1),
         fontSans: typeof saved.fontSans === 'boolean' ? saved.fontSans : false,
         fontBold: typeof saved.fontBold === 'string' ? saved.fontBold : '印品鸿蒙体',
@@ -2288,12 +2288,12 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       voidSizeDesc: '空洞的默认直径（420–920 px）。',
       voidSpeed: '动画速度',
       voidSpeedDesc: '光带流动速度的倍数（0.3–2.5）。',
-      voidZoom: '点按放大',
+      voidZoom: '点按缩放',
       voidZoomDesc: '按住鼠标时的缩放倍数，小于 1 会缩小（0.5–1.6）。',
       voidFollow: '跟随速度',
       voidFollowDesc: '越大越紧跟鼠标（0.2–3.0）。',
       voidReset: '重置空洞参数',
-      voidResetDesc: '恢复 680px / 1.0x / 1.2x / 1.0x。',
+      voidResetDesc: '恢复 680px / 1.0x / 0.7x / 1.0x。',
       perfToggle: '性能模式',
       perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
       fontGroup: '字体',
@@ -2559,7 +2559,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }, STR.voidResetDesc),
         h('button', {
           type: 'button',
-          onClick: () => updateVoidPrefs({ voidSize: 680, voidSpeed: 1, voidZoom: 1.2, voidFollow: 1 }),
+          onClick: () => updateVoidPrefs({ voidSize: 680, voidSpeed: 1, voidZoom: 0.7, voidFollow: 1 }),
           style: {
             flex: '0 0 auto',
             background: 'var(--dsw-alias-bg-layer-3)',
@@ -2657,7 +2657,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         SHADOW_W: 13.82,        // outer contact shadow width (= BAND_W / 0.618)
         SHADOW_ALPHA: 'rgba(0,0,0,.50)',
         SHADOW_DEBUG_ALPHA: 'rgba(255,0,0,.60)',
-        ZOOM: 1.2,              // press-and-hold scale
+        ZOOM: 0.7,              // press-and-hold scale
         ZOOM_TAU: 110,          // ms
         FPS: 24,
         FPS_ZOOM: 60,
