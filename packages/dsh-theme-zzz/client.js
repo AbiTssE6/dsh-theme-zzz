@@ -260,9 +260,7 @@ function registerTokens(palette) {
    ZZZ theme tokens + paper + components
    ============================================================ */
 
-@font-face{font-family:'ZZZ Display';src:url('/zzz-theme/fonts/inpin-bold.woff2') format('woff2');font-weight:700;font-display:swap}
-@font-face{font-family:'ZZZ Secondary';src:url('/zzz-theme/fonts/inpin-d40.woff2') format('woff2');font-weight:500;font-display:swap}
-@font-face{font-family:'ZZZ Body';src:url('/zzz-theme/fonts/noto-sans-sc-regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'ZZZ Sans';src:url('/zzz-theme/fonts/noto-sans-sc-regular.woff2') format('woff2');font-weight:400;font-display:swap}
 
 html[${MARKER}],
 html[${MARKER}] body{
@@ -298,6 +296,10 @@ html[${MARKER}] body{
   --zzz-glass-radius-sm:12px;
   --zzz-glass-radius:16px;
   --zzz-glass-radius-lg:20px;
+  /* fonts: Source Han Sans (Noto Sans SC) by default; the settings page can swap
+     the families for locally installed ones (e.g. 印品鸿蒙体) through these vars. */
+  --zzz-font-display:'ZZZ Sans','Source Han Sans SC','Noto Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  --zzz-font-text:'ZZZ Sans','Source Han Sans SC','Noto Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
   --zzz-bevel-lo:1px 1px 0 rgba(0,0,0,.55);
   --zzz-green:#00cc0c;
   --zzz-red:#c81800;
@@ -326,7 +328,7 @@ html[${MARKER}] select,
 html[${MARKER}] [class*="_sidebarCol"],
 html[${MARKER}] [class*="_tabHost_"],
 html[${MARKER}] [role="tab"]{
-  font-family:'ZZZ Display','ZZZ Secondary','ZZZ Body',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
+  font-family:var(--zzz-font-display) !important;
 }
 /* dialogs, menus and tooltips carry paragraphs, lists and form rows. They read
    in D40 (the secondary face), never the body face: Noto is reserved for actual
@@ -337,7 +339,7 @@ html[${MARKER}] [role="menu"],
 html[${MARKER}] [role="menu"] *,
 html[${MARKER}] [role="tooltip"],
 html[${MARKER}] [role="tooltip"] *{
-  font-family:'ZZZ Secondary','ZZZ Body',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
+  font-family:var(--zzz-font-text) !important;
   font-weight:500 !important;
 }
 html[${MARKER}] [role="dialog"] h1,
@@ -350,18 +352,18 @@ html[${MARKER}] [role="dialog"] [class*="_sectionTitle"],
 html[${MARKER}] [role="dialog"] nav button,
 html[${MARKER}] [role="dialog"] [role="tab"],
 html[${MARKER}] [role="menu"] [role="menuitem"]{
-  font-family:'ZZZ Display','ZZZ Secondary',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
+  font-family:var(--zzz-font-display) !important;
   font-weight:700 !important;
 }
 /* blank-session hero headline ("探索未至之境"): the host draws it with a 26px
    medium body face; give the title span the real bold display face. The preview
    badge next to it keeps its own styling. */
 html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]){
-  font-family:'ZZZ Display','ZZZ Secondary',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;
+  font-family:var(--zzz-font-display);
   font-weight:700;
 }
 html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]) [class*="_titleGroup"] > span:first-child{
-  font-family:'ZZZ Display','ZZZ Secondary',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
+  font-family:var(--zzz-font-display) !important;
   font-weight:700 !important;
 }
 /* reading text is the body face: the assistant message body is bare text
@@ -383,7 +385,7 @@ html[${MARKER}] [class*="_paragraph"],
 html[${MARKER}] [class*="_paragraph"] *,
 html[${MARKER}] p,
 html[${MARKER}] li{
-  font-family:'ZZZ Body',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
+  font-family:var(--zzz-font-text) !important;
   font-weight:400 !important;
 }
 
@@ -735,7 +737,7 @@ html[${MARKER}] [class*="_regionArea"]{
    hierarchy is carried by weight, not size */
 html[${MARKER}] [class*="_regionArea"],
 html[${MARKER}] [class*="_regionArea"] *{
-  font-family:'ZZZ Secondary','ZZZ Body',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
+  font-family:var(--zzz-font-text) !important;
   font-weight:500 !important;
 }
 
@@ -1035,12 +1037,12 @@ html[${MARKER}] [role="listbox"] [role="option"]{padding:6px 8px !important; mar
    display face whatever class the host gives it; buttons inside keep D40 */
 html[${MARKER}] [role="dialog"] > :first-child,
 html[${MARKER}] [role="dialog"] > :first-child *{
-  font-family:'ZZZ Display','ZZZ Secondary',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
+  font-family:var(--zzz-font-display) !important;
   font-weight:700 !important;
 }
 html[${MARKER}] [role="dialog"] > :first-child button,
 html[${MARKER}] [role="dialog"] > :first-child button *{
-  font-family:'ZZZ Secondary','ZZZ Body',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
+  font-family:var(--zzz-font-text) !important;
   font-weight:500 !important;
 }
 
@@ -2226,6 +2228,9 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       return {
         void: typeof saved.void === 'boolean' ? saved.void : true,
         low: typeof saved.low === 'boolean' ? saved.low : false,
+        fontCustom: typeof saved.fontCustom === 'boolean' ? saved.fontCustom : false,
+        fontBold: typeof saved.fontBold === 'string' ? saved.fontBold : '印品鸿蒙体',
+        fontThin: typeof saved.fontThin === 'string' ? saved.fontThin : '印品鸿蒙体 D40',
       }
     })()
     const voidPrefListeners = new Set()
@@ -2284,10 +2289,54 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       h(ZzzSwitch, { checked: props.checked, onChange: props.onChange }))
     }
 
+    function ZzzTextField(props) {
+      return h('div', {
+        style: {
+          display: 'flex', alignItems: 'center', gap: '16px',
+          padding: '10px 0',
+          borderTop: '1px solid var(--dsw-alias-border-l1)',
+        },
+      },
+      h('div', { style: { flex: '1', minWidth: '0' } },
+        h('div', {
+          style: { color: 'var(--dsw-alias-label-primary)', fontSize: '14px', lineHeight: '1.5' },
+        }, props.label),
+        props.desc
+          ? h('div', {
+              style: {
+                color: 'var(--dsw-alias-label-secondary)', fontSize: '12px',
+                lineHeight: '1.6', marginTop: '2px',
+              },
+            }, props.desc)
+          : null),
+      h('input', {
+        type: 'text',
+        value: props.value,
+        placeholder: props.placeholder,
+        spellCheck: false,
+        onChange: (e) => props.onChange(e.target.value),
+        style: {
+          flex: '0 0 auto', width: '190px', boxSizing: 'border-box',
+          background: 'var(--dsw-alias-bg-layer-2)',
+          color: 'var(--dsw-alias-label-primary)',
+          border: '1px solid var(--dsw-alias-border-l2)',
+          borderRadius: '8px', padding: '6px 10px', fontSize: '13px',
+          outline: 'none',
+        },
+      }))
+    }
+
     function ZzzSettings() {
-      const [prefs, setPrefs] = React.useState({ void: voidPrefs.void, low: voidPrefs.low })
+      const snapshot = () => ({
+        void: voidPrefs.void,
+        low: voidPrefs.low,
+        fontCustom: voidPrefs.fontCustom,
+        fontBold: voidPrefs.fontBold,
+        fontThin: voidPrefs.fontThin,
+      })
+      const [prefs, setPrefs] = React.useState(snapshot)
       React.useEffect(() => {
-        const fn = () => setPrefs({ void: voidPrefs.void, low: voidPrefs.low })
+        const fn = () => setPrefs(snapshot())
         voidPrefListeners.add(fn)
         return () => { voidPrefListeners.delete(fn) }
       }, [])
@@ -2323,7 +2372,37 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           desc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
           checked: prefs.low,
           onChange: () => updateVoidPrefs({ low: !voidPrefs.low }),
-        }))
+        }),
+        h('div', {
+          style: { color: 'var(--dsw-alias-label-primary)', fontSize: '15px', fontWeight: 600, padding: '20px 0 6px' },
+        }, '字体'),
+        h('div', {
+          style: { color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', lineHeight: '1.6' },
+        }, '默认使用思源黑体（Source Han Sans / Noto Sans SC）。'),
+        h(ZzzSettingRow, {
+          title: '自定义字体',
+          desc: '改用本机已安装的字体，填字体族名（不是文件名）。',
+          checked: prefs.fontCustom,
+          onChange: () => updateVoidPrefs({ fontCustom: !voidPrefs.fontCustom }),
+        }),
+        prefs.fontCustom
+          ? h(ZzzTextField, {
+              label: '粗体字体',
+              desc: '标题、导航与分区标题使用。',
+              value: prefs.fontBold,
+              placeholder: '印品鸿蒙体',
+              onChange: (v) => updateVoidPrefs({ fontBold: v }),
+            })
+          : null,
+        prefs.fontCustom
+          ? h(ZzzTextField, {
+              label: '细体字体',
+              desc: '正文、设置项与次级标签使用。',
+              value: prefs.fontThin,
+              placeholder: '印品鸿蒙体 D40',
+              onChange: (v) => updateVoidPrefs({ fontThin: v }),
+            })
+          : null)
     }
 
     function apply(ctx) {
@@ -3297,20 +3376,35 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }
       }, 'dsh-theme-zzz: black text on yellow')
 
-      // Fonts must be resolved before streaming starts: a swap mid-answer reflows
-      // every paragraph and reads as the page jumping upwards.
+      // Fonts: the defaults are Source Han Sans (Noto Sans SC) through --zzz-font-*;
+      // the settings page can point the display/text stacks at locally installed
+      // families (e.g. 印品鸿蒙体 bold / D40) without shipping any font file.
       ctx.effect(() => {
-        for (const file of ['inpin-bold', 'inpin-d40', 'noto-sans-sc-regular']) {
-          const link = document.createElement('link')
-          link.rel = 'preload'
-          link.as = 'font'
-          link.type = 'font/woff2'
-          link.crossOrigin = 'anonymous'
-          link.href = '/zzz-theme/fonts/' + file + '.woff2'
-          document.head.appendChild(link)
+        const BASE = "'ZZZ Sans','Source Han Sans SC','Noto Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
+        const stack = (name) => {
+          const clean = String(name || '').replace(/["']/g, '').trim()
+          return clean ? '"' + clean + '",' + BASE : BASE
         }
+        const apply = () => {
+          const root = document.documentElement
+          if (voidPrefs.fontCustom) {
+            root.style.setProperty('--zzz-font-display', stack(voidPrefs.fontBold || '印品鸿蒙体'))
+            root.style.setProperty('--zzz-font-text', stack(voidPrefs.fontThin || '印品鸿蒙体 D40'))
+          } else {
+            root.style.removeProperty('--zzz-font-display')
+            root.style.removeProperty('--zzz-font-text')
+          }
+        }
+        voidPrefListeners.add(apply)
+        apply()
         if (document.fonts && document.fonts.ready) document.fonts.ready.catch(() => {})
-      }, 'dsh-theme-zzz: font preload')
+        return () => {
+          voidPrefListeners.delete(apply)
+          const root = document.documentElement
+          root.style.removeProperty('--zzz-font-display')
+          root.style.removeProperty('--zzz-font-text')
+        }
+      }, 'dsh-theme-zzz: fonts')
 
       ctx.slots.inject('sidebar.brand.mark', () =>
         ctx.slots.register({ name: 'sidebar.brand.mark', priority: -1 }, () => h(BrandMark, { size: 26 })),

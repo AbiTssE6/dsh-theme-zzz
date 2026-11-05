@@ -957,3 +957,13 @@ epeating-linear-gradient。
 - README.md (root + package) documents market index, git #dist, npm, local install.
 - scripts/make-dist.mjs builds the dist branch content; scripts/make-market-index.mjs +
   scripts/check-market-index.mjs generate and validate a format-1 market index.
+
+### fonts: Source Han Sans by default + custom font setting (2026-11-05)
+
+- @font-face for inpin-bold / inpin-d40 removed; the only webfont left is 'ZZZ Sans' (Noto Sans SC, OFL).
+- New tokens --zzz-font-display / --zzz-font-text default to Source Han Sans / Noto Sans SC / 思源黑体,
+  with PingFang / YaHei fallbacks; every font-family rule now reads them, so the existing
+  display / secondary / body classification is unchanged.
+- Settings page: new 字体 group with a 自定义字体 switch and two family-name fields (bold / thin);
+  when enabled the theme sets the two CSS variables inline from localStorage prefs.
+- Fonts are still not shipped; FONT-LICENSES and both READMEs describe the new model.

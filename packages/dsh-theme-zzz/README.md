@@ -42,23 +42,18 @@ dsh plugin --profile web add dsh-theme-zzz
 dsh plugin --profile web add D:\path\to\dsh-theme-zzz
 ```
 
-## 字体（重要）
+## 字体
 
-标题与次级文字使用 **印品鸿蒙体**（`inpin-bold` / `inpin-d40`）。该字体为**非商用授权**，
-本插件**不随包分发字体文件**。
+默认使用 **思源黑体**（Source Han Sans / Noto Sans SC），由系统提供，不随包分发；
+系统缺少时回退 `PingFang SC / Microsoft YaHei / system-ui`。
 
-- **不装字体**：主题照常工作，`ZZZ Display/Secondary/Body` 会自动回退到
-  `PingFang SC / Microsoft YaHei / Noto Sans SC / system-ui`；
-- **想还原设计**：把 `inpin-bold.woff2`、`inpin-d40.woff2`（可选 `noto-sans-sc-regular.woff2`）
-  放进：
+想还原最初的印品鸿蒙体设计：
 
-  ```
-  $DSH_HOME/dsh-theme-zzz/fonts/
-  ```
+1. 把 `印品鸿蒙体`（粗体）与 `印品鸿蒙体 D40`（细体）安装到操作系统；
+2. 打开 **设置 → ZZZ 主题 → 字体**，开启「自定义字体」；
+3. 在两个输入框里分别填写字体族名（例如 `印品鸿蒙体`、`印品鸿蒙体 D40`）。
 
-  重启后生效；插件会优先从这里读取，读不到才回退。
-
-字体授权与来源说明见 [FONT-LICENSES.md](./FONT-LICENSES.md)。请自行确认使用/商用授权。
+字体为**非商用授权**，本仓库不分发字体文件；授权说明见 [FONT-LICENSES.md](./FONT-LICENSES.md)。
 
 ## 兼容性
 
