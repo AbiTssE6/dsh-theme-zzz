@@ -326,7 +326,7 @@ html[${MARKER}] select,
 html[${MARKER}] [class*="_sidebarCol"],
 html[${MARKER}] [class*="_tabHost_"],
 html[${MARKER}] [role="tab"]{
-  font-family:'ZZZ Display','ZZZ Secondary','ZZZ Body',system-ui,-apple-system,'Segoe UI',sans-serif !important;
+  font-family:'ZZZ Display','ZZZ Secondary','ZZZ Body',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
 }
 /* dialogs, menus and tooltips carry paragraphs, lists and form rows. They read
    in D40 (the secondary face), never the body face: Noto is reserved for actual
@@ -337,7 +337,7 @@ html[${MARKER}] [role="menu"],
 html[${MARKER}] [role="menu"] *,
 html[${MARKER}] [role="tooltip"],
 html[${MARKER}] [role="tooltip"] *{
-  font-family:'ZZZ Secondary','ZZZ Body',system-ui,-apple-system,'Segoe UI',sans-serif !important;
+  font-family:'ZZZ Secondary','ZZZ Body',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
   font-weight:500 !important;
 }
 html[${MARKER}] [role="dialog"] h1,
@@ -350,18 +350,18 @@ html[${MARKER}] [role="dialog"] [class*="_sectionTitle"],
 html[${MARKER}] [role="dialog"] nav button,
 html[${MARKER}] [role="dialog"] [role="tab"],
 html[${MARKER}] [role="menu"] [role="menuitem"]{
-  font-family:'ZZZ Display','ZZZ Secondary',system-ui,sans-serif !important;
+  font-family:'ZZZ Display','ZZZ Secondary',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
   font-weight:700 !important;
 }
 /* blank-session hero headline ("探索未至之境"): the host draws it with a 26px
    medium body face; give the title span the real bold display face. The preview
    badge next to it keeps its own styling. */
 html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]){
-  font-family:'ZZZ Display','ZZZ Secondary',system-ui,sans-serif;
+  font-family:'ZZZ Display','ZZZ Secondary',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;
   font-weight:700;
 }
 html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]) [class*="_titleGroup"] > span:first-child{
-  font-family:'ZZZ Display','ZZZ Secondary',system-ui,sans-serif !important;
+  font-family:'ZZZ Display','ZZZ Secondary',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
   font-weight:700 !important;
 }
 /* reading text is the body face: the assistant message body is bare text
@@ -383,7 +383,7 @@ html[${MARKER}] [class*="_paragraph"],
 html[${MARKER}] [class*="_paragraph"] *,
 html[${MARKER}] p,
 html[${MARKER}] li{
-  font-family:'ZZZ Body',system-ui,-apple-system,'Segoe UI',sans-serif !important;
+  font-family:'ZZZ Body',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
   font-weight:400 !important;
 }
 
@@ -735,7 +735,7 @@ html[${MARKER}] [class*="_regionArea"]{
    hierarchy is carried by weight, not size */
 html[${MARKER}] [class*="_regionArea"],
 html[${MARKER}] [class*="_regionArea"] *{
-  font-family:'ZZZ Secondary','ZZZ Body',system-ui,sans-serif !important;
+  font-family:'ZZZ Secondary','ZZZ Body',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
   font-weight:500 !important;
 }
 
@@ -1035,12 +1035,12 @@ html[${MARKER}] [role="listbox"] [role="option"]{padding:6px 8px !important; mar
    display face whatever class the host gives it; buttons inside keep D40 */
 html[${MARKER}] [role="dialog"] > :first-child,
 html[${MARKER}] [role="dialog"] > :first-child *{
-  font-family:'ZZZ Display','ZZZ Secondary',system-ui,sans-serif !important;
+  font-family:'ZZZ Display','ZZZ Secondary',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
   font-weight:700 !important;
 }
 html[${MARKER}] [role="dialog"] > :first-child button,
 html[${MARKER}] [role="dialog"] > :first-child button *{
-  font-family:'ZZZ Secondary','ZZZ Body',system-ui,sans-serif !important;
+  font-family:'ZZZ Secondary','ZZZ Body',system-ui,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif !important;
   font-weight:500 !important;
 }
 

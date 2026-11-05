@@ -947,3 +947,13 @@ epeating-linear-gradient。
   ZZZ Secondary = inpin-d40.woff2 = 印品鸿蒙体 D40 (500).
 - Added a container-level rule on _headline so the whole headline block resolves to the display face;
   the title span keeps the !important pair so the host's medium body face cannot win.
+
+### distribution: fonts optional, dist branch + market index tooling (2026-11-05)
+
+- Fonts are no longer tracked or published (印品鸿蒙体 is non-commercial); the host serves them from
+  /dsh-theme-zzz/fonts when present, otherwise 404 -> CSS falls back to system CJK fonts.
+- CSS stacks gained PingFang SC / Microsoft YaHei / Noto Sans SC fallbacks.
+- package.json: files without fonts, engines.dsh, keywords, README/LICENSE.
+- README.md (root + package) documents market index, git #dist, npm, local install.
+- scripts/make-dist.mjs builds the dist branch content; scripts/make-market-index.mjs +
+  scripts/check-market-index.mjs generate and validate a format-1 market index.

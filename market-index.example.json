@@ -1,0 +1,70 @@
+{
+  "format": 1,
+  "title": {
+    "en": "ZZZ Themes",
+    "zh": "ZZZ 主题"
+  },
+  "description": {
+    "en": "Zenless Zone Zero style themes for the DeepSeek Harness Web UI.",
+    "zh": "《绝区零》风格的 DeepSeek Harness Web 主题。"
+  },
+  "metadata": {
+    "categories": {
+      "theme": {
+        "title": {
+          "en": "Theme",
+          "zh": "主题"
+        }
+      }
+    },
+    "labels": {},
+    "sortKeys": {}
+  },
+  "plugins": [
+    {
+      "name": "dsh-theme-zzz",
+      "title": {
+        "en": "Zenless Theme",
+        "zh": "绝区零主题"
+      },
+      "description": {
+        "en": "Zenless Zone Zero inspired palette, typography and brand chrome for the Harness Web UI.",
+        "zh": "以《绝区零》UI 风格重绘 Harness 界面：高对比黄黑配色、印品鸿蒙体标题字、切角品牌标识与印刷质感叠层。"
+      },
+      "icon": "./icon.svg",
+      "author": "dsh-theme-zzz contributors",
+      "homepage": "https://github.com/example/dsh-theme-zzz",
+      "repository": {
+        "url": "https://github.com/example/dsh-theme-zzz",
+        "directory": "packages/dsh-theme-zzz"
+      },
+      "metadata": {
+        "category": "theme",
+        "keywords": [
+          "dsh",
+          "deepseek-harness",
+          "theme",
+          "zenless-zone-zero",
+          "zzz"
+        ],
+        "labels": [],
+        "sortKeys": {}
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1793867171,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/example/dsh-theme-zzz",
+            "commit": "0123456789abcdef0123456789abcdef01234567",
+            "path": "dist"
+          },
+          "engines": {
+            "dsh": ">=0.2.1-rc.4"
+          }
+        }
+      ]
+    }
+  ]
+}

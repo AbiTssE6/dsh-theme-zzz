@@ -1,19 +1,28 @@
 /**
  * Host half of dsh-theme-zzz.
  *
- * Serves the bundled assets (fonts) so the browser half can use them from CSS
- * without inlining megabytes into the client bundle.
+ * Serves the fonts the browser half asks for from CSS. The theme does NOT bundle
+ * 印品鸿蒙体 (its licence does not allow redistribution), so the lookup order is:
+ *
+ *   1. $DSH_HOME/dsh-theme-zzz/fonts/  (the user drops the .woff2 there)
+ *   2. ./fonts/                        (a developer checkout that still has them)
+ *
+ * When neither exists the request is a 404 and CSS falls back to the system fonts.
  */
 import { createReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
+import { homedir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
+const DSH_HOME = process.env.DSH_HOME || join(homedir(), '.dsh')
+const USER_FONT_DIR = join(DSH_HOME, 'dsh-theme-zzz', 'fonts')
 const ROUTES = [
   {
     path: '/zzz-theme/fonts',
     dir: join(HERE, 'fonts'),
+    userDir: USER_FONT_DIR,
     files: {
       'inpin-bold.woff2': 'font/woff2',
       'inpin-d40.woff2': 'font/woff2',
@@ -33,11 +42,19 @@ function staticHandler(route) {
       res.end('not found')
       return
     }
-    const file = join(route.dir, name)
+    let file
     let info
-    try {
-      info = await stat(file)
-    } catch {
+    for (const dir of [route.userDir, route.dir]) {
+      if (!dir) continue
+      try {
+        info = await stat(join(dir, name))
+        file = join(dir, name)
+        break
+      } catch {
+        /* try the next location */
+      }
+    }
+    if (file === undefined || info === undefined) {
       res.statusCode = 404
       res.end('not found')
       return

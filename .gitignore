@@ -14,3 +14,11 @@ node_modules/
 *.log
 Thumbs.db
 desktop.ini
+
+# non-redistributable fonts (inpin hongmengti): kept locally only
+packages/dsh-theme-zzz/fonts/
+
+# dist-branch build output
+dist/
+.dist-tmp/
+
