@@ -23,6 +23,10 @@ dsh plugin --profile web add AbiTssE6/dsh-theme-zzz#dist
 填别的字体族名同样可以，「重置字体」恢复这两个默认值。
 详见 [FONT-LICENSES.md](packages/dsh-theme-zzz/FONT-LICENSES.md)。
 
+## 自定义文案
+
+设置页的文字在 `packages/dsh-theme-zzz/locale/zh.json`、`en.json` 的 `settings` 里，改完刷新即可。
+
 ## 文档
 
 | 文档 | 内容 |

@@ -1007,3 +1007,11 @@ epeating-linear-gradient。
 - Empty field or an uninstalled family falls through the stack to Source Han Sans automatically,
   so no switch is needed.
 - Added a 重置字体 button restoring the two default families.
+
+### settings copy moved to locale JSON (2026-11-05)
+
+- All settings-page strings now live in locale/zh.json + locale/en.json under 'settings'.
+- index.js serves them at /zzz-theme/locale/<lang>.json (no-cache, whitelisted zh/en);
+  the client merges them over a built-in Chinese fallback and re-renders when they arrive.
+- The nav label uses a thunk (() => STR.title) so it follows the loaded copy.
+- Editing the JSON + refreshing is enough after the Host half has loaded once (restart needed once).

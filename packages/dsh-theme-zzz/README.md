@@ -57,6 +57,18 @@ dsh plugin --profile web add D:\path\to\dsh-theme-zzz
 
 字体为**非商用授权**，本仓库不分发字体文件；授权说明见 [FONT-LICENSES.md](./FONT-LICENSES.md)。
 
+## 自定义设置页文案
+
+设置页的文字不在代码里，而在：
+
+```
+locale/zh.json   -> settings.*
+locale/en.json   -> settings.*
+```
+
+Host 端（`index.js`）把它们以 `/zzz-theme/locale/<lang>.json` 提供给浏览器，改完刷新页面即可生效
+（需要重启过一次 DSH，让 Host 端加载路由）。`client.js` 里保留一份中文兜底，接口不可用时仍能显示。
+
 ## 兼容性
 
 ```json

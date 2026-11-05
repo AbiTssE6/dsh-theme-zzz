@@ -2246,6 +2246,45 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       }
     }
 
+    // Settings-page copy lives in locale/zh.json + locale/en.json (served by index.js);
+    // the defaults below keep the page readable if that request fails.
+    const STR = {
+      title: 'ZZZ 主题',
+      eyebrow: 'ZENLESS ZONE ZERO',
+      voidGroup: '空洞',
+      voidDesc: '会话区背景的动态空洞效果。',
+      voidToggle: '空洞开关',
+      voidToggleDesc: '关闭后空洞不再显示，动画同时暂停。',
+      perfToggle: '性能模式',
+      perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
+      fontGroup: '字体',
+      fontDesc: '默认使用思源黑体；下方留空或字体缺失时同样回退到默认。',
+      fontBold: '粗体字体',
+      fontBoldDesc: '标题、导航与分区标题使用；留空 = 默认。',
+      fontBoldPlaceholder: '印品鸿蒙体',
+      fontThin: '细体字体',
+      fontThinDesc: '正文、设置项与次级标签使用；留空 = 默认。',
+      fontThinPlaceholder: '印品鸿蒙体 D40',
+      reset: '重置字体',
+    }
+    const strListeners = new Set()
+    async function loadStrings() {
+      const lang = String(document.documentElement.lang || navigator.language || 'zh')
+        .toLowerCase().startsWith('zh') ? 'zh' : 'en'
+      try {
+        const res = await fetch('/zzz-theme/locale/' + lang + '.json', { cache: 'no-cache' })
+        if (res.ok) {
+          const data = await res.json()
+          if (data && data.settings && typeof data.settings === 'object') Object.assign(STR, data.settings)
+        }
+      } catch (e) {
+        /* keep the built-in defaults */
+      }
+      for (const fn of Array.from(strListeners)) {
+        try { fn() } catch (e) {}
+      }
+    }
+
     function ZzzSwitch(props) {
       const on = !!props.checked
       return h('button', {
@@ -2343,6 +2382,12 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         voidPrefListeners.add(fn)
         return () => { voidPrefListeners.delete(fn) }
       }, [])
+      const [, bumpStrings] = React.useState(0)
+      React.useEffect(() => {
+        const fn = () => bumpStrings((n) => n + 1)
+        strListeners.add(fn)
+        return () => { strListeners.delete(fn) }
+      }, [])
       return h('div', { style: { padding: '0 0 8px' } },
         h('div', {
           style: {
@@ -2350,50 +2395,50 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
             fontSize: '24px', fontWeight: 800, letterSpacing: '0.02em',
             lineHeight: '1.3', padding: '2px 0 4px',
           },
-        }, 'ZZZ 主题'),
+        }, STR.title),
         h('div', {
           style: {
             color: 'var(--dsw-alias-brand-primary)', fontSize: '11px',
             fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase',
             paddingBottom: '10px',
           },
-        }, 'ZENLESS ZONE ZERO'),
+        }, STR.eyebrow),
         h('div', {
           style: { color: 'var(--dsw-alias-label-primary)', fontSize: '15px', fontWeight: 600, paddingBottom: '6px' },
-        }, '空洞'),
+        }, STR.voidGroup),
         h('div', {
           style: { color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', lineHeight: '1.6' },
-        }, '会话区背景的动态空洞效果。'),
+        }, STR.voidDesc),
         h(ZzzSettingRow, {
-          title: '空洞开关',
-          desc: '关闭后空洞不再显示，动画同时暂停。',
+          title: STR.voidToggle,
+          desc: STR.voidToggleDesc,
           checked: prefs.void,
           onChange: () => updateVoidPrefs({ void: !voidPrefs.void }),
         }),
         h(ZzzSettingRow, {
-          title: '性能模式',
-          desc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
+          title: STR.perfToggle,
+          desc: STR.perfToggleDesc,
           checked: prefs.low,
           onChange: () => updateVoidPrefs({ low: !voidPrefs.low }),
         }),
         h('div', {
           style: { color: 'var(--dsw-alias-label-primary)', fontSize: '15px', fontWeight: 600, padding: '20px 0 6px' },
-        }, '字体'),
+        }, STR.fontGroup),
         h('div', {
           style: { color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', lineHeight: '1.6' },
-        }, '默认使用思源黑体；下方留空或字体缺失时同样回退到默认。'),
+        }, STR.fontDesc),
         h(ZzzTextField, {
-          label: '粗体字体',
-          desc: '标题、导航与分区标题使用；留空 = 默认。',
+          label: STR.fontBold,
+          desc: STR.fontBoldDesc,
           value: prefs.fontBold,
-          placeholder: '印品鸿蒙体',
+          placeholder: STR.fontBoldPlaceholder,
           onChange: (v) => updateVoidPrefs({ fontBold: v }),
         }),
         h(ZzzTextField, {
-          label: '细体字体',
-          desc: '正文、设置项与次级标签使用；留空 = 默认。',
+          label: STR.fontThin,
+          desc: STR.fontThinDesc,
           value: prefs.fontThin,
-          placeholder: '印品鸿蒙体 D40',
+          placeholder: STR.fontThinPlaceholder,
           onChange: (v) => updateVoidPrefs({ fontThin: v }),
         }),
         h('div', { style: { display: 'flex', justifyContent: 'flex-end', paddingTop: '14px' } },
@@ -2407,7 +2452,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
               borderRadius: '8px', padding: '6px 14px', fontSize: '13px',
               cursor: 'pointer',
             },
-          }, '重置字体')))
+          }, STR.reset)))
     }
 
     function apply(ctx) {
@@ -3408,6 +3453,11 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }
       }, 'dsh-theme-zzz: fonts')
 
+      ctx.effect(() => {
+        loadStrings()
+        return () => {}
+      }, 'dsh-theme-zzz: strings')
+
       ctx.slots.inject('sidebar.brand.mark', () =>
         ctx.slots.register({ name: 'sidebar.brand.mark', priority: -1 }, () => h(BrandMark, { size: 26 })),
       )
@@ -3417,7 +3467,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       )
 
       ctx.slots.inject('settings.section', () =>
-        ctx.slots.register({ name: 'settings.section', id: 'zzz-theme', order: 70, label: 'ZZZ 主题' }, ZzzSettings),
+        ctx.slots.register({ name: 'settings.section', id: 'zzz-theme', order: 70, label: () => STR.title }, ZzzSettings),
       )
 
       } catch (err) {
