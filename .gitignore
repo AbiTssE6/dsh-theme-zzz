@@ -2,18 +2,17 @@
 .scratch/
 .backups/
 
-# screenshot galleries and design-mock images (reference only, not source)
+# reference-only images and analysis material: never published, kept on disk locally
 示例截图/
 素材/字体/
 素材/参考/*.png
-
-# unrelated analysis material
+素材/logo/
+按钮与强调色逻辑/
+框逻辑/
 思维导图/
 
-node_modules/
-*.log
-Thumbs.db
-desktop.ini
+# unused local copies of the brand art (the runtime uses inline data URIs)
+packages/dsh-theme-zzz/assets/*.png
 
 # non-redistributable fonts (inpin hongmengti): kept locally only
 packages/dsh-theme-zzz/fonts/
@@ -21,4 +20,9 @@ packages/dsh-theme-zzz/fonts/
 # dist-branch build output
 dist/
 .dist-tmp/
+.dist-worktree/
 
+node_modules/
+*.log
+Thumbs.db
+desktop.ini
