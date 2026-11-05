@@ -1088,3 +1088,13 @@ epeating-linear-gradient。
 - Some builds of 印品鸿蒙体 D40 carry the internal family name 'SDK_SC_Web' (nameID 3 still says
   yinpinhongmengti D40-v1.04). Added it to the text stack aliases, after the D40 names.
 - It is a single Regular (400) face; the bold is a separate file ('inpin hongmengti').
+
+### settings: custom font fields return, applied to html AND body (2026-11-05)
+
+- Two inputs (display / text family) with a small hint: use the family name installed in the system,
+  not the file name. Defaults are 印品鸿蒙体 / 印品鸿蒙体 D40; the values expand with the known aliases.
+- The inline override is written to document.documentElement AND document.body, because the base
+  declarations live in a rule that targets both; writing only html left body on the stylesheet stacks
+  (the bug that made the switch look dead).
+- Typing into a field switches the 'Source Han Sans' toggle off, so the field visibly applies.
+- Empty field removes the override so the stylesheet default (inpin-first) applies again.

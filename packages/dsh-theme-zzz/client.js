@@ -2254,6 +2254,8 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         void: typeof saved.void === 'boolean' ? saved.void : true,
         low: typeof saved.low === 'boolean' ? saved.low : false,
         fontSans: typeof saved.fontSans === 'boolean' ? saved.fontSans : false,
+        fontBold: typeof saved.fontBold === 'string' ? saved.fontBold : '印品鸿蒙体',
+        fontThin: typeof saved.fontThin === 'string' ? saved.fontThin : '印品鸿蒙体 D40',
       }
     })()
     const voidPrefListeners = new Set()
@@ -2279,7 +2281,13 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       fontGroup: '字体',
       fontDesc: '由于绝区零使用的印品鸿蒙体不允许无授权的二次分发，本主题不自带印品鸿蒙体字体文件。若你的电脑上自行安装了印品鸿蒙体，主题会识别到并使用，否则回退至思源黑体。',
       fontSans: '使用思源黑体',
-      fontSansDesc: '跳过印品鸿蒙体，始终使用思源黑体。',
+      fontSansDesc: '跳过自定义字体，始终使用思源黑体。',
+      fontBold: '粗体字体',
+      fontBoldDesc: '填系统内的字体名（不是文件名）。',
+      fontBoldPlaceholder: '印品鸿蒙体',
+      fontThin: '细体字体',
+      fontThinDesc: '填系统内的字体名（不是文件名）。',
+      fontThinPlaceholder: '印品鸿蒙体 D40',
     }
     const strListeners = new Set()
     async function loadStrings() {
@@ -2346,11 +2354,53 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       h(ZzzSwitch, { checked: props.checked, onChange: props.onChange }))
     }
 
+    function ZzzTextField(props) {
+      return h('div', {
+        style: {
+          display: 'flex', alignItems: 'center', gap: '16px',
+          padding: '10px 0',
+          borderTop: '1px solid var(--dsw-alias-border-l1)',
+        },
+      },
+      h('div', { style: { flex: '1', minWidth: '0' } },
+        h('div', {
+          style: { color: 'var(--dsw-alias-label-primary)', fontSize: '14px', lineHeight: '1.5' },
+        }, props.label),
+        props.desc
+          ? h('div', {
+              style: {
+                color: 'var(--dsw-alias-label-secondary)', fontSize: '12px',
+                lineHeight: '1.6', marginTop: '2px',
+              },
+            }, props.desc)
+          : null),
+      h('input', {
+        type: 'text',
+        value: props.value,
+        placeholder: props.placeholder,
+        spellCheck: false,
+        onChange: (e) => {
+          props.onChange(e.target.value)
+          if (voidPrefs.fontSans) updateVoidPrefs({ fontSans: false })
+        },
+        style: {
+          flex: '0 0 auto', width: '190px', boxSizing: 'border-box',
+          background: 'var(--dsw-alias-bg-layer-2)',
+          color: 'var(--dsw-alias-label-primary)',
+          border: '1px solid var(--dsw-alias-border-l2)',
+          borderRadius: '8px', padding: '6px 10px', fontSize: '13px',
+          outline: 'none',
+        },
+      }))
+    }
+
     function ZzzSettings() {
       const snapshot = () => ({
         void: voidPrefs.void,
         low: voidPrefs.low,
         fontSans: voidPrefs.fontSans,
+        fontBold: voidPrefs.fontBold,
+        fontThin: voidPrefs.fontThin,
       })
       const [prefs, setPrefs] = React.useState(snapshot)
       React.useEffect(() => {
@@ -2403,6 +2453,20 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         h('div', {
           style: { color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', lineHeight: '1.6' },
         }, STR.fontDesc),
+        h(ZzzTextField, {
+          label: STR.fontBold,
+          desc: STR.fontBoldDesc,
+          value: prefs.fontBold,
+          placeholder: STR.fontBoldPlaceholder,
+          onChange: (v) => updateVoidPrefs({ fontBold: v }),
+        }),
+        h(ZzzTextField, {
+          label: STR.fontThin,
+          desc: STR.fontThinDesc,
+          value: prefs.fontThin,
+          placeholder: STR.fontThinPlaceholder,
+          onChange: (v) => updateVoidPrefs({ fontThin: v }),
+        }),
         h(ZzzSettingRow, {
           title: STR.fontSans,
           desc: STR.fontSansDesc,
@@ -3403,6 +3467,50 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           document.documentElement.removeAttribute('data-zzz-font-sans')
         }
       }, 'dsh-theme-zzz: font mode')
+
+      // Custom families. The base vars are declared on html AND body, so an override must be
+      // written to both, otherwise descendants keep inheriting the stylesheet stacks.
+      ctx.effect(() => {
+        const BASE = "'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
+        const ALIASES = {
+          '印品鸿蒙体': ['inpin hongmengti', '印品鸿蒙体（非商用）'],
+          '印品鸿蒙体 D40': ['印品鸿蒙体 D40-v1.04', 'yinpinhongmengti D40-v1.04', 'SDK_SC_Web'],
+        }
+        const stack = (name) => {
+          const clean = String(name || '').replace(/["']/g, '').trim()
+          if (!clean) return ''
+          const names = [clean].concat(ALIASES[clean] || [])
+          return names.map((n) => '"' + n + '"').join(',') + ',' + BASE
+        }
+        const targets = () => [document.documentElement, document.body].filter(Boolean)
+        const apply = () => {
+          if (voidPrefs.fontSans) return
+          const bold = stack(voidPrefs.fontBold)
+          const thin = stack(voidPrefs.fontThin)
+          for (const el of targets()) {
+            if (bold) el.style.setProperty('--zzz-font-display', bold)
+            else el.style.removeProperty('--zzz-font-display')
+            if (thin) el.style.setProperty('--zzz-font-text', thin)
+            else el.style.removeProperty('--zzz-font-text')
+          }
+        }
+        const clear = () => {
+          for (const el of targets()) {
+            el.style.removeProperty('--zzz-font-display')
+            el.style.removeProperty('--zzz-font-text')
+          }
+        }
+        const run = () => {
+          if (voidPrefs.fontSans) clear()
+          else apply()
+        }
+        voidPrefListeners.add(run)
+        run()
+        return () => {
+          voidPrefListeners.delete(run)
+          clear()
+        }
+      }, 'dsh-theme-zzz: custom fonts')
 
       ctx.effect(() => {
         loadStrings()

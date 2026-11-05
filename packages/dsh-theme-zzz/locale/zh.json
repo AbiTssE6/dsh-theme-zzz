@@ -15,6 +15,12 @@
     "fontGroup": "字体",
     "fontDesc": "由于绝区零使用的印品鸿蒙体不允许无授权的二次分发，本主题不自带印品鸿蒙体字体文件。若你的电脑上自行安装了印品鸿蒙体，主题会识别到并使用，否则回退至思源黑体。",
     "fontSans": "使用思源黑体",
-    "fontSansDesc": "跳过印品鸿蒙体，始终使用思源黑体。"
+    "fontSansDesc": "跳过自定义字体，始终使用思源黑体。",
+    "fontBold": "粗体字体",
+    "fontBoldDesc": "填系统内的字体名（不是文件名）。",
+    "fontBoldPlaceholder": "印品鸿蒙体",
+    "fontThin": "细体字体",
+    "fontThinDesc": "填系统内的字体名（不是文件名）。",
+    "fontThinPlaceholder": "印品鸿蒙体 D40"
   }
 }
