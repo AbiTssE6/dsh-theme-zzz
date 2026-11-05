@@ -1059,7 +1059,10 @@ html[${MARKER}] [role="dialog"] > :first-child button *{
 /* one scheme only: light mode must look exactly like dark mode, down to the
    parts CSS does not paint (scrollbars, native form controls) */
 /* settings switch: force Source Han Sans regardless of what is installed */
-html[${MARKER}][data-zzz-font-sans]{
+/* the base declarations sit on BOTH html and body, so the override must reach body too
+   (otherwise every descendant inherits the inpin stack from body) */
+html[${MARKER}][data-zzz-font-sans],
+html[${MARKER}][data-zzz-font-sans] body{
   --zzz-font-display:'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
   --zzz-font-text:'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
 }

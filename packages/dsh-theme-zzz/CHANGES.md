@@ -1073,3 +1073,12 @@ epeating-linear-gradient。
   flips both stacks, so nothing inline can shadow it.
 - The effect also clears inline --zzz-font-display/--zzz-font-text left by older builds (inline
   custom properties beat the stylesheet and were the reason the switch appeared to do nothing).
+
+### font switch root cause: the base vars are also declared on body (2026-11-05)
+
+- Live DOM probe (BrowserSkill): with data-zzz-font-sans set, <html> resolved --zzz-font-display to the
+  Sans stack, but the hero title still resolved it to the inpin stack.
+- Reason: the base declarations live in a rule that targets BOTH html[data] and html[data] body, so body
+  re-declares the inpin stacks and every descendant inherits them; overriding only html was invisible.
+- Fix: the override rule now also targets html[data][data-zzz-font-sans] body.
+- Replica measurement with the real stacks: 375.9 (inpin) -> 356.1 (Sans) when the attribute flips.
