@@ -2616,7 +2616,13 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           desc: STR.fontSansDesc,
           checked: prefs.fontSans,
           onChange: () => updateVoidPrefs({ fontSans: !voidPrefs.fontSans }),
-        }))
+        }),
+        h('div', {
+          style: {
+            color: 'var(--dsw-alias-label-secondary)', fontSize: '11px',
+            paddingTop: '18px', opacity: '0.65',
+          },
+        }, 'ZZZ Theme · build ' + BUILD))
     }
 
     function apply(ctx) {
@@ -2649,7 +2655,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       // the union of the watch options is enough, and each effect only registers a
       // handler. Handlers are wrapped so one failure cannot stop the others.
       // Build marker: the recorder reads it to prove which bundle is running.
-      const BUILD = '2026-11-02T22'
+      const BUILD = '2026-11-05T22'
       document.documentElement.dataset.zzzThemeBuild = BUILD
 
       const domWatchers = new Set()
