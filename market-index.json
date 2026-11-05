@@ -52,11 +52,11 @@
       "versions": [
         {
           "version": "0.3.2-5",
-          "publishTimestamp": 1793887587,
+          "publishTimestamp": 1793887604,
           "source": {
             "type": "git",
             "url": "https://github.com/AbiTssE6/dsh-theme-zzz",
-            "commit": "6ae2ac15350295bfdb6b8cd649ac586fd1792d10"
+            "commit": "27b527f5f3e6640d9fb452d104e55921a21f648b"
           },
           "engines": {
             "dsh": ">=0.2.1-rc.4"
