@@ -1061,3 +1061,8 @@ epeating-linear-gradient。
   --zzz-font-text to the Source Han Sans stack; when off it removes the inline override so the
   stylesheet's inpin-first default applies.
 - The 字体 group has a row with a button that toggles between 使用思源黑体 / 恢复印品优先.
+
+### settings: the Source Han Sans control is a switch (2026-11-05)
+
+- Replaced the plain button with the shared ZzzSettingRow switch (same slider as 空洞/性能模式).
+- The toggle pins / unpins the two font variables through the font-mode effect; state persists.

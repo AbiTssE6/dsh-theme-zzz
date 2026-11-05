@@ -2396,34 +2396,12 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         h('div', {
           style: { color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', lineHeight: '1.6' },
         }, STR.fontDesc),
-        h('div', {
-          style: {
-            display: 'flex', alignItems: 'center', gap: '16px',
-            padding: '14px 0', borderTop: '1px solid var(--dsw-alias-border-l1)',
-          },
-        },
-        h('div', { style: { flex: '1', minWidth: '0' } },
-          h('div', {
-            style: { color: 'var(--dsw-alias-label-primary)', fontSize: '14px', lineHeight: '1.5' },
-          }, STR.fontSans),
-          h('div', {
-            style: {
-              color: 'var(--dsw-alias-label-secondary)', fontSize: '12px',
-              lineHeight: '1.6', marginTop: '2px',
-            },
-          }, STR.fontSansDesc)),
-        h('button', {
-          type: 'button',
-          onClick: () => updateVoidPrefs({ fontSans: !voidPrefs.fontSans }),
-          style: {
-            flex: '0 0 auto',
-            background: prefs.fontSans ? 'var(--dsw-alias-brand-primary)' : 'var(--dsw-alias-bg-layer-3)',
-            color: prefs.fontSans ? '#101010' : 'var(--dsw-alias-label-primary)',
-            border: '1px solid var(--dsw-alias-border-l2)',
-            borderRadius: '8px', padding: '6px 14px', fontSize: '13px',
-            cursor: 'pointer',
-          },
-        }, prefs.fontSans ? STR.fontSansRestore : STR.fontSans)))
+        h(ZzzSettingRow, {
+          title: STR.fontSans,
+          desc: STR.fontSansDesc,
+          checked: prefs.fontSans,
+          onChange: () => updateVoidPrefs({ fontSans: !voidPrefs.fontSans }),
+        }))
     }
 
     function apply(ctx) {
