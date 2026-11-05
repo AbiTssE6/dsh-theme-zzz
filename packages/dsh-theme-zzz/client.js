@@ -2278,7 +2278,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
     // Settings-page copy lives in locale/zh.json + locale/en.json (served by index.js);
     // the defaults below keep the page readable if that request fails.
     const STR = {
-      title: 'ZZZ 主题',
+      title: '绝区零主题',
       eyebrow: 'ZENLESS ZONE ZERO',
       voidGroup: '空洞',
       voidDesc: '会话区背景的动态空洞效果。',
@@ -2492,7 +2492,9 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         h('div', {
           style: {
             color: 'var(--dsw-alias-label-primary)',
+            fontFamily: 'var(--zzz-font-display)',
             fontSize: '24px', fontWeight: 800, letterSpacing: '0.02em',
+            fontSynthesisWeight: 'none',
             lineHeight: '1.3', padding: '2px 0 4px',
           },
         }, STR.title),
