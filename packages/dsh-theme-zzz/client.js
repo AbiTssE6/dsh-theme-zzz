@@ -421,6 +421,12 @@ html[${MARKER}] [class*="_navCell"]{
   border-radius:8px !important;
   box-shadow:none !important;
 }
+/* every entry in that sidebar wears the display face in bold */
+html[${MARKER}] [class*="_navCell"]{
+  font-family:var(--zzz-font-display) !important;
+  font-weight:800 !important;
+  font-synthesis-weight:none !important;
+}
 html[${MARKER}] [class*="_navCell"]:hover{
   background:var(--zzz-hl) !important;
   color:#e8e8e8 !important;
