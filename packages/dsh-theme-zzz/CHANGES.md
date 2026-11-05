@@ -982,3 +982,10 @@ epeating-linear-gradient。
 - index.js is now an empty Host half: no @font-face, no /zzz-theme/fonts route, no bundled fonts.
 - The local packages/dsh-theme-zzz/fonts directory was deleted (sources stay in 素材/字体).
 - Fonts resolve purely from the OS; the settings page's custom-font fields cover 印品鸿蒙体.
+
+### markdown table centring (2026-11-05)
+
+- The host renders a table as max-content inside a 100%-wide scroll wrapper, so a table narrower
+  than the prose sits at the left edge and looks off-centre.
+- The wrapper now uses width:fit-content + max-width:100% + margin-inline:auto: it shrinks to the
+  grid and centres, while wide tables still cap at 100% and scroll horizontally.

@@ -2084,6 +2084,13 @@ html[${MARKER}] [class*="_tableScroll_"]{
   /* inset so the glass reads as a panel around the grid, not a page-wide band */
   padding:6px 14px;
   box-sizing:border-box;
+  /* the host renders the table as max-content inside a 100%-wide scroll box, so a
+     table narrower than the prose sticks to the left edge and reads off-centre;
+     shrink to the grid and centre it (wide tables still cap at 100% and scroll) */
+  width:fit-content;
+  max-width:100%;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 /* ===== queued-message dock: frosted glass =====
