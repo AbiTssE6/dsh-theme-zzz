@@ -23,8 +23,9 @@ import path from 'node:path'
 // 2026-11-04: +2 for the blank-session hero headline (display face + bold).
 // 2026-11-05: +3 for the settings section title (display face, weight 900, no synthesis).
 // 2026-11-05: +3 for the bold settings sidebar cells (display face, 800, no synthesis).
+// 2026-11-05: +3 for the nav label span inside those cells.
 const BASELINE = {
-  important: 646,
+  important: 649,
   idHacks: 9,
 }
 
