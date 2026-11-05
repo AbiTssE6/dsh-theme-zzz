@@ -2644,6 +2644,19 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         return () => el.remove()
       }, 'dsh-theme-zzz: stylesheet')
 
+      ctx.slots.inject('sidebar.brand.mark', () =>
+        ctx.slots.register({ name: 'sidebar.brand.mark', priority: -1 }, () => h(BrandMark, { size: 26 })),
+      )
+
+      ctx.slots.inject('conversation.hero.brand.mark', () =>
+        ctx.slots.register({ name: 'conversation.hero.brand.mark', priority: -1 }, () => h(BrandMark, { size: 42 })),
+      )
+
+      ctx.slots.inject('settings.section', () =>
+        ctx.slots.register({ name: 'settings.section', id: 'zzz-theme', order: 70, label: () => STR.title }, ZzzSettings),
+      )
+
+
       ctx.effect(() => {
         const root = document.documentElement
         root.setAttribute(MARKER, '')
@@ -3690,6 +3703,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       // class rules, so also pin the weight inline (with priority) whenever a cell appears.
       // If the stylesheet somehow misses them, this still lands.
       ctx.effect(() => {
+        try {
         const pin = (el) => {
           el.style.setProperty('font-family', 'var(--zzz-font-display)', 'important')
           el.style.setProperty('font-weight', '800', 'important')
@@ -3703,26 +3717,21 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           for (const el of root.querySelectorAll(SEL)) pin(el)
         }
         paint(document)
+        if (!document.body) return () => {}
         const mo = new MutationObserver((records) => {
           for (const record of records) {
-            for (const node of record.addedNodes) paint(node)
+            for (const node of record.addedNodes) {
+              try { paint(node) } catch (e) { /* never let a paint failure break apply */ }
+            }
           }
         })
         mo.observe(document.body, { childList: true, subtree: true })
         return () => mo.disconnect()
+        } catch (e) {
+          return () => {}
+        }
       }, 'dsh-theme-zzz: nav weight')
 
-      ctx.slots.inject('sidebar.brand.mark', () =>
-        ctx.slots.register({ name: 'sidebar.brand.mark', priority: -1 }, () => h(BrandMark, { size: 26 })),
-      )
-
-      ctx.slots.inject('conversation.hero.brand.mark', () =>
-        ctx.slots.register({ name: 'conversation.hero.brand.mark', priority: -1 }, () => h(BrandMark, { size: 42 })),
-      )
-
-      ctx.slots.inject('settings.section', () =>
-        ctx.slots.register({ name: 'settings.section', id: 'zzz-theme', order: 70, label: () => STR.title }, ZzzSettings),
-      )
 
       } catch (err) {
         document.title = 'APPLY-ERR: ' + ((err && err.message) || String(err))
