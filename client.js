@@ -3686,6 +3686,31 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         return () => {}
       }, 'dsh-theme-zzz: strings')
 
+      // Belt and braces for the settings sidebar: the host paints those cells with its own
+      // class rules, so also pin the weight inline (with priority) whenever a cell appears.
+      // If the stylesheet somehow misses them, this still lands.
+      ctx.effect(() => {
+        const pin = (el) => {
+          el.style.setProperty('font-family', 'var(--zzz-font-display)', 'important')
+          el.style.setProperty('font-weight', '800', 'important')
+          el.style.setProperty('font-synthesis-weight', 'none', 'important')
+        }
+        const paint = (root) => {
+          if (!root) return
+          if (root.nodeType === 1 && root.matches && root.matches('[class*="_navCell"]')) pin(root)
+          if (!root.querySelectorAll) return
+          for (const el of root.querySelectorAll('[class*="_navCell"]')) pin(el)
+        }
+        paint(document)
+        const mo = new MutationObserver((records) => {
+          for (const record of records) {
+            for (const node of record.addedNodes) paint(node)
+          }
+        })
+        mo.observe(document.body, { childList: true, subtree: true })
+        return () => mo.disconnect()
+      }, 'dsh-theme-zzz: nav weight')
+
       ctx.slots.inject('sidebar.brand.mark', () =>
         ctx.slots.register({ name: 'sidebar.brand.mark', priority: -1 }, () => h(BrandMark, { size: 26 })),
       )
