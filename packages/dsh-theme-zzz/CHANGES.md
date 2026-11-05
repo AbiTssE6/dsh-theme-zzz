@@ -976,3 +976,9 @@ epeating-linear-gradient。
 - Display rules raised 700 -> 800 (Noto Sans SC Black / Source Han Heavy); the medium 500 and
   body 400 classes are unchanged.
 - index.js font route is now unused; kept for users who still drop a font file in \.
+
+### font serving removed (2026-11-05)
+
+- index.js is now an empty Host half: no @font-face, no /zzz-theme/fonts route, no bundled fonts.
+- The local packages/dsh-theme-zzz/fonts directory was deleted (sources stay in 素材/字体).
+- Fonts resolve purely from the OS; the settings page's custom-font fields cover 印品鸿蒙体.
