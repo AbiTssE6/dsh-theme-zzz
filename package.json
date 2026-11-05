@@ -1,6 +1,6 @@
 {
   "name": "dsh-theme-zzz",
-  "version": "0.3.2",
+  "version": "0.3.2-5",
   "description": "Zenless Zone Zero style theme for DeepSeek Harness: palette, typography, brand chrome and the hollow background.",
   "type": "module",
   "private": false,
