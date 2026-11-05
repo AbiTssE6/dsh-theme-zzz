@@ -21,6 +21,14 @@
     "fontBoldPlaceholder": "inpin hongmengti",
     "fontThin": "Text font",
     "fontThinDesc": "Use the family name as installed in the system, not the file name.",
-    "fontThinPlaceholder": "inpin hongmengti D40"
+    "fontThinPlaceholder": "inpin hongmengti D40",
+    "voidSize": "Hollow size",
+    "voidSizeDesc": "Default diameter of the hollow (420–920 px).",
+    "voidSpeed": "Animation speed",
+    "voidSpeedDesc": "Flow speed multiplier of the light band (0.3–2.5).",
+    "voidZoom": "Press zoom",
+    "voidZoomDesc": "Scale while the mouse is held (1.0–1.6).",
+    "voidFollow": "Follow speed",
+    "voidFollowDesc": "Higher follows the pointer more closely (0.2–3.0)."
   }
 }

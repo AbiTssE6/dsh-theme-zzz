@@ -21,6 +21,14 @@
     "fontBoldPlaceholder": "印品鸿蒙体",
     "fontThin": "细体字体",
     "fontThinDesc": "填系统内的字体名（不是文件名）。",
-    "fontThinPlaceholder": "印品鸿蒙体 D40"
+    "fontThinPlaceholder": "印品鸿蒙体 D40",
+    "voidSize": "空洞大小",
+    "voidSizeDesc": "空洞的默认直径（420–920 px）。",
+    "voidSpeed": "动画速度",
+    "voidSpeedDesc": "光带流动速度的倍数（0.3–2.5）。",
+    "voidZoom": "点按放大",
+    "voidZoomDesc": "按住鼠标时的放大倍数（1.0–1.6）。",
+    "voidFollow": "跟随速度",
+    "voidFollowDesc": "越大越紧跟鼠标（0.2–3.0）。"
   }
 }
