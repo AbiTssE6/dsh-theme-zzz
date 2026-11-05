@@ -1066,3 +1066,10 @@ epeating-linear-gradient。
 
 - Replaced the plain button with the shared ZzzSettingRow switch (same slider as 空洞/性能模式).
 - The toggle pins / unpins the two font variables through the font-mode effect; state persists.
+
+### font switch: attribute-driven, no inline vars (2026-11-05)
+
+- The switch now toggles data-zzz-font-sans on <html>; a dedicated rule with higher specificity
+  flips both stacks, so nothing inline can shadow it.
+- The effect also clears inline --zzz-font-display/--zzz-font-text left by older builds (inline
+  custom properties beat the stylesheet and were the reason the switch appeared to do nothing).

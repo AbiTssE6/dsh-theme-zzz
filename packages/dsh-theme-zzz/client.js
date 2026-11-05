@@ -1058,6 +1058,11 @@ html[${MARKER}] [role="dialog"] > :first-child button *{
 
 /* one scheme only: light mode must look exactly like dark mode, down to the
    parts CSS does not paint (scrollbars, native form controls) */
+/* settings switch: force Source Han Sans regardless of what is installed */
+html[${MARKER}][data-zzz-font-sans]{
+  --zzz-font-display:'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  --zzz-font-text:'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+}
 html[${MARKER}]{
   color-scheme:dark !important;
 }
@@ -3381,21 +3386,18 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         const SANS = "'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
         const apply = () => {
           const root = document.documentElement
-          if (voidPrefs.fontSans) {
-            root.style.setProperty('--zzz-font-display', SANS)
-            root.style.setProperty('--zzz-font-text', SANS)
-          } else {
-            root.style.removeProperty('--zzz-font-display')
-            root.style.removeProperty('--zzz-font-text')
-          }
+          // older builds wrote these as inline custom properties; inline beats the
+          // stylesheet, so clear them before the attribute takes over
+          root.style.removeProperty('--zzz-font-display')
+          root.style.removeProperty('--zzz-font-text')
+          if (voidPrefs.fontSans) root.setAttribute('data-zzz-font-sans', '')
+          else root.removeAttribute('data-zzz-font-sans')
         }
         voidPrefListeners.add(apply)
         apply()
         return () => {
           voidPrefListeners.delete(apply)
-          const root = document.documentElement
-          root.style.removeProperty('--zzz-font-display')
-          root.style.removeProperty('--zzz-font-text')
+          document.documentElement.removeAttribute('data-zzz-font-sans')
         }
       }, 'dsh-theme-zzz: font mode')
 
