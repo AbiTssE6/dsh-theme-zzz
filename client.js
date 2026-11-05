@@ -12,6 +12,7 @@ window.__ModuleLoader__.load({
 
     const STYLE_ID = 'dsh-theme-zzz-style'
     const MARKER = 'data-dsh-theme-zzz'
+const BUILD = '2026-11-05T22'
 
     /* Gray ladder re-sampled off the reference screenshots:
          page        #131313
@@ -2668,7 +2669,6 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       // the union of the watch options is enough, and each effect only registers a
       // handler. Handlers are wrapped so one failure cannot stop the others.
       // Build marker: the recorder reads it to prove which bundle is running.
-      const BUILD = '2026-11-05T22'
       document.documentElement.dataset.zzzThemeBuild = BUILD
 
       const domWatchers = new Set()
