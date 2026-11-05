@@ -2233,7 +2233,6 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       return {
         void: typeof saved.void === 'boolean' ? saved.void : true,
         low: typeof saved.low === 'boolean' ? saved.low : false,
-        fontCustom: typeof saved.fontCustom === 'boolean' ? saved.fontCustom : false,
         fontBold: typeof saved.fontBold === 'string' ? saved.fontBold : '印品鸿蒙体',
         fontThin: typeof saved.fontThin === 'string' ? saved.fontThin : '印品鸿蒙体 D40',
       }
@@ -2335,7 +2334,6 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       const snapshot = () => ({
         void: voidPrefs.void,
         low: voidPrefs.low,
-        fontCustom: voidPrefs.fontCustom,
         fontBold: voidPrefs.fontBold,
         fontThin: voidPrefs.fontThin,
       })
@@ -2383,31 +2381,33 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }, '字体'),
         h('div', {
           style: { color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', lineHeight: '1.6' },
-        }, '默认使用思源黑体（Source Han Sans / Noto Sans SC）。'),
-        h(ZzzSettingRow, {
-          title: '自定义字体',
-          desc: '改用本机已安装的字体，填字体族名（不是文件名）。',
-          checked: prefs.fontCustom,
-          onChange: () => updateVoidPrefs({ fontCustom: !voidPrefs.fontCustom }),
+        }, '默认使用思源黑体；下方留空或字体缺失时同样回退到默认。'),
+        h(ZzzTextField, {
+          label: '粗体字体',
+          desc: '标题、导航与分区标题使用；留空 = 默认。',
+          value: prefs.fontBold,
+          placeholder: '印品鸿蒙体',
+          onChange: (v) => updateVoidPrefs({ fontBold: v }),
         }),
-        prefs.fontCustom
-          ? h(ZzzTextField, {
-              label: '粗体字体',
-              desc: '标题、导航与分区标题使用。',
-              value: prefs.fontBold,
-              placeholder: '印品鸿蒙体',
-              onChange: (v) => updateVoidPrefs({ fontBold: v }),
-            })
-          : null,
-        prefs.fontCustom
-          ? h(ZzzTextField, {
-              label: '细体字体',
-              desc: '正文、设置项与次级标签使用。',
-              value: prefs.fontThin,
-              placeholder: '印品鸿蒙体 D40',
-              onChange: (v) => updateVoidPrefs({ fontThin: v }),
-            })
-          : null)
+        h(ZzzTextField, {
+          label: '细体字体',
+          desc: '正文、设置项与次级标签使用；留空 = 默认。',
+          value: prefs.fontThin,
+          placeholder: '印品鸿蒙体 D40',
+          onChange: (v) => updateVoidPrefs({ fontThin: v }),
+        }),
+        h('div', { style: { display: 'flex', justifyContent: 'flex-end', paddingTop: '14px' } },
+          h('button', {
+            type: 'button',
+            onClick: () => updateVoidPrefs({ fontBold: '印品鸿蒙体', fontThin: '印品鸿蒙体 D40' }),
+            style: {
+              background: 'var(--dsw-alias-bg-layer-3)',
+              color: 'var(--dsw-alias-label-primary)',
+              border: '1px solid var(--dsw-alias-border-l2)',
+              borderRadius: '8px', padding: '6px 14px', fontSize: '13px',
+              cursor: 'pointer',
+            },
+          }, '重置字体')))
     }
 
     function apply(ctx) {
@@ -3392,13 +3392,10 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }
         const apply = () => {
           const root = document.documentElement
-          if (voidPrefs.fontCustom) {
-            root.style.setProperty('--zzz-font-display', stack(voidPrefs.fontBold || '印品鸿蒙体'))
-            root.style.setProperty('--zzz-font-text', stack(voidPrefs.fontThin || '印品鸿蒙体 D40'))
-          } else {
-            root.style.removeProperty('--zzz-font-display')
-            root.style.removeProperty('--zzz-font-text')
-          }
+          // an empty field keeps the default stack; a family that is not installed
+          // simply misses and the following families take over, so no switch is needed
+          root.style.setProperty('--zzz-font-display', stack(voidPrefs.fontBold))
+          root.style.setProperty('--zzz-font-text', stack(voidPrefs.fontThin))
         }
         voidPrefListeners.add(apply)
         apply()

@@ -999,3 +999,11 @@ epeating-linear-gradient。
 
 - The host's full-width flow is what reads as skewed in this layout, so the wrapper is back to
   fit-content + max-width:100% + margin-inline:auto (measured 183px / 183px around the grid).
+
+### font settings: no toggle, always-editable fields + reset (2026-11-05)
+
+- Removed the 自定义字体 switch; the two family-name fields are always shown and default to
+  印品鸿蒙体 / 印品鸿蒙体 D40.
+- Empty field or an uninstalled family falls through the stack to Source Han Sans automatically,
+  so no switch is needed.
+- Added a 重置字体 button restoring the two default families.

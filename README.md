@@ -18,8 +18,9 @@ dsh plugin --profile web add AbiTssE6/dsh-theme-zzz#dist
 默认字体是 **思源黑体**（Source Han Sans / Noto Sans SC），不随包分发，由系统提供；
 缺少时回退 `PingFang SC / Microsoft YaHei`。
 
-想还原最初的印品鸿蒙体设计：把字体安装到系统，然后在 **设置 → ZZZ 主题 → 字体** 打开
-「自定义字体」，分别填写粗体与细体的字体族名（如 `印品鸿蒙体`、`印品鸿蒙体 D40`）。
+字体可在 **设置 → ZZZ 主题 → 字体** 里改：两个输入框默认就是 `印品鸿蒙体` 与
+`印品鸿蒙体 D40`，装好字体即刻生效；**留空、或字体没装** 都会自动退回思源黑体；
+填别的字体族名同样可以，「重置字体」恢复这两个默认值。
 详见 [FONT-LICENSES.md](packages/dsh-theme-zzz/FONT-LICENSES.md)。
 
 ## 文档
