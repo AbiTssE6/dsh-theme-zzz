@@ -29,6 +29,8 @@
     "voidZoom": "Press zoom",
     "voidZoomDesc": "Scale while the mouse is held (1.0–1.6).",
     "voidFollow": "Follow speed",
-    "voidFollowDesc": "Higher follows the pointer more closely (0.2–3.0)."
+    "voidFollowDesc": "Higher follows the pointer more closely (0.2–3.0).",
+    "voidReset": "Reset hollow settings",
+    "voidResetDesc": "Restores 680px / 1.0x / 1.2x / 1.0x."
   }
 }
