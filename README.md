@@ -5,7 +5,7 @@
 
 - 深色单方案（浅色系统下也强制同一套深色外观）
 - 主题设置页：空洞开关 / 性能模式
-- 会话区「空洞」：球面菲涅尔、光带、外圈接触阴影，随鼠标滞后跟随，按下放大
+- 会话区「空洞」：球面菲涅尔、光带、外圈接触阴影，随鼠标滞后跟随，按下缩放
 
 ## 安装
 
@@ -15,7 +15,7 @@
 
 1. 打开 **设置 → 插件 → 发现**；
 2. **添加索引源**，粘贴本仓库的索引地址：
-   `https://abitisse6.github.io/dsh-theme-zzz/market-index.json`
+   `https://raw.githubusercontent.com/AbiTssE6/dsh-theme-zzz/master/market-index.json`
 3. 搜索「绝区零 / ZZZ」，点 **安装**。
 
 > 索引源只需添加一次，之后搜索和安装都是一键。

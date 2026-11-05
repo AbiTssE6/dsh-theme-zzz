@@ -2247,12 +2247,20 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
     }
     // ---- ZZZ settings: persisted preferences shared with the void effect ----
     const PREF_KEY = 'dsh-theme-zzz:prefs'
+    const clampNum = (v, lo, hi, fallback) => {
+      const n = typeof v === 'number' && isFinite(v) ? v : NaN
+      return isFinite(n) ? Math.max(lo, Math.min(hi, n)) : fallback
+    }
     const voidPrefs = (() => {
       let saved = {}
       try { saved = JSON.parse(localStorage.getItem(PREF_KEY) || '{}') || {} } catch (e) { saved = {} }
       return {
         void: typeof saved.void === 'boolean' ? saved.void : true,
         low: typeof saved.low === 'boolean' ? saved.low : false,
+        voidSize: clampNum(saved.voidSize, 420, 920, 680),
+        voidSpeed: clampNum(saved.voidSpeed, 0.3, 2.5, 1),
+        voidZoom: clampNum(saved.voidZoom, 0.5, 1.6, 0.7),
+        voidFollow: clampNum(saved.voidFollow, 0.2, 3, 1),
         fontSans: typeof saved.fontSans === 'boolean' ? saved.fontSans : false,
         fontBold: typeof saved.fontBold === 'string' ? saved.fontBold : '印品鸿蒙体',
         fontThin: typeof saved.fontThin === 'string' ? saved.fontThin : '印品鸿蒙体 D40',
@@ -2276,6 +2284,16 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       voidDesc: '会话区背景的动态空洞效果。',
       voidToggle: '空洞开关',
       voidToggleDesc: '关闭后空洞不再显示，动画同时暂停。',
+      voidSize: '空洞大小',
+      voidSizeDesc: '空洞的默认直径（420–920 px）。',
+      voidSpeed: '动画速度',
+      voidSpeedDesc: '光带流动速度的倍数（0.3–2.5）。',
+      voidZoom: '点按缩放',
+      voidZoomDesc: '按住鼠标时的缩放倍数，小于 1 会缩小（0.5–1.6）。',
+      voidFollow: '跟随速度',
+      voidFollowDesc: '越大越紧跟鼠标（0.2–3.0）。',
+      voidReset: '重置空洞参数',
+      voidResetDesc: '恢复 680px / 1.0x / 0.7x / 1.0x。',
       perfToggle: '性能模式',
       perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
       fontGroup: '字体',
@@ -2394,10 +2412,66 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       }))
     }
 
+    function ZzzSlider(props) {
+      // The theme paints the travelled part of the track from --zzz-fill, which its
+      // listener updates on input/change. A programmatic value change (the reset
+      // button) fires neither, so the fill would lag behind the thumb; recompute it.
+      const inputRef = React.useRef(null)
+      React.useEffect(() => {
+        const el = inputRef.current
+        if (!el) return
+        const min = Number(props.min)
+        const max = Number(props.max)
+        const pct = max > min ? ((Number(el.value) - min) / (max - min)) * 100 : 0
+        el.style.setProperty('--zzz-fill', Math.max(0, Math.min(100, pct)).toFixed(2) + '%')
+      }, [props.value, props.min, props.max])
+      return h('div', {
+        style: {
+          display: 'flex', alignItems: 'center', gap: '12px',
+          padding: '10px 0',
+          borderTop: '1px solid var(--dsw-alias-border-l1)',
+        },
+      },
+      h('div', { style: { flex: '1', minWidth: '0' } },
+        h('div', {
+          style: { color: 'var(--dsw-alias-label-primary)', fontSize: '14px', lineHeight: '1.5' },
+        }, props.label),
+        props.desc
+          ? h('div', {
+              style: {
+                color: 'var(--dsw-alias-label-secondary)', fontSize: '12px',
+                lineHeight: '1.6', marginTop: '2px',
+              },
+            }, props.desc)
+          : null),
+      h('input', {
+        ref: inputRef,
+        type: 'range',
+        min: props.min, max: props.max, step: props.step,
+        value: props.value,
+        onChange: (e) => props.onChange(Number(e.target.value)),
+        style: {
+          flex: '0 0 auto', width: '150px', cursor: 'pointer',
+          accentColor: 'var(--dsw-alias-brand-primary)',
+        },
+      }),
+      h('div', {
+        style: {
+          flex: '0 0 auto', width: '58px', textAlign: 'right',
+          color: 'var(--dsw-alias-label-secondary)', fontSize: '12px',
+          fontVariantNumeric: 'tabular-nums',
+        },
+      }, props.display))
+    }
+
     function ZzzSettings() {
       const snapshot = () => ({
         void: voidPrefs.void,
         low: voidPrefs.low,
+        voidSize: voidPrefs.voidSize,
+        voidSpeed: voidPrefs.voidSpeed,
+        voidZoom: voidPrefs.voidZoom,
+        voidFollow: voidPrefs.voidFollow,
         fontSans: voidPrefs.fontSans,
         fontBold: voidPrefs.fontBold,
         fontThin: voidPrefs.fontThin,
@@ -2447,6 +2521,54 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           checked: prefs.low,
           onChange: () => updateVoidPrefs({ low: !voidPrefs.low }),
         }),
+        h(ZzzSlider, {
+          label: STR.voidSize, desc: STR.voidSizeDesc,
+          min: 420, max: 920, step: 20, value: prefs.voidSize,
+          display: prefs.voidSize + 'px',
+          onChange: (v) => updateVoidPrefs({ voidSize: v }),
+        }),
+        h(ZzzSlider, {
+          label: STR.voidSpeed, desc: STR.voidSpeedDesc,
+          min: 0.3, max: 2.5, step: 0.1, value: prefs.voidSpeed,
+          display: prefs.voidSpeed.toFixed(1) + 'x',
+          onChange: (v) => updateVoidPrefs({ voidSpeed: v }),
+        }),
+        h(ZzzSlider, {
+          label: STR.voidZoom, desc: STR.voidZoomDesc,
+          min: 0.5, max: 1.6, step: 0.05, value: prefs.voidZoom,
+          display: prefs.voidZoom.toFixed(2) + 'x',
+          onChange: (v) => updateVoidPrefs({ voidZoom: v }),
+        }),
+        h(ZzzSlider, {
+          label: STR.voidFollow, desc: STR.voidFollowDesc,
+          min: 0.2, max: 3, step: 0.1, value: prefs.voidFollow,
+          display: prefs.voidFollow.toFixed(1) + 'x',
+          onChange: (v) => updateVoidPrefs({ voidFollow: v }),
+        }),
+        h('div', {
+          style: {
+            display: 'flex', alignItems: 'center', gap: '16px',
+            padding: '12px 0', borderTop: '1px solid var(--dsw-alias-border-l1)',
+          },
+        },
+        h('div', {
+          style: {
+            flex: '1', minWidth: '0', color: 'var(--dsw-alias-label-secondary)',
+            fontSize: '12px', lineHeight: '1.6',
+          },
+        }, STR.voidResetDesc),
+        h('button', {
+          type: 'button',
+          onClick: () => updateVoidPrefs({ voidSize: 680, voidSpeed: 1, voidZoom: 0.7, voidFollow: 1 }),
+          style: {
+            flex: '0 0 auto',
+            background: 'var(--dsw-alias-bg-layer-3)',
+            color: 'var(--dsw-alias-label-primary)',
+            border: '1px solid var(--dsw-alias-border-l2)',
+            borderRadius: '8px', padding: '6px 14px', fontSize: '13px',
+            cursor: 'pointer',
+          },
+        }, STR.voidReset)),
         h('div', {
           style: { color: 'var(--dsw-alias-label-primary)', fontSize: '15px', fontWeight: 600, padding: '20px 0 6px' },
         }, STR.fontGroup),
@@ -2535,7 +2657,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         SHADOW_W: 13.82,        // outer contact shadow width (= BAND_W / 0.618)
         SHADOW_ALPHA: 'rgba(0,0,0,.50)',
         SHADOW_DEBUG_ALPHA: 'rgba(255,0,0,.60)',
-        ZOOM: 1.2,              // press-and-hold scale
+        ZOOM: 0.7,              // press-and-hold scale
         ZOOM_TAU: 110,          // ms
         FPS: 24,
         FPS_ZOOM: 60,
@@ -2576,6 +2698,15 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           }
         })()
         const on = (name) => DEBUG.hide.indexOf(name) < 0
+        // live tunables from the settings page (the tick reads them every frame)
+        const sizeScale = () =>
+          Math.max(0.6, Math.min(1.4, (Number(voidPrefs.voidSize) || VOID.SIZE) / VOID.SIZE))
+        const followTau = () =>
+          180 / Math.max(0.2, Math.min(3, Number(voidPrefs.voidFollow) || 1))
+        const speedFactor = () =>
+          Math.max(0.3, Math.min(2.5, Number(voidPrefs.voidSpeed) || 1))
+        const zoomMax = () =>
+          Math.max(0.5, Math.min(1.6, Number(voidPrefs.voidZoom) || VOID.ZOOM))
         // low-power mode: ?voidlow, the settings toggle, or a small machine
         const LOW = DEBUG.low ||
           (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4 || voidPrefs.low
@@ -2912,7 +3043,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           if (fres.isConnected) {
             // low-power mode regenerates the sphere every other frame
             fresTick = (fresTick + 1) & 1
-            if (!lowNow() || fresTick === 0) drawFresnel(performance.now() * FRES_SPEED)
+            if (!lowNow() || fresTick === 0) drawFresnel(performance.now() * FRES_SPEED * speedFactor())
           }
           if (on('inner')) buildGlow(gIn, VOID.BLUR_IN, R + 43, [
             [0, 'rgba(255,255,255,0)'],
@@ -3014,7 +3145,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         let zoom = 1
         let zoomTarget = 1
         const onPress = (e) => {
-          if (e.button === 0 || e.button === 2) zoomTarget = VOID.ZOOM
+          if (e.button === 0 || e.button === 2) zoomTarget = zoomMax()
         }
         const onRelease = (e) => {
           if (!e || e.buttons === 0) zoomTarget = 1
@@ -3030,11 +3161,12 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           const dt = prevT ? Math.min(64, t - prevT) : 16
           prevT = t
           if (follow) {
-            const k = 1 - Math.exp(-dt / 180)
+            const k = 1 - Math.exp(-dt / followTau())
             ox += (tx - ox) * k
             oy += (ty - oy) * k
             stageEl.style.transform = 'translate(-50%,-50%) translate(' +
-              ox.toFixed(2) + 'px,' + oy.toFixed(2) + 'px)'
+              ox.toFixed(2) + 'px,' + oy.toFixed(2) + 'px) scale(' +
+              sizeScale().toFixed(3) + ')'
           }
           zoom += (zoomTarget - zoom) * (1 - Math.exp(-dt / VOID.ZOOM_TAU))
           if (Math.abs(zoomTarget - zoom) < 0.0002) zoom = zoomTarget
@@ -3048,10 +3180,19 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }
         if (!reduced) raf = requestAnimationFrame(tick)
         else render(0.15, 1)
+        // reduced motion (no tick) and the gap before the first frame still need the size
+        const applyGeometry = () => {
+          if (!follow) {
+            stageEl.style.transform = 'translate(-50%,-50%) scale(' + sizeScale().toFixed(3) + ')'
+          }
+        }
+        if (!follow) applyGeometry()
+        voidPrefListeners.add(applyGeometry)
 
         return () => {
           if (raf) cancelAnimationFrame(raf)
           if (io) io.disconnect()
+          voidPrefListeners.delete(applyGeometry)
           if (follow) window.removeEventListener('pointermove', onMove)
           window.removeEventListener('pointerdown', onPress, true)
           window.removeEventListener('pointerup', onRelease, true)
