@@ -2212,6 +2212,14 @@ html[${MARKER}] [data-slot="main.conversation"] :where(pre, code){
   filter:drop-shadow(0 1px 0 rgba(0,0,0,.55));
 }
 
+/* the settings section title: force the display face even if a host rule or an
+   inline style tries to keep it on the text face */
+html[${MARKER}] [data-zzz-settings-title]{
+  font-family:var(--zzz-font-display) !important;
+  font-weight:900 !important;
+  font-synthesis-weight:none !important;
+}
+
 /* ===== zzz void: conversation background ===== */
 html[${MARKER}] [class*="_centerCol"]{ position:relative; isolation:isolate; }
 html[${MARKER}] .zzz-void{ position:absolute; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
@@ -2490,11 +2498,10 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       }, [])
       return h('div', { style: { padding: '0 0 8px' } },
         h('div', {
+          'data-zzz-settings-title': '',
           style: {
             color: 'var(--dsw-alias-label-primary)',
-            fontFamily: 'var(--zzz-font-display)',
-            fontSize: '24px', fontWeight: 800, letterSpacing: '0.02em',
-            fontSynthesisWeight: 'none',
+            fontSize: '24px', letterSpacing: '0.02em',
             lineHeight: '1.3', padding: '2px 0 4px',
           },
         }, STR.title),
