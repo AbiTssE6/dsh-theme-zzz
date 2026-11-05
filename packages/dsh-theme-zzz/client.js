@@ -299,7 +299,7 @@ html[${MARKER}] body{
   /* the stylesheet default already prefers 印品 when it is installed (the same alias
      list the settings effect writes), otherwise it falls through to Source Han Sans */
   --zzz-font-display:'印品鸿蒙体','inpin hongmengti','印品鸿蒙体（非商用）','Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-  --zzz-font-text:'印品鸿蒙体 D40','印品鸿蒙体 D40-v1.04','yinpinhongmengti D40-v1.04','Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  --zzz-font-text:'印品鸿蒙体 D40','印品鸿蒙体 D40-v1.04','yinpinhongmengti D40-v1.04','SDK_SC_Web','Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
   --zzz-bevel-lo:1px 1px 0 rgba(0,0,0,.55);
   --zzz-green:#00cc0c;
   --zzz-red:#c81800;

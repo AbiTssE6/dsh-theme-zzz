@@ -1082,3 +1082,9 @@ epeating-linear-gradient。
   re-declares the inpin stacks and every descendant inherits them; overriding only html was invisible.
 - Fix: the override rule now also targets html[data][data-zzz-font-sans] body.
 - Replica measurement with the real stacks: 375.9 (inpin) -> 356.1 (Sans) when the attribute flips.
+
+### fonts: accept the renamed D40 build (SDK_SC_Web) (2026-11-05)
+
+- Some builds of 印品鸿蒙体 D40 carry the internal family name 'SDK_SC_Web' (nameID 3 still says
+  yinpinhongmengti D40-v1.04). Added it to the text stack aliases, after the D40 names.
+- It is a single Regular (400) face; the bold is a separate file ('inpin hongmengti').
