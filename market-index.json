@@ -35,8 +35,7 @@
       "author": "dsh-theme-zzz contributors",
       "homepage": "https://github.com/AbiTssE6/dsh-theme-zzz",
       "repository": {
-        "url": "https://github.com/AbiTssE6/dsh-theme-zzz",
-        "directory": "packages/dsh-theme-zzz"
+        "url": "https://github.com/AbiTssE6/dsh-theme-zzz"
       },
       "metadata": {
         "category": "theme",
@@ -53,12 +52,11 @@
       "versions": [
         {
           "version": "0.2.0",
-          "publishTimestamp": 1793878868,
+          "publishTimestamp": 1793879473,
           "source": {
             "type": "git",
             "url": "https://github.com/AbiTssE6/dsh-theme-zzz",
-            "commit": "a1ce0b8d5300467ea992ec70760698212b59d460",
-            "path": "dist"
+            "commit": "a1ce0b8d5300467ea992ec70760698212b59d460"
           },
           "engines": {
             "dsh": ">=0.2.1-rc.4"
