@@ -10,16 +10,14 @@
 dsh plugin --profile web add AbiTssE6/dsh-theme-zzz#dist
 ```
 
-或在 **设置 → 插件 → 发现** 添加索引源 `https://abitisse6.github.io/dsh-theme-zzz/market-index.json`
+或在 **设置 → 插件 → 发现** 添加索引源 `https://raw.githubusercontent.com/AbiTssE6/dsh-theme-zzz/master/market-index.json`
 后搜索安装。同一时刻只启用一个主题，装好后重启 Harness。
 
 ## 字体
 
-默认字体是 **思源黑体**（Source Han Sans / Noto Sans SC），不随包分发，由系统提供；
-缺少时回退 `PingFang SC / Microsoft YaHei`。
-
-字体默认优先 **印品鸿蒙体**（粗体 `inpin hongmengti` / 细体 D40），装好即生效；
-本机没装时自动回退 **思源黑体**，再回退系统无衬线。设置页「字体」里只显示这条说明。
+字体优先使用本机安装的 **印品鸿蒙体**（粗体 `inpin hongmengti` / 细体 D40），
+未安装时回退 **思源黑体**（Source Han Sans / Noto Sans SC），再回退系统无衬线。
+设置页「字体」可以填写任意系统字体名，或用开关强制思源黑体。
 详见 [FONT-LICENSES.md](packages/dsh-theme-zzz/FONT-LICENSES.md)。
 
 ## 自定义文案
