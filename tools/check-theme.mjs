@@ -21,8 +21,9 @@ import path from 'node:path'
 // Measured 2026-10-29 after the stale-hash cleanup and observer merge.
 // 2026-11-03: +3 for the dialog glass surface (it must out-rank the card fill).
 // 2026-11-04: +2 for the blank-session hero headline (display face + bold).
+// 2026-11-05: +3 for the settings section title (display face, weight 900, no synthesis).
 const BASELINE = {
-  important: 640,
+  important: 643,
   idHacks: 9,
 }
 
