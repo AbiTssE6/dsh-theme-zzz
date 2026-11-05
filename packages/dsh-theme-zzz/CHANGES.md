@@ -989,3 +989,8 @@ epeating-linear-gradient。
   than the prose sits at the left edge and looks off-centre.
 - The wrapper now uses width:fit-content + max-width:100% + margin-inline:auto: it shrinks to the
   grid and centres, while wide tables still cap at 100% and scroll horizontally.
+
+### markdown table: back to the host layout (2026-11-05)
+
+- Reverted the fit-content centring; the table wrapper keeps only the glass fill and the 6/14 padding,
+  so the host's full-width, left-aligned table flow is preserved.
