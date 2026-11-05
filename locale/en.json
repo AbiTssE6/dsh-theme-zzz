@@ -23,7 +23,7 @@
     "fontThinDesc": "Use the family name as installed in the system, not the file name.",
     "fontThinPlaceholder": "inpin hongmengti D40",
     "voidSize": "Hollow size",
-    "voidSizeDesc": "Default diameter of the hollow (420–920 px).",
+    "voidSizeDesc": "Default diameter of the hollow (240–920 px).",
     "voidSpeed": "Animation speed",
     "voidSpeedDesc": "Flow speed multiplier of the light band (0.3–2.5).",
     "voidZoom": "Press zoom",
