@@ -421,8 +421,15 @@ html[${MARKER}] [class*="_navCell"]{
   border-radius:8px !important;
   box-shadow:none !important;
 }
-/* every entry in that sidebar wears the display face in bold */
+/* every entry in that sidebar wears the display face in bold. The host's panel uses
+   <button class="XX_navCell"><span class="XX_navLabel">…, and the label span is the
+   element that actually paints the text, so both layers are pinned. */
 html[${MARKER}] [class*="_navCell"]{
+  font-family:var(--zzz-font-display) !important;
+  font-weight:800 !important;
+  font-synthesis-weight:none !important;
+}
+html[${MARKER}] [class*="_navCell"] [class*="_navLabel"]{
   font-family:var(--zzz-font-display) !important;
   font-weight:800 !important;
   font-synthesis-weight:none !important;
