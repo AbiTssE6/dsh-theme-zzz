@@ -15,7 +15,6 @@
     "fontGroup": "Fonts",
     "fontDesc": "The inpin hongmengti font used by Zenless Zone Zero does not allow unauthorised redistribution, so this theme ships no font files. If you have installed it yourself, the theme picks it up; otherwise it falls back to Source Han Sans.",
     "fontSans": "Use Source Han Sans",
-    "fontSansDesc": "Skip inpin hongmengti and always use Source Han Sans.",
-    "fontSansRestore": "Prefer inpin"
+    "fontSansDesc": "Skip inpin hongmengti and always use Source Han Sans."
   }
 }
