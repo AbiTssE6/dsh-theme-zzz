@@ -23,7 +23,7 @@
     "fontThinDesc": "填系统内的字体名（不是文件名）。",
     "fontThinPlaceholder": "印品鸿蒙体 D40",
     "voidSize": "空洞大小",
-    "voidSizeDesc": "空洞的默认直径（240–920 px）。",
+    "voidSizeDesc": "空洞的默认直径（240–1200 px）。",
     "voidSpeed": "动画速度",
     "voidSpeedDesc": "光带流动速度的倍数（0.3–2.5）。",
     "voidZoom": "点按缩放",
