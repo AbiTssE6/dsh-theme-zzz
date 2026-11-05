@@ -13,7 +13,7 @@
     "perfToggle": "Performance mode",
     "perfToggleDesc": "DPR 1.0, texture 96, 20 fps, tight glow off; DPR and texture apply after a reload.",
     "fontGroup": "Fonts",
-    "fontDesc": "Source Han Sans by default; empty fields or missing fonts fall back to it.",
+    "fontDesc": "Prefers inpin hongmengti; falls back to Source Han Sans when missing or empty.",
     "fontBold": "Display font",
     "fontBoldDesc": "Headings, navigation and section titles; empty = default.",
     "fontBoldPlaceholder": "inpin hongmengti",

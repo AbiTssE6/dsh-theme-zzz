@@ -1023,3 +1023,13 @@ epeating-linear-gradient。
 - The font effect now expands the two default Chinese names with those aliases, so the settings
   defaults really select 印品. Measured text width: bold 375.9, thin 368.9 vs fallback 356.1.
 - Explained the earlier "700 not bold enough": the theme had silently been rendering Source Han Sans.
+
+### fonts: inpin-first default + stale empty prefs fixed (2026-11-05)
+
+- The stylesheet defaults for --zzz-font-display / --zzz-font-text now start with the inpin
+  alias list, so the theme uses 印品 even before the settings effect runs (falls through to
+  Source Han Sans when it is not installed).
+- An empty stored family name no longer forces the fallback stack: it removes the inline
+  override, and saved empty values migrate to the inpin defaults.
+- This also fixes the 'everything is Source Han Sans' state left in localStorage by the
+  removed 自定义字体 toggle.

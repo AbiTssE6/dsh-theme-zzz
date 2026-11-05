@@ -296,8 +296,10 @@ html[${MARKER}] body{
   --zzz-glass-radius-lg:20px;
   /* fonts: Source Han Sans (Noto Sans SC) by default; the settings page can swap
      the families for locally installed ones (e.g. 印品鸿蒙体) through these vars. */
-  --zzz-font-display:'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-  --zzz-font-text:'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  /* the stylesheet default already prefers 印品 when it is installed (the same alias
+     list the settings effect writes), otherwise it falls through to Source Han Sans */
+  --zzz-font-display:'印品鸿蒙体','inpin hongmengti','印品鸿蒙体（非商用）','Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  --zzz-font-text:'印品鸿蒙体 D40','印品鸿蒙体 D40-v1.04','yinpinhongmengti D40-v1.04','Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
   --zzz-bevel-lo:1px 1px 0 rgba(0,0,0,.55);
   --zzz-green:#00cc0c;
   --zzz-red:#c81800;
@@ -2233,8 +2235,8 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       return {
         void: typeof saved.void === 'boolean' ? saved.void : true,
         low: typeof saved.low === 'boolean' ? saved.low : false,
-        fontBold: typeof saved.fontBold === 'string' ? saved.fontBold : '印品鸿蒙体',
-        fontThin: typeof saved.fontThin === 'string' ? saved.fontThin : '印品鸿蒙体 D40',
+        fontBold: typeof saved.fontBold === 'string' && saved.fontBold.trim() ? saved.fontBold : '印品鸿蒙体',
+        fontThin: typeof saved.fontThin === 'string' && saved.fontThin.trim() ? saved.fontThin : '印品鸿蒙体 D40',
       }
     })()
     const voidPrefListeners = new Set()
@@ -2258,7 +2260,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       perfToggle: '性能模式',
       perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
       fontGroup: '字体',
-      fontDesc: '默认使用思源黑体；下方留空或字体缺失时同样回退到默认。',
+      fontDesc: '默认优先印品鸿蒙体；未安装、留空或填错时自动回退思源黑体。',
       fontBold: '粗体字体',
       fontBoldDesc: '标题、导航与分区标题使用；留空 = 默认。',
       fontBoldPlaceholder: '印品鸿蒙体',
@@ -3446,10 +3448,14 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }
         const apply = () => {
           const root = document.documentElement
-          // an empty field keeps the default stack; a family that is not installed
-          // simply misses and the following families take over, so no switch is needed
-          root.style.setProperty('--zzz-font-display', stack(voidPrefs.fontBold))
-          root.style.setProperty('--zzz-font-text', stack(voidPrefs.fontThin))
+          // empty field -> drop the override so the stylesheet default (inpin-first) applies;
+          // a family that is not installed simply misses and the next families take over
+          const bold = String(voidPrefs.fontBold || '').trim()
+          const thin = String(voidPrefs.fontThin || '').trim()
+          if (bold) root.style.setProperty('--zzz-font-display', stack(bold))
+          else root.style.removeProperty('--zzz-font-display')
+          if (thin) root.style.setProperty('--zzz-font-text', stack(thin))
+          else root.style.removeProperty('--zzz-font-text')
         }
         voidPrefListeners.add(apply)
         apply()
