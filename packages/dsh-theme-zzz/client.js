@@ -2245,6 +2245,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       return {
         void: typeof saved.void === 'boolean' ? saved.void : true,
         low: typeof saved.low === 'boolean' ? saved.low : false,
+        fontSans: typeof saved.fontSans === 'boolean' ? saved.fontSans : false,
       }
     })()
     const voidPrefListeners = new Set()
@@ -2269,6 +2270,9 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
       fontGroup: '字体',
       fontDesc: '由于绝区零使用的印品鸿蒙体不允许无授权的二次分发，本主题不自带印品鸿蒙体字体文件。若你的电脑上自行安装了印品鸿蒙体，主题会识别到并使用，否则回退至思源黑体。',
+      fontSans: '使用思源黑体',
+      fontSansDesc: '跳过印品鸿蒙体，始终使用思源黑体。',
+      fontSansRestore: '恢复印品优先',
     }
     const strListeners = new Set()
     async function loadStrings() {
@@ -2339,6 +2343,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       const snapshot = () => ({
         void: voidPrefs.void,
         low: voidPrefs.low,
+        fontSans: voidPrefs.fontSans,
       })
       const [prefs, setPrefs] = React.useState(snapshot)
       React.useEffect(() => {
@@ -2390,7 +2395,35 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }, STR.fontGroup),
         h('div', {
           style: { color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', lineHeight: '1.6' },
-        }, STR.fontDesc))
+        }, STR.fontDesc),
+        h('div', {
+          style: {
+            display: 'flex', alignItems: 'center', gap: '16px',
+            padding: '14px 0', borderTop: '1px solid var(--dsw-alias-border-l1)',
+          },
+        },
+        h('div', { style: { flex: '1', minWidth: '0' } },
+          h('div', {
+            style: { color: 'var(--dsw-alias-label-primary)', fontSize: '14px', lineHeight: '1.5' },
+          }, STR.fontSans),
+          h('div', {
+            style: {
+              color: 'var(--dsw-alias-label-secondary)', fontSize: '12px',
+              lineHeight: '1.6', marginTop: '2px',
+            },
+          }, STR.fontSansDesc)),
+        h('button', {
+          type: 'button',
+          onClick: () => updateVoidPrefs({ fontSans: !voidPrefs.fontSans }),
+          style: {
+            flex: '0 0 auto',
+            background: prefs.fontSans ? 'var(--dsw-alias-brand-primary)' : 'var(--dsw-alias-bg-layer-3)',
+            color: prefs.fontSans ? '#101010' : 'var(--dsw-alias-label-primary)',
+            border: '1px solid var(--dsw-alias-border-l2)',
+            borderRadius: '8px', padding: '6px 14px', fontSize: '13px',
+            cursor: 'pointer',
+          },
+        }, prefs.fontSans ? STR.fontSansRestore : STR.fontSans)))
     }
 
     function apply(ctx) {
@@ -3364,6 +3397,30 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }
       }, 'dsh-theme-zzz: black text on yellow')
 
+
+      // Font mode: the stylesheet stacks already prefer 印品; this effect only pins the
+      // stacks to Source Han Sans when the settings page's button asks for it.
+      ctx.effect(() => {
+        const SANS = "'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
+        const apply = () => {
+          const root = document.documentElement
+          if (voidPrefs.fontSans) {
+            root.style.setProperty('--zzz-font-display', SANS)
+            root.style.setProperty('--zzz-font-text', SANS)
+          } else {
+            root.style.removeProperty('--zzz-font-display')
+            root.style.removeProperty('--zzz-font-text')
+          }
+        }
+        voidPrefListeners.add(apply)
+        apply()
+        return () => {
+          voidPrefListeners.delete(apply)
+          const root = document.documentElement
+          root.style.removeProperty('--zzz-font-display')
+          root.style.removeProperty('--zzz-font-text')
+        }
+      }, 'dsh-theme-zzz: font mode')
 
       ctx.effect(() => {
         loadStrings()

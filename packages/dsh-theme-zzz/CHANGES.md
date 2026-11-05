@@ -1054,3 +1054,10 @@ epeating-linear-gradient。
 - Replacement copy: 印品鸿蒙体 cannot be redistributed without authorisation, the theme ships no font
   files, installed copies are picked up automatically, otherwise Source Han Sans is used.
 - Updated in the client fallback string and in locale/zh.json + locale/en.json.
+
+### settings: 'use Source Han Sans' button (2026-11-05)
+
+- New pref fontSans (default false). When on, the font-mode effect pins both --zzz-font-display and
+  --zzz-font-text to the Source Han Sans stack; when off it removes the inline override so the
+  stylesheet's inpin-first default applies.
+- The 字体 group has a row with a button that toggles between 使用思源黑体 / 恢复印品优先.
