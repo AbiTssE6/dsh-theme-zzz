@@ -6,6 +6,11 @@
   <img src="docs/preview.png" width="100%" alt="">
 </p>
 
+<p align="center">
+  <img src="docs/hollow.jpg" width="58%" alt="">
+</p>
+<p align="center"><sub>动态「空洞」：随鼠标移动、按下放大</sub></p>
+
 ## 快速开始
 
 ```powershell
