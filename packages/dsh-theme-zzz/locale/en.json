@@ -13,6 +13,6 @@
     "perfToggle": "Performance mode",
     "perfToggleDesc": "DPR 1.0, texture 96, 20 fps, tight glow off; DPR and texture apply after a reload.",
     "fontGroup": "Fonts",
-    "fontDesc": "Prefers inpin hongmengti (bold and D40); falls back to Source Han Sans when it is not installed."
+    "fontDesc": "The inpin hongmengti font used by Zenless Zone Zero does not allow unauthorised redistribution, so this theme ships no font files. If you have installed it yourself, the theme picks it up; otherwise it falls back to Source Han Sans."
   }
 }

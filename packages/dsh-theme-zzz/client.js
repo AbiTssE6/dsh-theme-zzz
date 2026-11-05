@@ -2268,7 +2268,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       perfToggle: '性能模式',
       perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
       fontGroup: '字体',
-      fontDesc: '默认优先使用印品鸿蒙体（粗体与 D40）；本机未安装时自动回退到思源黑体。',
+      fontDesc: '由于绝区零使用的印品鸿蒙体不允许无授权的二次分发，本主题不自带印品鸿蒙体字体文件。若你的电脑上自行安装了印品鸿蒙体，主题会识别到并使用，否则回退至思源黑体。',
     }
     const strListeners = new Set()
     async function loadStrings() {

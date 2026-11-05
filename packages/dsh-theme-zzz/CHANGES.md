@@ -1048,3 +1048,9 @@ epeating-linear-gradient。
   font preference fields and the effect that applied them.
 - Fonts are resolved entirely by the stylesheet stacks: 印品 first, Source Han Sans / Noto next,
   then the system sans; the settings page shows a single explanatory line.
+
+### settings: font note explains the redistribution constraint (2026-11-05)
+
+- Replacement copy: 印品鸿蒙体 cannot be redistributed without authorisation, the theme ships no font
+  files, installed copies are picked up automatically, otherwise Source Han Sans is used.
+- Updated in the client fallback string and in locale/zh.json + locale/en.json.
