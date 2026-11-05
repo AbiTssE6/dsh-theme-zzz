@@ -354,6 +354,9 @@ html[${MARKER}] [role="dialog"] [role="tab"],
 html[${MARKER}] [role="menu"] [role="menuitem"]{
   font-family:var(--zzz-font-display) !important;
   font-weight:800 !important;
+  /* 印品's face is already bold and is labelled Regular; without this the browser
+     synthesises a second bold on top of it. Fallback families keep their real weights. */
+  font-synthesis-weight:none;
 }
 /* blank-session hero headline ("探索未至之境"): the host draws it with a 26px
    medium body face; give the title span the real bold display face. The preview
@@ -361,10 +364,14 @@ html[${MARKER}] [role="menu"] [role="menuitem"]{
 html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]){
   font-family:var(--zzz-font-display);
   font-weight:800;
+  font-synthesis-weight:none;
 }
 html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]) [class*="_titleGroup"] > span:first-child{
   font-family:var(--zzz-font-display) !important;
   font-weight:800 !important;
+  /* 印品's face is already bold and is labelled Regular; without this the browser
+     synthesises a second bold on top of it. Fallback families keep their real weights. */
+  font-synthesis-weight:none;
 }
 /* reading text is the body face: the assistant message body is bare text
    (_root > _body), so it has to be named explicitly, otherwise it inherits the
@@ -1039,6 +1046,9 @@ html[${MARKER}] [role="dialog"] > :first-child,
 html[${MARKER}] [role="dialog"] > :first-child *{
   font-family:var(--zzz-font-display) !important;
   font-weight:800 !important;
+  /* 印品's face is already bold and is labelled Regular; without this the browser
+     synthesises a second bold on top of it. Fallback families keep their real weights. */
+  font-synthesis-weight:none;
 }
 html[${MARKER}] [role="dialog"] > :first-child button,
 html[${MARKER}] [role="dialog"] > :first-child button *{

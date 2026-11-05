@@ -1033,3 +1033,11 @@ epeating-linear-gradient。
   override, and saved empty values migrate to the inpin defaults.
 - This also fixes the 'everything is Source Han Sans' state left in localStorage by the
   removed 自定义字体 toggle.
+
+### display rules: font-synthesis-weight:none (2026-11-05)
+
+- 印品's faces are already bold but are labelled Regular, so weight 700/800 made the browser
+  synthesise a second bold on top of them (smeared edges).
+- The four display rules (dialog headings/menu items, hero container + title, dialog title bar)
+  now set font-synthesis-weight:none; fallback families keep their real weights
+  (Noto Sans SC Black, YaHei Bold).
