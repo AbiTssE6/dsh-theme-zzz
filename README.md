@@ -1,47 +1,85 @@
-# dsh-theme-zzz · 绝区零主题 for DeepSeek Harness
+# 绝区零主题 · dsh-theme-zzz
 
-《绝区零》风格的 DSH Web 主题插件：高对比黄黑配色、印品鸿蒙体标题字、切角品牌标识、
-印刷质感叠层，以及随鼠标跟随、按下放大的「空洞」动态背景。
+为 **DeepSeek Harness** 重绘的《绝区零》风格主题插件：黄黑高对比配色、印品鸿蒙体标题字、
+切角品牌标识、印刷质感叠层，以及会跟随鼠标的「空洞」动态背景。
 
-## 快速开始
+- 深色单方案（浅色系统下也强制同一套深色外观）
+- 主题设置页：空洞开关 / 性能模式
+- 会话区「空洞」：球面菲涅尔、光带、外圈接触阴影，随鼠标滞后跟随，按下放大
+
+## 安装
+
+同一时刻只启用一个主题。装好后重启 DeepSeek Harness。
+
+### 方式 1：插件市场（推荐，一键）
+
+1. 打开 **设置 → 插件 → 发现**；
+2. **添加索引源**，粘贴本仓库的索引地址：
+   `https://abitisse6.github.io/dsh-theme-zzz/market-index.json`
+3. 搜索「绝区零 / ZZZ」，点 **安装**。
+
+> 索引源只需添加一次，之后搜索和安装都是一键。
+
+### 方式 2：GitHub 发布分支
 
 ```powershell
-# GitHub 发布分支（无需 npm）
-dsh plugin --profile web add AbiTssE6/dsh-theme-zzz#dist
+dsh plugin --profile web add <用户名>/dsh-theme-zzz#dist
 ```
 
-或在 **设置 → 插件 → 发现** 添加索引源 `https://abitisse6.github.io/dsh-theme-zzz/market-index.json`
-后搜索安装。同一时刻只启用一个主题，装好后重启 Harness。
+`dist` 分支里放的是可直接安装的包（不含字体文件）。
+
+### 方式 3：npm
+
+> 尚未发布。
+
+```powershell
+dsh plugin --profile web add dsh-theme-zzz
+```
+
+### 方式 4：本地目录（开发）
+
+```powershell
+dsh plugin --profile web add D:\path\to\dsh-theme-zzz
+```
 
 ## 字体
 
-默认字体是 **思源黑体**（Source Han Sans / Noto Sans SC），不随包分发，由系统提供；
-缺少时回退 `PingFang SC / Microsoft YaHei`。
+默认字体栈优先 **印品鸿蒙体**（粗体 `inpin hongmengti` 与 `印品鸿蒙体 D40-v1.04`），
+本机安装后主题自动使用；**没有安装时回退思源黑体**（Source Han Sans / Noto Sans SC），
+再回退系统无衬线（PingFang SC / Microsoft YaHei）。
 
-字体默认优先 **印品鸿蒙体**（粗体 `inpin hongmengti` / 细体 D40），装好即生效；
-本机没装时自动回退 **思源黑体**，再回退系统无衬线。设置页「字体」里只显示这条说明。
-详见 [FONT-LICENSES.md](packages/dsh-theme-zzz/FONT-LICENSES.md)。
+- 字体不随插件分发，不需要任何设置；
+- 设置页「字体」分组只有一条说明文字；
+- 授权说明见 [FONT-LICENSES.md](./FONT-LICENSES.md)。
 
-## 自定义文案
+## 兼容性
 
-设置页的文字在 `packages/dsh-theme-zzz/locale/zh.json`、`en.json` 的 `settings` 里，改完刷新即可。
+```json
+"engines": { "dsh": ">=0.2.1-rc.4" }
+```
 
-## 文档
+## 卸载与升级
 
-| 文档 | 内容 |
-|---|---|
-| [packages/dsh-theme-zzz/README.md](packages/dsh-theme-zzz/README.md) | 完整安装方式、字体、兼容性、开发说明 |
-| [素材/参考/设计规范.md](素材/参考/设计规范.md) | 设计语言、token 绑定、空洞参数与踩坑记录 |
-| [packages/dsh-theme-zzz/CHANGES.md](packages/dsh-theme-zzz/CHANGES.md) | 版本变更时间线 |
+```powershell
+dsh plugin --profile web remove dsh-theme-zzz
+```
 
-## 仓库结构
+插件市场目前**不支持原位升级**：有新版时先卸载再安装。
+
+## 开发
+
+```powershell
+node tools/check-theme.mjs        # 语法 / CSS 反引号 / 玻璃 token / !important 棘轮 / 空洞不变量
+```
+
+调参集中在 `client.js` 的 `VOID` 表（几何、帧率、缩放、菲涅尔、辉光），
+调试开关集中在 `debug` 参数：
 
 ```
-packages/dsh-theme-zzz/   # 插件包（package.json / index.js / client.js / locale / icon）
-scripts/                  # dist 分支构建、市场索引生成
-market-index.example.json # 市场索引示例（实际索引由脚本生成）
+?voidhide=outer,inner,tight,band,canvas,fresnel,dome,shadow
+?nofollow  ?voidshadow  ?voidlow  ?voidfres=96
 ```
 
 ## 许可
 
-代码 MIT；字体不在授权范围内，见 `FONT-LICENSES.md`。
+代码以 MIT 发布；字体不在许可范围内，见 `FONT-LICENSES.md`。
