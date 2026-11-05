@@ -29,6 +29,8 @@
     "voidZoom": "点按放大",
     "voidZoomDesc": "按住鼠标时的放大倍数（1.0–1.6）。",
     "voidFollow": "跟随速度",
-    "voidFollowDesc": "越大越紧跟鼠标（0.2–3.0）。"
+    "voidFollowDesc": "越大越紧跟鼠标（0.2–3.0）。",
+    "voidReset": "重置空洞参数",
+    "voidResetDesc": "恢复 680px / 1.0x / 1.2x / 1.0x。"
   }
 }

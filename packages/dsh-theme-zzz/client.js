@@ -2292,6 +2292,8 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       voidZoomDesc: '按住鼠标时的放大倍数（1.0–1.6）。',
       voidFollow: '跟随速度',
       voidFollowDesc: '越大越紧跟鼠标（0.2–3.0）。',
+      voidReset: '重置空洞参数',
+      voidResetDesc: '恢复 680px / 1.0x / 1.2x / 1.0x。',
       perfToggle: '性能模式',
       perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
       fontGroup: '字体',
@@ -2530,6 +2532,30 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           display: prefs.voidFollow.toFixed(1) + 'x',
           onChange: (v) => updateVoidPrefs({ voidFollow: v }),
         }),
+        h('div', {
+          style: {
+            display: 'flex', alignItems: 'center', gap: '16px',
+            padding: '12px 0', borderTop: '1px solid var(--dsw-alias-border-l1)',
+          },
+        },
+        h('div', {
+          style: {
+            flex: '1', minWidth: '0', color: 'var(--dsw-alias-label-secondary)',
+            fontSize: '12px', lineHeight: '1.6',
+          },
+        }, STR.voidResetDesc),
+        h('button', {
+          type: 'button',
+          onClick: () => updateVoidPrefs({ voidSize: 680, voidSpeed: 1, voidZoom: 1.2, voidFollow: 1 }),
+          style: {
+            flex: '0 0 auto',
+            background: 'var(--dsw-alias-bg-layer-3)',
+            color: 'var(--dsw-alias-label-primary)',
+            border: '1px solid var(--dsw-alias-border-l2)',
+            borderRadius: '8px', padding: '6px 14px', fontSize: '13px',
+            cursor: 'pointer',
+          },
+        }, STR.voidReset)),
         h('div', {
           style: { color: 'var(--dsw-alias-label-primary)', fontSize: '15px', fontWeight: 600, padding: '20px 0 6px' },
         }, STR.fontGroup),
