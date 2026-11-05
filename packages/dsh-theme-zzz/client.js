@@ -2413,6 +2413,18 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
     }
 
     function ZzzSlider(props) {
+      // The theme paints the travelled part of the track from --zzz-fill, which its
+      // listener updates on input/change. A programmatic value change (the reset
+      // button) fires neither, so the fill would lag behind the thumb; recompute it.
+      const inputRef = React.useRef(null)
+      React.useEffect(() => {
+        const el = inputRef.current
+        if (!el) return
+        const min = Number(props.min)
+        const max = Number(props.max)
+        const pct = max > min ? ((Number(el.value) - min) / (max - min)) * 100 : 0
+        el.style.setProperty('--zzz-fill', Math.max(0, Math.min(100, pct)).toFixed(2) + '%')
+      }, [props.value, props.min, props.max])
       return h('div', {
         style: {
           display: 'flex', alignItems: 'center', gap: '12px',
@@ -2433,6 +2445,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
             }, props.desc)
           : null),
       h('input', {
+        ref: inputRef,
         type: 'range',
         min: props.min, max: props.max, step: props.step,
         value: props.value,
