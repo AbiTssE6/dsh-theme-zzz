@@ -12,7 +12,6 @@ window.__ModuleLoader__.load({
 
     const STYLE_ID = 'dsh-theme-zzz-style'
     const MARKER = 'data-dsh-theme-zzz'
-    const FONT_BASE = '/zzz-theme/fonts/'
 
     /* Gray ladder re-sampled off the reference screenshots:
          page        #131313
@@ -223,7 +222,7 @@ function registerTokens(palette) {
    ZZZ theme stylesheet - table of contents
    (search by these headings; each block states why + how to revert)
 
-   0.  palette + @font-face + page plane
+   0.  palette + fonts (system) + page plane
    1.  cards (A class): frame / halftone / sheen / chamfer
    2.  buttons (B class): design-system skin, discs, icon buttons
    3.  rows & nav (C class): yellow breathing plate, hover wash
