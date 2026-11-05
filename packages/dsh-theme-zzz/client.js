@@ -3431,9 +3431,18 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       // families (e.g. 印品鸿蒙体 bold / D40) without shipping any font file.
       ctx.effect(() => {
         const BASE = "'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
+        // The installed 印品 faces do not answer to one single family name on Windows:
+        // the bold answers to the English name, the D40 to its full "-v1.04" name.
+        // Expand the two defaults with those aliases so a plain Chinese entry still works.
+        const ALIASES = {
+          '印品鸿蒙体': ['inpin hongmengti', '印品鸿蒙体（非商用）'],
+          '印品鸿蒙体 D40': ['印品鸿蒙体 D40-v1.04', 'yinpinhongmengti D40-v1.04'],
+        }
         const stack = (name) => {
           const clean = String(name || '').replace(/["']/g, '').trim()
-          return clean ? '"' + clean + '",' + BASE : BASE
+          if (!clean) return BASE
+          const names = [clean].concat(ALIASES[clean] || [])
+          return names.map((n) => '"' + n + '"').join(',') + ',' + BASE
         }
         const apply = () => {
           const root = document.documentElement

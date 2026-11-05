@@ -1015,3 +1015,11 @@ epeating-linear-gradient。
   the client merges them over a built-in Chinese fallback and re-renders when they arrive.
 - The nav label uses a thunk (() => STR.title) so it follows the loaded copy.
 - Editing the JSON + refreshing is enough after the Host half has loaded once (restart needed once).
+
+### inpin font aliases: the families were never actually matched (2026-11-05)
+
+- Probe (headless Chrome, installed faces): '印品鸿蒙体' and '印品鸿蒙体 D40' do NOT match;
+  the fonts answer to 'inpin hongmengti', '印品鸿蒙体（非商用）' and '印品鸿蒙体 D40-v1.04'.
+- The font effect now expands the two default Chinese names with those aliases, so the settings
+  defaults really select 印品. Measured text width: bold 375.9, thin 368.9 vs fallback 356.1.
+- Explained the earlier "700 not bold enough": the theme had silently been rendering Source Han Sans.
