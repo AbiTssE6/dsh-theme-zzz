@@ -3695,11 +3695,12 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           el.style.setProperty('font-weight', '800', 'important')
           el.style.setProperty('font-synthesis-weight', 'none', 'important')
         }
+        const SEL = '[class*="_navCell"], [class*="_navLabel"]'
         const paint = (root) => {
           if (!root) return
-          if (root.nodeType === 1 && root.matches && root.matches('[class*="_navCell"]')) pin(root)
+          if (root.nodeType === 1 && root.matches && root.matches(SEL)) pin(root)
           if (!root.querySelectorAll) return
-          for (const el of root.querySelectorAll('[class*="_navCell"]')) pin(el)
+          for (const el of root.querySelectorAll(SEL)) pin(el)
         }
         paint(document)
         const mo = new MutationObserver((records) => {
