@@ -1041,3 +1041,10 @@ epeating-linear-gradient。
 - The four display rules (dialog headings/menu items, hero container + title, dialog title bar)
   now set font-synthesis-weight:none; fallback families keep their real weights
   (Noto Sans SC Black, YaHei Bold).
+
+### settings: font fields removed, one fallback note kept (2026-11-05)
+
+- Removed the two font inputs and the reset button (and the now-unused ZzzTextField), plus the
+  font preference fields and the effect that applied them.
+- Fonts are resolved entirely by the stylesheet stacks: 印品 first, Source Han Sans / Noto next,
+  then the system sans; the settings page shows a single explanatory line.

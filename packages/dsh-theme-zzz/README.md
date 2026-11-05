@@ -44,30 +44,13 @@ dsh plugin --profile web add D:\path\to\dsh-theme-zzz
 
 ## 字体
 
-默认使用 **思源黑体**（Source Han Sans / Noto Sans SC），由系统提供，不随包分发；
-系统缺少时回退 `PingFang SC / Microsoft YaHei / system-ui`。
+默认字体栈优先 **印品鸿蒙体**（粗体 `inpin hongmengti` 与 `印品鸿蒙体 D40-v1.04`），
+本机安装后主题自动使用；**没有安装时回退思源黑体**（Source Han Sans / Noto Sans SC），
+再回退系统无衬线（PingFang SC / Microsoft YaHei）。
 
-想还原最初的印品鸿蒙体设计：
-
-1. 把 `印品鸿蒙体`（粗体）与 `印品鸿蒙体 D40`（细体）安装到操作系统；
-2. 打开 **设置 → ZZZ 主题 → 字体**，两个输入框默认已经是这两个族名，装好即生效。
-
-输入框可以改成任意本机字体族名；**留空或字体缺失时自动回退思源黑体**，
-「重置字体」恢复默认的两个族名。
-
-字体为**非商用授权**，本仓库不分发字体文件；授权说明见 [FONT-LICENSES.md](./FONT-LICENSES.md)。
-
-## 自定义设置页文案
-
-设置页的文字不在代码里，而在：
-
-```
-locale/zh.json   -> settings.*
-locale/en.json   -> settings.*
-```
-
-Host 端（`index.js`）把它们以 `/zzz-theme/locale/<lang>.json` 提供给浏览器，改完刷新页面即可生效
-（需要重启过一次 DSH，让 Host 端加载路由）。`client.js` 里保留一份中文兜底，接口不可用时仍能显示。
+- 字体不随插件分发，不需要任何设置；
+- 设置页「字体」分组只有一条说明文字；
+- 授权说明见 [FONT-LICENSES.md](./FONT-LICENSES.md)。
 
 ## 兼容性
 

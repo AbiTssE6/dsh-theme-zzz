@@ -2245,8 +2245,6 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       return {
         void: typeof saved.void === 'boolean' ? saved.void : true,
         low: typeof saved.low === 'boolean' ? saved.low : false,
-        fontBold: typeof saved.fontBold === 'string' && saved.fontBold.trim() ? saved.fontBold : '印品鸿蒙体',
-        fontThin: typeof saved.fontThin === 'string' && saved.fontThin.trim() ? saved.fontThin : '印品鸿蒙体 D40',
       }
     })()
     const voidPrefListeners = new Set()
@@ -2270,14 +2268,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       perfToggle: '性能模式',
       perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
       fontGroup: '字体',
-      fontDesc: '默认优先印品鸿蒙体；未安装、留空或填错时自动回退思源黑体。',
-      fontBold: '粗体字体',
-      fontBoldDesc: '标题、导航与分区标题使用；留空 = 默认。',
-      fontBoldPlaceholder: '印品鸿蒙体',
-      fontThin: '细体字体',
-      fontThinDesc: '正文、设置项与次级标签使用；留空 = 默认。',
-      fontThinPlaceholder: '印品鸿蒙体 D40',
-      reset: '重置字体',
+      fontDesc: '默认优先使用印品鸿蒙体（粗体与 D40）；本机未安装时自动回退到思源黑体。',
     }
     const strListeners = new Set()
     async function loadStrings() {
@@ -2344,49 +2335,10 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       h(ZzzSwitch, { checked: props.checked, onChange: props.onChange }))
     }
 
-    function ZzzTextField(props) {
-      return h('div', {
-        style: {
-          display: 'flex', alignItems: 'center', gap: '16px',
-          padding: '10px 0',
-          borderTop: '1px solid var(--dsw-alias-border-l1)',
-        },
-      },
-      h('div', { style: { flex: '1', minWidth: '0' } },
-        h('div', {
-          style: { color: 'var(--dsw-alias-label-primary)', fontSize: '14px', lineHeight: '1.5' },
-        }, props.label),
-        props.desc
-          ? h('div', {
-              style: {
-                color: 'var(--dsw-alias-label-secondary)', fontSize: '12px',
-                lineHeight: '1.6', marginTop: '2px',
-              },
-            }, props.desc)
-          : null),
-      h('input', {
-        type: 'text',
-        value: props.value,
-        placeholder: props.placeholder,
-        spellCheck: false,
-        onChange: (e) => props.onChange(e.target.value),
-        style: {
-          flex: '0 0 auto', width: '190px', boxSizing: 'border-box',
-          background: 'var(--dsw-alias-bg-layer-2)',
-          color: 'var(--dsw-alias-label-primary)',
-          border: '1px solid var(--dsw-alias-border-l2)',
-          borderRadius: '8px', padding: '6px 10px', fontSize: '13px',
-          outline: 'none',
-        },
-      }))
-    }
-
     function ZzzSettings() {
       const snapshot = () => ({
         void: voidPrefs.void,
         low: voidPrefs.low,
-        fontBold: voidPrefs.fontBold,
-        fontThin: voidPrefs.fontThin,
       })
       const [prefs, setPrefs] = React.useState(snapshot)
       React.useEffect(() => {
@@ -2438,33 +2390,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }, STR.fontGroup),
         h('div', {
           style: { color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', lineHeight: '1.6' },
-        }, STR.fontDesc),
-        h(ZzzTextField, {
-          label: STR.fontBold,
-          desc: STR.fontBoldDesc,
-          value: prefs.fontBold,
-          placeholder: STR.fontBoldPlaceholder,
-          onChange: (v) => updateVoidPrefs({ fontBold: v }),
-        }),
-        h(ZzzTextField, {
-          label: STR.fontThin,
-          desc: STR.fontThinDesc,
-          value: prefs.fontThin,
-          placeholder: STR.fontThinPlaceholder,
-          onChange: (v) => updateVoidPrefs({ fontThin: v }),
-        }),
-        h('div', { style: { display: 'flex', justifyContent: 'flex-end', paddingTop: '14px' } },
-          h('button', {
-            type: 'button',
-            onClick: () => updateVoidPrefs({ fontBold: '印品鸿蒙体', fontThin: '印品鸿蒙体 D40' }),
-            style: {
-              background: 'var(--dsw-alias-bg-layer-3)',
-              color: 'var(--dsw-alias-label-primary)',
-              border: '1px solid var(--dsw-alias-border-l2)',
-              borderRadius: '8px', padding: '6px 14px', fontSize: '13px',
-              cursor: 'pointer',
-            },
-          }, STR.reset)))
+        }, STR.fontDesc))
     }
 
     function apply(ctx) {
@@ -3438,45 +3364,6 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }
       }, 'dsh-theme-zzz: black text on yellow')
 
-      // Fonts: the defaults are Source Han Sans (Noto Sans SC) through --zzz-font-*;
-      // the settings page can point the display/text stacks at locally installed
-      // families (e.g. 印品鸿蒙体 bold / D40) without shipping any font file.
-      ctx.effect(() => {
-        const BASE = "'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
-        // The installed 印品 faces do not answer to one single family name on Windows:
-        // the bold answers to the English name, the D40 to its full "-v1.04" name.
-        // Expand the two defaults with those aliases so a plain Chinese entry still works.
-        const ALIASES = {
-          '印品鸿蒙体': ['inpin hongmengti', '印品鸿蒙体（非商用）'],
-          '印品鸿蒙体 D40': ['印品鸿蒙体 D40-v1.04', 'yinpinhongmengti D40-v1.04'],
-        }
-        const stack = (name) => {
-          const clean = String(name || '').replace(/["']/g, '').trim()
-          if (!clean) return BASE
-          const names = [clean].concat(ALIASES[clean] || [])
-          return names.map((n) => '"' + n + '"').join(',') + ',' + BASE
-        }
-        const apply = () => {
-          const root = document.documentElement
-          // empty field -> drop the override so the stylesheet default (inpin-first) applies;
-          // a family that is not installed simply misses and the next families take over
-          const bold = String(voidPrefs.fontBold || '').trim()
-          const thin = String(voidPrefs.fontThin || '').trim()
-          if (bold) root.style.setProperty('--zzz-font-display', stack(bold))
-          else root.style.removeProperty('--zzz-font-display')
-          if (thin) root.style.setProperty('--zzz-font-text', stack(thin))
-          else root.style.removeProperty('--zzz-font-text')
-        }
-        voidPrefListeners.add(apply)
-        apply()
-        if (document.fonts && document.fonts.ready) document.fonts.ready.catch(() => {})
-        return () => {
-          voidPrefListeners.delete(apply)
-          const root = document.documentElement
-          root.style.removeProperty('--zzz-font-display')
-          root.style.removeProperty('--zzz-font-text')
-        }
-      }, 'dsh-theme-zzz: fonts')
 
       ctx.effect(() => {
         loadStrings()
