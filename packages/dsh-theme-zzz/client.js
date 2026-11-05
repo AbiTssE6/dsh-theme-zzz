@@ -2257,7 +2257,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       return {
         void: typeof saved.void === 'boolean' ? saved.void : true,
         low: typeof saved.low === 'boolean' ? saved.low : false,
-        voidSize: clampNum(saved.voidSize, 420, 920, 680),
+        voidSize: clampNum(saved.voidSize, 240, 920, 680),
         voidSpeed: clampNum(saved.voidSpeed, 0.3, 2.5, 1),
         voidZoom: clampNum(saved.voidZoom, 0.5, 1.6, 0.7),
         voidFollow: clampNum(saved.voidFollow, 0.2, 3, 1),
@@ -2285,7 +2285,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       voidToggle: '空洞开关',
       voidToggleDesc: '关闭后空洞不再显示，动画同时暂停。',
       voidSize: '空洞大小',
-      voidSizeDesc: '空洞的默认直径（420–920 px）。',
+      voidSizeDesc: '空洞的默认直径（240–920 px）。',
       voidSpeed: '动画速度',
       voidSpeedDesc: '光带流动速度的倍数（0.3–2.5）。',
       voidZoom: '点按缩放',
@@ -2523,7 +2523,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }),
         h(ZzzSlider, {
           label: STR.voidSize, desc: STR.voidSizeDesc,
-          min: 420, max: 920, step: 20, value: prefs.voidSize,
+          min: 240, max: 920, step: 20, value: prefs.voidSize,
           display: prefs.voidSize + 'px',
           onChange: (v) => updateVoidPrefs({ voidSize: v }),
         }),
@@ -2700,7 +2700,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         const on = (name) => DEBUG.hide.indexOf(name) < 0
         // live tunables from the settings page (the tick reads them every frame)
         const sizeScale = () =>
-          Math.max(0.6, Math.min(1.4, (Number(voidPrefs.voidSize) || VOID.SIZE) / VOID.SIZE))
+          Math.max(0.2, Math.min(1.4, (Number(voidPrefs.voidSize) || VOID.SIZE) / VOID.SIZE))
         const followTau = () =>
           180 / Math.max(0.2, Math.min(3, Number(voidPrefs.voidFollow) || 1))
         const speedFactor = () =>
