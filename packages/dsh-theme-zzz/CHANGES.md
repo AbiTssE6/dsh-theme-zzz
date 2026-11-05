@@ -967,3 +967,12 @@ epeating-linear-gradient。
 - Settings page: new 字体 group with a 自定义字体 switch and two family-name fields (bold / thin);
   when enabled the theme sets the two CSS variables inline from localStorage prefs.
 - Fonts are still not shipped; FONT-LICENSES and both READMEs describe the new model.
+
+### display face: real bold weight (2026-11-05)
+
+- Removed the 'ZZZ Sans' webfont from the stacks: a 400-only face was shadowing the system's
+  real bold, so 700 rendered as weak synthetic bold.
+- Stacks now start with 'Noto Sans SC' / 'Source Han Sans SC' / '思源黑体' (system faces).
+- Display rules raised 700 -> 800 (Noto Sans SC Black / Source Han Heavy); the medium 500 and
+  body 400 classes are unchanged.
+- index.js font route is now unused; kept for users who still drop a font file in \.

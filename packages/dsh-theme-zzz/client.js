@@ -260,7 +260,6 @@ function registerTokens(palette) {
    ZZZ theme tokens + paper + components
    ============================================================ */
 
-@font-face{font-family:'ZZZ Sans';src:url('/zzz-theme/fonts/noto-sans-sc-regular.woff2') format('woff2');font-weight:400;font-display:swap}
 
 html[${MARKER}],
 html[${MARKER}] body{
@@ -298,8 +297,8 @@ html[${MARKER}] body{
   --zzz-glass-radius-lg:20px;
   /* fonts: Source Han Sans (Noto Sans SC) by default; the settings page can swap
      the families for locally installed ones (e.g. 印品鸿蒙体) through these vars. */
-  --zzz-font-display:'ZZZ Sans','Source Han Sans SC','Noto Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-  --zzz-font-text:'ZZZ Sans','Source Han Sans SC','Noto Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  --zzz-font-display:'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  --zzz-font-text:'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
   --zzz-bevel-lo:1px 1px 0 rgba(0,0,0,.55);
   --zzz-green:#00cc0c;
   --zzz-red:#c81800;
@@ -353,18 +352,18 @@ html[${MARKER}] [role="dialog"] nav button,
 html[${MARKER}] [role="dialog"] [role="tab"],
 html[${MARKER}] [role="menu"] [role="menuitem"]{
   font-family:var(--zzz-font-display) !important;
-  font-weight:700 !important;
+  font-weight:800 !important;
 }
 /* blank-session hero headline ("探索未至之境"): the host draws it with a 26px
    medium body face; give the title span the real bold display face. The preview
    badge next to it keeps its own styling. */
 html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]){
   font-family:var(--zzz-font-display);
-  font-weight:700;
+  font-weight:800;
 }
 html[${MARKER}] [class*="_headline"]:has([class*="_previewBadge"]) [class*="_titleGroup"] > span:first-child{
   font-family:var(--zzz-font-display) !important;
-  font-weight:700 !important;
+  font-weight:800 !important;
 }
 /* reading text is the body face: the assistant message body is bare text
    (_root > _body), so it has to be named explicitly, otherwise it inherits the
@@ -1038,7 +1037,7 @@ html[${MARKER}] [role="listbox"] [role="option"]{padding:6px 8px !important; mar
 html[${MARKER}] [role="dialog"] > :first-child,
 html[${MARKER}] [role="dialog"] > :first-child *{
   font-family:var(--zzz-font-display) !important;
-  font-weight:700 !important;
+  font-weight:800 !important;
 }
 html[${MARKER}] [role="dialog"] > :first-child button,
 html[${MARKER}] [role="dialog"] > :first-child button *{
@@ -2344,7 +2343,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         h('div', {
           style: {
             color: 'var(--dsw-alias-label-primary)',
-            fontSize: '24px', fontWeight: 700, letterSpacing: '0.02em',
+            fontSize: '24px', fontWeight: 800, letterSpacing: '0.02em',
             lineHeight: '1.3', padding: '2px 0 4px',
           },
         }, 'ZZZ 主题'),
@@ -3380,7 +3379,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       // the settings page can point the display/text stacks at locally installed
       // families (e.g. 印品鸿蒙体 bold / D40) without shipping any font file.
       ctx.effect(() => {
-        const BASE = "'ZZZ Sans','Source Han Sans SC','Noto Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
+        const BASE = "'Noto Sans SC','Source Han Sans SC','思源黑体',system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
         const stack = (name) => {
           const clean = String(name || '').replace(/["']/g, '').trim()
           return clean ? '"' + clean + '",' + BASE : BASE
