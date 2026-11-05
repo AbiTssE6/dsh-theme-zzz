@@ -1,7 +1,6 @@
 # dsh-theme-zzz · 绝区零主题 for DeepSeek Harness
 
-《绝区零》风格的 DSH Web 主题插件：高对比黄黑配色、印品鸿蒙体标题字、切角品牌标识、
-印刷质感叠层，以及随鼠标跟随、按下放大的「空洞」动态背景。
+《绝区零》风格的 DSH Web 主题插件，除了在ui上模仿了绝区零的风格以外，还在背景上添加了跟随鼠标、按下放大的~~ 动态RGB LED圈圈！~~「空洞」。
 
 ## 快速开始
 
@@ -11,18 +10,16 @@ dsh plugin --profile web add AbiTssE6/dsh-theme-zzz#dist
 ```
 
 或在 **设置 → 插件 → 发现** 添加索引源 `https://raw.githubusercontent.com/AbiTssE6/dsh-theme-zzz/master/market-index.json`
-后搜索安装。同一时刻只启用一个主题，装好后重启 Harness。
+后搜索安装。同一时刻请只启用一个主题来防止未知的问题，装好后重启 Harness。
 
 ## 字体
 
-字体优先使用本机安装的 **印品鸿蒙体**（粗体 `inpin hongmengti` / 细体 D40），
+字体优先使用本机安装的 **印品鸿蒙体**（粗体 印品鸿蒙体/`inpin hongmengti` ; 细体印品鸿蒙体 D40），
 未安装时回退 **思源黑体**（Source Han Sans / Noto Sans SC），再回退系统无衬线。
 设置页「字体」可以填写任意系统字体名，或用开关强制思源黑体。
 详见 [FONT-LICENSES.md](packages/dsh-theme-zzz/FONT-LICENSES.md)。
 
-## 自定义文案
-
-设置页的文字在 `packages/dsh-theme-zzz/locale/zh.json`、`en.json` 的 `settings` 里，改完刷新即可。
+**如果想要最还原的绝区零风格体验**，你可以试着在网络上下载非商用版的印品鸿蒙体，或者取得游戏原字体文件，自行安装到电脑来使用。
 
 ## 文档
 
