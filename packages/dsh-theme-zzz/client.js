@@ -2259,7 +2259,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         low: typeof saved.low === 'boolean' ? saved.low : false,
         voidSize: clampNum(saved.voidSize, 420, 920, 680),
         voidSpeed: clampNum(saved.voidSpeed, 0.3, 2.5, 1),
-        voidZoom: clampNum(saved.voidZoom, 1, 1.6, 1.2),
+        voidZoom: clampNum(saved.voidZoom, 0.5, 1.6, 1.2),
         voidFollow: clampNum(saved.voidFollow, 0.2, 3, 1),
         fontSans: typeof saved.fontSans === 'boolean' ? saved.fontSans : false,
         fontBold: typeof saved.fontBold === 'string' ? saved.fontBold : '印品鸿蒙体',
@@ -2289,7 +2289,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       voidSpeed: '动画速度',
       voidSpeedDesc: '光带流动速度的倍数（0.3–2.5）。',
       voidZoom: '点按放大',
-      voidZoomDesc: '按住鼠标时的放大倍数（1.0–1.6）。',
+      voidZoomDesc: '按住鼠标时的缩放倍数，小于 1 会缩小（0.5–1.6）。',
       voidFollow: '跟随速度',
       voidFollowDesc: '越大越紧跟鼠标（0.2–3.0）。',
       voidReset: '重置空洞参数',
@@ -2535,7 +2535,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }),
         h(ZzzSlider, {
           label: STR.voidZoom, desc: STR.voidZoomDesc,
-          min: 1, max: 1.6, step: 0.05, value: prefs.voidZoom,
+          min: 0.5, max: 1.6, step: 0.05, value: prefs.voidZoom,
           display: prefs.voidZoom.toFixed(2) + 'x',
           onChange: (v) => updateVoidPrefs({ voidZoom: v }),
         }),
@@ -2706,7 +2706,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         const speedFactor = () =>
           Math.max(0.3, Math.min(2.5, Number(voidPrefs.voidSpeed) || 1))
         const zoomMax = () =>
-          Math.max(1, Math.min(1.6, Number(voidPrefs.voidZoom) || VOID.ZOOM))
+          Math.max(0.5, Math.min(1.6, Number(voidPrefs.voidZoom) || VOID.ZOOM))
         // low-power mode: ?voidlow, the settings toggle, or a small machine
         const LOW = DEBUG.low ||
           (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4 || voidPrefs.low

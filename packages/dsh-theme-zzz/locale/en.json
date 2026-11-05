@@ -27,7 +27,7 @@
     "voidSpeed": "Animation speed",
     "voidSpeedDesc": "Flow speed multiplier of the light band (0.3–2.5).",
     "voidZoom": "Press zoom",
-    "voidZoomDesc": "Scale while the mouse is held (1.0–1.6).",
+    "voidZoomDesc": "Scale while the mouse is held; below 1 shrinks it (0.5–1.6).",
     "voidFollow": "Follow speed",
     "voidFollowDesc": "Higher follows the pointer more closely (0.2–3.0).",
     "voidReset": "Reset hollow settings",
