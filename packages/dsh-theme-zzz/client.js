@@ -2084,6 +2084,13 @@ html[${MARKER}] [class*="_tableScroll_"]{
   /* inset so the glass reads as a panel around the grid, not a page-wide band */
   padding:6px 14px;
   box-sizing:border-box;
+  /* the host's table flow is full-width and left-aligned inside the message column;
+     that is what reads as "off-centre" here. Shrink to the grid and centre it, which
+     is the smallest deviation that removes the skew (measured: 183px / 183px). */
+  width:fit-content;
+  max-width:100%;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 /* ===== queued-message dock: frosted glass =====

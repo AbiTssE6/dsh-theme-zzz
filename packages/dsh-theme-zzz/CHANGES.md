@@ -994,3 +994,8 @@ epeating-linear-gradient。
 
 - Reverted the fit-content centring; the table wrapper keeps only the glass fill and the 6/14 padding,
   so the host's full-width, left-aligned table flow is preserved.
+
+### markdown table: restore the centred wrapper (2026-11-05)
+
+- The host's full-width flow is what reads as skewed in this layout, so the wrapper is back to
+  fit-content + max-width:100% + margin-inline:auto (measured 183px / 183px around the grid).
