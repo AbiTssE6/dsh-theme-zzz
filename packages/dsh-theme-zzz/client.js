@@ -2330,6 +2330,7 @@ html[${MARKER}][data-zzz-glass-lite] body{
       perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
       fontGroup: '字体',
       fontDesc: '由于绝区零使用的印品鸿蒙体不允许无授权的二次分发，本主题不自带印品鸿蒙体字体文件。若你的电脑上自行安装了印品鸿蒙体，主题会识别到并使用，否则回退至思源黑体。',
+      visualGroup: '视觉效果',
       glassToggle: '毛玻璃模糊',
       glassToggleDesc: '关闭后玻璃面板改为实色，远控或低性能环境下可消除闪烁。',
       fontSans: '使用思源黑体',
@@ -2557,12 +2558,6 @@ html[${MARKER}][data-zzz-glass-lite] body{
           checked: prefs.low,
           onChange: () => updateVoidPrefs({ low: !voidPrefs.low }),
         }),
-        h(ZzzSettingRow, {
-          title: STR.glassToggle,
-          desc: STR.glassToggleDesc,
-          checked: prefs.glassBlur,
-          onChange: () => updateVoidPrefs({ glassBlur: !voidPrefs.glassBlur }),
-        }),
         h(ZzzSlider, {
           label: STR.voidSize, desc: STR.voidSizeDesc,
           min: 240, max: 1200, step: 20, value: prefs.voidSize,
@@ -2611,6 +2606,15 @@ html[${MARKER}][data-zzz-glass-lite] body{
             cursor: 'pointer',
           },
         }, STR.voidReset)),
+        h('div', {
+          style: { color: 'var(--dsw-alias-label-primary)', fontSize: '15px', fontWeight: 600, padding: '20px 0 6px' },
+        }, STR.visualGroup),
+        h(ZzzSettingRow, {
+          title: STR.glassToggle,
+          desc: STR.glassToggleDesc,
+          checked: prefs.glassBlur,
+          onChange: () => updateVoidPrefs({ glassBlur: !voidPrefs.glassBlur }),
+        }),
         h('div', {
           style: { color: 'var(--dsw-alias-label-primary)', fontSize: '15px', fontWeight: 600, padding: '20px 0 6px' },
         }, STR.fontGroup),
