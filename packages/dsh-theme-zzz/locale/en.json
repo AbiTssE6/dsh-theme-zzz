@@ -34,6 +34,8 @@
     "voidResetDesc": "Restores 680px / 1.0x / 0.7x / 1.0x.",
     "glassToggle": "Frosted glass",
     "glassToggleDesc": "Turning this off swaps the blur for a solid fill, which removes flicker under remote control.",
-    "visualGroup": "Visual effects"
+    "visualGroup": "Visual effects",
+    "resetAll": "Reset all settings",
+    "resetAllDesc": "Restores every hollow, visual and font preference to its default."
   }
 }
