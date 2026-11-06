@@ -2282,6 +2282,18 @@ html[${MARKER}][data-zzz-glass-lite] body{
       const n = typeof v === 'number' && isFinite(v) ? v : NaN
       return isFinite(n) ? Math.max(lo, Math.min(hi, n)) : fallback
     }
+    const DEFAULT_PREFS = {
+      void: true,
+      low: false,
+      voidSize: 680,
+      voidSpeed: 1,
+      voidZoom: 0.7,
+      voidFollow: 1,
+      glassBlur: true,
+      fontSans: false,
+      fontBold: '印品鸿蒙体',
+      fontThin: '印品鸿蒙体 D40',
+    }
     const voidPrefs = (() => {
       let saved = {}
       try { saved = JSON.parse(localStorage.getItem(PREF_KEY) || '{}') || {} } catch (e) { saved = {} }
@@ -2299,6 +2311,9 @@ html[${MARKER}][data-zzz-glass-lite] body{
       }
     })()
     const voidPrefListeners = new Set()
+    function resetVoidPrefs() {
+      updateVoidPrefs({ ...DEFAULT_PREFS })
+    }
     function updateVoidPrefs(patch) {
       Object.assign(voidPrefs, patch)
       try { localStorage.setItem(PREF_KEY, JSON.stringify(voidPrefs)) } catch (e) {}
@@ -2331,6 +2346,9 @@ html[${MARKER}][data-zzz-glass-lite] body{
       fontGroup: '字体',
       fontDesc: '由于绝区零使用的印品鸿蒙体不允许无授权的二次分发，本主题不自带印品鸿蒙体字体文件。若你的电脑上自行安装了印品鸿蒙体，主题会识别到并使用，否则回退至思源黑体。',
       visualGroup: '视觉效果',
+      resetAll: '重置全部设置',
+      resetAllDesc: '空洞、视觉效果与字体全部恢复默认。',
+
       glassToggle: '毛玻璃模糊',
       glassToggleDesc: '关闭后玻璃面板改为实色，远控或低性能环境下可消除闪烁。',
       fontSans: '使用思源黑体',
@@ -2641,6 +2659,31 @@ html[${MARKER}][data-zzz-glass-lite] body{
           checked: prefs.fontSans,
           onChange: () => updateVoidPrefs({ fontSans: !voidPrefs.fontSans }),
         }),
+        h('div', {
+          style: {
+            display: 'flex', alignItems: 'center', gap: '16px',
+            padding: '18px 0 0', marginTop: '18px',
+            borderTop: '1px solid var(--dsw-alias-border-l1)',
+          },
+        },
+        h('div', {
+          style: {
+            flex: '1', minWidth: '0', color: 'var(--dsw-alias-label-secondary)',
+            fontSize: '12px', lineHeight: '1.6',
+          },
+        }, STR.resetAllDesc),
+        h('button', {
+          type: 'button',
+          onClick: () => resetVoidPrefs(),
+          style: {
+            flex: '0 0 auto',
+            background: 'var(--dsw-alias-bg-layer-3)',
+            color: 'var(--dsw-alias-label-primary)',
+            border: '1px solid var(--dsw-alias-border-l2)',
+            borderRadius: '8px', padding: '6px 14px', fontSize: '13px',
+            cursor: 'pointer',
+          },
+        }, STR.resetAll)),
         h('div', {
           style: {
             color: 'var(--dsw-alias-label-secondary)', fontSize: '11px',

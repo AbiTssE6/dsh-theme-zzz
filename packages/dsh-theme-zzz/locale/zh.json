@@ -34,6 +34,8 @@
     "voidResetDesc": "恢复 680px / 1.0x / 0.7x / 1.0x。",
     "glassToggle": "毛玻璃模糊",
     "glassToggleDesc": "关闭后玻璃面板改为实色，远控或低性能环境下可消除闪烁。",
-    "visualGroup": "视觉效果"
+    "visualGroup": "视觉效果",
+    "resetAll": "重置全部设置",
+    "resetAllDesc": "空洞、视觉效果与字体全部恢复默认。"
   }
 }
