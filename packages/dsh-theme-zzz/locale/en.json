@@ -33,6 +33,7 @@
     "voidReset": "Reset hollow settings",
     "voidResetDesc": "Restores 680px / 1.0x / 0.7x / 1.0x.",
     "glassToggle": "Frosted glass",
-    "glassToggleDesc": "Turning this off swaps the blur for a solid fill, which removes flicker under remote control."
+    "glassToggleDesc": "Turning this off swaps the blur for a solid fill, which removes flicker under remote control.",
+    "visualGroup": "Visual effects"
   }
 }
