@@ -31,6 +31,8 @@
     "voidFollow": "跟随速度",
     "voidFollowDesc": "越大越紧跟鼠标（0.2–3.0）。",
     "voidReset": "重置空洞参数",
-    "voidResetDesc": "恢复 680px / 1.0x / 0.7x / 1.0x。"
+    "voidResetDesc": "恢复 680px / 1.0x / 0.7x / 1.0x。",
+    "glassToggle": "毛玻璃模糊",
+    "glassToggleDesc": "关闭后玻璃面板改为实色，远控或低性能环境下可消除闪烁。"
   }
 }
