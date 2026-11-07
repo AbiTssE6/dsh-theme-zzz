@@ -2253,6 +2253,15 @@ html[${MARKER}] .zzz-void-fresnel{
   mix-blend-mode:screen; transform-origin:50% 50%;
 }
 html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:680px; }
+
+/* remote / low-power fallback: same glass colour, no backdrop blur (the blur is what
+   flickers under remote capture). Toggled from the settings page or ?zzzglass=off */
+html[${MARKER}][data-zzz-glass-lite],
+html[${MARKER}][data-zzz-glass-lite] body{
+  --zzz-glass-blur:none;
+  --zzz-glass-fill:rgba(16,16,16,.66);
+  --zzz-glass-fill-strong:rgba(16,16,16,.76);
+}
 `
 
     function BrandMark(props) {
@@ -2273,6 +2282,18 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       const n = typeof v === 'number' && isFinite(v) ? v : NaN
       return isFinite(n) ? Math.max(lo, Math.min(hi, n)) : fallback
     }
+    const DEFAULT_PREFS = {
+      void: true,
+      low: false,
+      voidSize: 680,
+      voidSpeed: 1,
+      voidZoom: 0.7,
+      voidFollow: 1,
+      glassBlur: true,
+      fontSans: false,
+      fontBold: '印品鸿蒙体',
+      fontThin: '印品鸿蒙体 D40',
+    }
     const voidPrefs = (() => {
       let saved = {}
       try { saved = JSON.parse(localStorage.getItem(PREF_KEY) || '{}') || {} } catch (e) { saved = {} }
@@ -2283,12 +2304,16 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         voidSpeed: clampNum(saved.voidSpeed, 0.3, 2.5, 1),
         voidZoom: clampNum(saved.voidZoom, 0.5, 1.6, 0.7),
         voidFollow: clampNum(saved.voidFollow, 0.2, 3, 1),
+        glassBlur: typeof saved.glassBlur === 'boolean' ? saved.glassBlur : true,
         fontSans: typeof saved.fontSans === 'boolean' ? saved.fontSans : false,
         fontBold: typeof saved.fontBold === 'string' ? saved.fontBold : '印品鸿蒙体',
         fontThin: typeof saved.fontThin === 'string' ? saved.fontThin : '印品鸿蒙体 D40',
       }
     })()
     const voidPrefListeners = new Set()
+    function resetVoidPrefs() {
+      updateVoidPrefs({ ...DEFAULT_PREFS })
+    }
     function updateVoidPrefs(patch) {
       Object.assign(voidPrefs, patch)
       try { localStorage.setItem(PREF_KEY, JSON.stringify(voidPrefs)) } catch (e) {}
@@ -2320,6 +2345,12 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
       perfToggleDesc: 'DPR 降到 1.0、纹理 96、帧率 20，并关闭紧贴辉光；DPR 与纹理刷新后完全生效。',
       fontGroup: '字体',
       fontDesc: '由于绝区零使用的印品鸿蒙体不允许无授权的二次分发，本主题不自带印品鸿蒙体字体文件。若你的电脑上自行安装了印品鸿蒙体，主题会识别到并使用，否则回退至思源黑体。',
+      visualGroup: '视觉效果',
+      resetAll: '重置全部设置',
+      resetAllDesc: '空洞、视觉效果与字体全部恢复默认。',
+
+      glassToggle: '毛玻璃模糊',
+      glassToggleDesc: '关闭后玻璃面板改为实色，远控或低性能环境下可消除闪烁。',
       fontSans: '使用思源黑体',
       fontSansDesc: '跳过自定义字体，始终使用思源黑体。',
       fontBold: '粗体字体',
@@ -2494,6 +2525,7 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         voidSpeed: voidPrefs.voidSpeed,
         voidZoom: voidPrefs.voidZoom,
         voidFollow: voidPrefs.voidFollow,
+        glassBlur: voidPrefs.glassBlur,
         fontSans: voidPrefs.fontSans,
         fontBold: voidPrefs.fontBold,
         fontThin: voidPrefs.fontThin,
@@ -2594,6 +2626,15 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         }, STR.voidReset)),
         h('div', {
           style: { color: 'var(--dsw-alias-label-primary)', fontSize: '15px', fontWeight: 600, padding: '20px 0 6px' },
+        }, STR.visualGroup),
+        h(ZzzSettingRow, {
+          title: STR.glassToggle,
+          desc: STR.glassToggleDesc,
+          checked: prefs.glassBlur,
+          onChange: () => updateVoidPrefs({ glassBlur: !voidPrefs.glassBlur }),
+        }),
+        h('div', {
+          style: { color: 'var(--dsw-alias-label-primary)', fontSize: '15px', fontWeight: 600, padding: '20px 0 6px' },
         }, STR.fontGroup),
         h('div', {
           style: { color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', lineHeight: '1.6' },
@@ -2618,6 +2659,31 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
           checked: prefs.fontSans,
           onChange: () => updateVoidPrefs({ fontSans: !voidPrefs.fontSans }),
         }),
+        h('div', {
+          style: {
+            display: 'flex', alignItems: 'center', gap: '16px',
+            padding: '18px 0 0', marginTop: '18px',
+            borderTop: '1px solid var(--dsw-alias-border-l1)',
+          },
+        },
+        h('div', {
+          style: {
+            flex: '1', minWidth: '0', color: 'var(--dsw-alias-label-secondary)',
+            fontSize: '12px', lineHeight: '1.6',
+          },
+        }, STR.resetAllDesc),
+        h('button', {
+          type: 'button',
+          onClick: () => resetVoidPrefs(),
+          style: {
+            flex: '0 0 auto',
+            background: 'var(--dsw-alias-bg-layer-3)',
+            color: 'var(--dsw-alias-label-primary)',
+            border: '1px solid var(--dsw-alias-border-l2)',
+            borderRadius: '8px', padding: '6px 14px', fontSize: '13px',
+            cursor: 'pointer',
+          },
+        }, STR.resetAll)),
         h('div', {
           style: {
             color: 'var(--dsw-alias-label-secondary)', fontSize: '11px',
@@ -2663,6 +2729,24 @@ html[${MARKER}] .zzz-void-band{ position:absolute; inset:0; width:680px; height:
         root.setAttribute(MARKER, '')
         return () => root.removeAttribute(MARKER)
       }, 'dsh-theme-zzz: marker')
+
+      // Glass blur is the one surface that flickers under remote capture. This only
+      // swaps the blur for a more opaque fill; nothing else changes.
+      ctx.effect(() => {
+        const apply = () => {
+          const root = document.documentElement
+          const q = new URLSearchParams(location.search).get('zzzglass')
+          const lite = q === 'off' ? true : q === 'on' ? false : !voidPrefs.glassBlur
+          if (lite) root.setAttribute('data-zzz-glass-lite', '')
+          else root.removeAttribute('data-zzz-glass-lite')
+        }
+        voidPrefListeners.add(apply)
+        apply()
+        return () => {
+          voidPrefListeners.delete(apply)
+          document.documentElement.removeAttribute('data-zzz-glass-lite')
+        }
+      }, 'dsh-theme-zzz: glass blur')
 
       // One MutationObserver for the whole client half. Three effects used to create
       // their own observer (and two intervals polled the DOM); a single observer with

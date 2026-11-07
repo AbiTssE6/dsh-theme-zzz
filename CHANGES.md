@@ -1098,3 +1098,16 @@ epeating-linear-gradient。
   (the bug that made the switch look dead).
 - Typing into a field switches the 'Source Han Sans' toggle off, so the field visibly applies.
 - Empty field removes the override so the stylesheet default (inpin-first) applies again.
+
+### glass: remote-safe fallback without backdrop blur (2026-11-06, local only)
+
+- Settings gains a 毛玻璃模糊 switch (default on). Off swaps --zzz-glass-blur for 
+one and
+  raises the fill opacity (.34/.45 -> .66/.76) so panels stay readable without blur.
+- CSS: html[data-dsh-theme-zzz][data-zzz-glass-lite] plus the same rule on ody (the base
+  tokens are declared on both, so an html-only override would not reach descendants).
+- URL switches for testing: ?zzzglass=off forces lite, ?zzzglass=on forces full glass.
+- Rollback: turn the switch back on, or revert this commit; the pref defaults to blur on and
+  no stored data changes shape.
+- Rationale: only the backdrop-filter surfaces flicker under remote capture; the hollow and the
+  breathing animations were left untouched.
