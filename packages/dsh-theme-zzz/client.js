@@ -682,7 +682,10 @@ html[${MARKER}] button[class*="_sm_"][class*="1rv3m_"]:hover *{
 }
 html[${MARKER}] button[class*="1rv3m_"] svg{
   color:#dcdcdc !important;
-  stroke:#dcdcdc !important;
+  /* follow the colour instead of pinning one value: the three-dot glyph is a stroked
+     path, and a fixed stroke kept it light when :hover turned the disc yellow or when a
+     selected yellow row forced the button colour to black */
+  stroke:currentColor !important;
 }
 /* one timing for fill and glyph: un-hovering must never leave the icon dark on a
    disc that has already returned to black */
