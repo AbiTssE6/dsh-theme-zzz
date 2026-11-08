@@ -3624,6 +3624,55 @@ html[${MARKER}][data-zzz-glass-lite] body{
             /^color\(srgb 1 1 1\b/.test(v)
           )
         }
+        // Some glyphs carry the white paint in CSS (fill/stroke from the component rule)
+        // rather than as an SVG attribute, and hover-only yellow never mutates the DOM,
+        // so the attribute rewrite above never saw them. Fix the computed paint too:
+        // only where a white fill/stroke is actually in use, so outline icons (fill:none)
+        // and fill-only icons (stroke:none) are left alone.
+        const isWhiteCss = (value) => {
+          const v = String(value).trim().toLowerCase()
+          if (v === 'white' || v === '#fff' || v === '#ffffff') return true
+          const m = v.match(/^rgba?\(([^)]+)\)$/)
+          if (!m) return false
+          const p = m[1].split(',').map((n) => parseFloat(n))
+          return p[0] >= 250 && p[1] >= 250 && p[2] >= 250 && (p.length > 3 ? p[3] : 1) > 0.5
+        }
+        const paintTargets = (root) => {
+          const nodes = [root]
+          if (root && root.querySelectorAll) nodes.push(...root.querySelectorAll('svg, svg *'))
+          return nodes
+        }
+        const fixCssPaints = (root) => {
+          for (const node of paintTargets(root)) {
+            if (!node || node.nodeType !== 1 || !node.style) continue
+            const cs = getComputedStyle(node)
+            for (const prop of ['fill', 'stroke']) {
+              const v = cs.getPropertyValue(prop)
+              if (!v || v === 'none' || v.toLowerCase() === 'currentcolor') continue
+              if (!isWhiteCss(v)) continue
+              const key = 'data-zzz-css-' + prop
+              if (!node.hasAttribute(key)) node.setAttribute(key, node.style.getPropertyValue(prop))
+              node.style.setProperty(prop, 'currentColor', 'important')
+            }
+          }
+        }
+        const restoreCssPaints = (root) => {
+          const nodes = [root]
+          if (root && root.querySelectorAll) {
+            nodes.push(...root.querySelectorAll('[data-zzz-css-fill],[data-zzz-css-stroke]'))
+          }
+          for (const node of nodes) {
+            if (!node || node.nodeType !== 1 || !node.style) continue
+            for (const prop of ['fill', 'stroke']) {
+              const key = 'data-zzz-css-' + prop
+              if (!node.hasAttribute(key)) continue
+              const orig = node.getAttribute(key)
+              if (orig) node.style.setProperty(prop, orig)
+              else node.style.removeProperty(prop)
+              node.removeAttribute(key)
+            }
+          }
+        }
         const fixPaints = (root) => {
           for (const node of root.querySelectorAll('[fill],[stroke]')) {
             for (const attr of ['fill', 'stroke']) {
@@ -3649,21 +3698,17 @@ html[${MARKER}][data-zzz-glass-lite] body{
         }
         // The design-system discs (and their glyphs) already switch colour by state;
         // tagging them would force black after the fill is back to black.
-        const selfStyled = (el) =>
-          typeof el.matches === 'function' && el.matches('button[class*="1rv3m_"], button[class*="1rv3m_"] *')
         const test = (el) => {
           if (!el || el.nodeType !== 1) return
-          if (selfStyled(el)) {
-            if (el.hasAttribute('data-zzz-on-yellow')) el.removeAttribute('data-zzz-on-yellow')
-            return
-          }
           if (isYellowEl(el)) {
             if (!el.hasAttribute('data-zzz-on-yellow')) {
               el.setAttribute('data-zzz-on-yellow', '')
               fixPaints(el)
+              fixCssPaints(el)
             }
           } else if (el.hasAttribute('data-zzz-on-yellow')) {
             restorePaints(el)
+            restoreCssPaints(el)
             el.removeAttribute('data-zzz-on-yellow')
           }
         }
@@ -3700,12 +3745,26 @@ html[${MARKER}][data-zzz-glass-lite] body{
             : null
           if (host) test(host)
         }
+        // Hover-only yellow never mutates the DOM, so the observer never sees it.
+        // On enter, walk up and tag the first yellow ancestor while :hover is live.
+        const onPointerOver = (event) => {
+          let node = event.target
+          while (node && node !== document.body) {
+            if (node.nodeType === 1 && isYellowEl(node)) {
+              test(node)
+              return
+            }
+            node = node.parentElement
+          }
+        }
+        document.addEventListener('pointerover', onPointerOver, true)
         document.addEventListener('pointerout', onPointerOut, true)
         domWatchers.add(onDomChange)
         requestAnimationFrame(sweep)
         const late = setTimeout(sweep, 2500)
         return () => {
           domWatchers.delete(onDomChange)
+          document.removeEventListener('pointerover', onPointerOver, true)
           document.removeEventListener('pointerout', onPointerOut, true)
           clearTimeout(late)
           clearTimeout(queued)
