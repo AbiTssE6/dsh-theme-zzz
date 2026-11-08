@@ -1133,3 +1133,13 @@ one and
   (c) no longer skips the 1rv3m_ design-system discs.
 - Mock check: CSS-white fill and outline stroke both switch to #101010 when tagged; fill:none
   stays none.
+
+### three-dot glyph: the stroke was pinned (2026-11-08, local only)
+
+- The real buttons are _button_1rv3m_2 _ghost_1rv3m_45 _sm_1rv3m_28 (+ nL4_yW_moreButton /
+  wSkVaW_viewsMore) and their icon is a **stroked path**, not three circles.
+- utton[class*="1rv3m_"] svg{stroke:#dcdcdc !important} pinned that stroke. The hover and
+  selected-row rules only changed color, so the glyph stayed light on yellow.
+- The svg stroke now follows the colour (stroke:currentColor !important): hover rules and the
+  black-on-yellow rules both change color, so the dots turn black with them.
+- Mock check: tagged yellow surface gives rgb(16,16,16) for button, svg and path stroke.
