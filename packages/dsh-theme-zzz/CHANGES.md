@@ -1122,3 +1122,14 @@ one and
   component rule; id-hack baseline 9 -> 13.
 - Verified in a mock: before tag #dcdcdc, after tag #101010 on both a 1rv3m_ disc and a
   generic _button glyph (fill=currentColor dots).
+
+### black glyphs on yellow, follow-up: CSS paints and hover (2026-11-08, local only)
+
+- Root cause of the remaining white three-dot glyphs: some components carry the white paint in
+  CSS (fill/stroke from the component rule), not as an SVG attribute, so the attribute rewrite
+  never saw them; and hover-only yellow never mutates the DOM, so the tag was never applied.
+- The tagging effect now (a) rewrites computed white fill/stroke to currentColor inline
+  (fill:none / stroke:none left alone), (b) tags hover-yellow surfaces from pointerover, and
+  (c) no longer skips the 1rv3m_ design-system discs.
+- Mock check: CSS-white fill and outline stroke both switch to #101010 when tagged; fill:none
+  stays none.
