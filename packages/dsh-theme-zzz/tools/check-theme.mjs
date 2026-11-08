@@ -26,7 +26,8 @@ import path from 'node:path'
 // 2026-11-05: +3 for the nav label span inside those cells.
 const BASELINE = {
   important: 649,
-  idHacks: 9,
+  // 2026-11-08: +4 for the black-on-yellow rules (component :not() chains outranked them).
+  idHacks: 13,
 }
 
 const here = path.dirname(fileURLToPath(import.meta.url))

@@ -2090,13 +2090,13 @@ html[${MARKER}] [class*="JObwrW_fill"]{
    Anything the runtime tags as sitting on a yellow surface gets black text, icons and
    strokes. The tag is applied by the effect below and removed when the surface stops
    being yellow. */
-html[${MARKER}] [data-zzz-on-yellow]{
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard){
   /* colour needs the important: the host ships color: … !important in places */
   color:#101010 !important;
 }
-html[${MARKER}] [data-zzz-on-yellow] *,
-html[${MARKER}] [data-zzz-on-yellow] svg,
-html[${MARKER}] [data-zzz-on-yellow] svg *{
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) *,
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg,
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg *{
   /* colour only. fill/stroke are NOT forced: outline icons (fill="none") would be
      painted solid, and fill-only icons would grow an outline. Icons whose paint is
      hard-coded white are rewritten to currentColor by the tagging effect instead. */

@@ -1111,3 +1111,14 @@ one and
   no stored data changes shape.
 - Rationale: only the backdrop-filter surfaces flicker under remote capture; the hollow and the
   breathing animations were left untouched.
+
+### black glyphs on yellow: specificity fix (2026-11-08, local only)
+
+- The three-dot (and other) glyphs inside a yellow selected row / nav cell stayed #dcdcdc:
+  component rules such as utton[class*="_button"]:not(...)... and the design-system disc
+  recipe (utton[class*="1rv3m_"] svg{color:#dcdcdc !important}) carry enough
+  :not()/class specificity to outrank the plain [data-zzz-on-yellow] * rule.
+- The black-on-yellow rules now use :not(#zzz-guard), one id-level step above every
+  component rule; id-hack baseline 9 -> 13.
+- Verified in a mock: before tag #dcdcdc, after tag #101010 on both a 1rv3m_ disc and a
+  generic _button glyph (fill=currentColor dots).
