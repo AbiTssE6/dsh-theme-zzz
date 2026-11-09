@@ -1111,3 +1111,35 @@ one and
   no stored data changes shape.
 - Rationale: only the backdrop-filter surfaces flicker under remote capture; the hollow and the
   breathing animations were left untouched.
+
+### black glyphs on yellow: specificity fix (2026-11-08, local only)
+
+- The three-dot (and other) glyphs inside a yellow selected row / nav cell stayed #dcdcdc:
+  component rules such as utton[class*="_button"]:not(...)... and the design-system disc
+  recipe (utton[class*="1rv3m_"] svg{color:#dcdcdc !important}) carry enough
+  :not()/class specificity to outrank the plain [data-zzz-on-yellow] * rule.
+- The black-on-yellow rules now use :not(#zzz-guard), one id-level step above every
+  component rule; id-hack baseline 9 -> 13.
+- Verified in a mock: before tag #dcdcdc, after tag #101010 on both a 1rv3m_ disc and a
+  generic _button glyph (fill=currentColor dots).
+
+### black glyphs on yellow, follow-up: CSS paints and hover (2026-11-08, local only)
+
+- Root cause of the remaining white three-dot glyphs: some components carry the white paint in
+  CSS (fill/stroke from the component rule), not as an SVG attribute, so the attribute rewrite
+  never saw them; and hover-only yellow never mutates the DOM, so the tag was never applied.
+- The tagging effect now (a) rewrites computed white fill/stroke to currentColor inline
+  (fill:none / stroke:none left alone), (b) tags hover-yellow surfaces from pointerover, and
+  (c) no longer skips the 1rv3m_ design-system discs.
+- Mock check: CSS-white fill and outline stroke both switch to #101010 when tagged; fill:none
+  stays none.
+
+### three-dot glyph: the stroke was pinned (2026-11-08, local only)
+
+- The real buttons are _button_1rv3m_2 _ghost_1rv3m_45 _sm_1rv3m_28 (+ nL4_yW_moreButton /
+  wSkVaW_viewsMore) and their icon is a **stroked path**, not three circles.
+- utton[class*="1rv3m_"] svg{stroke:#dcdcdc !important} pinned that stroke. The hover and
+  selected-row rules only changed color, so the glyph stayed light on yellow.
+- The svg stroke now follows the colour (stroke:currentColor !important): hover rules and the
+  black-on-yellow rules both change color, so the dots turn black with them.
+- Mock check: tagged yellow surface gives rgb(16,16,16) for button, svg and path stroke.
