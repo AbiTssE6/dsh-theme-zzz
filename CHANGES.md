@@ -1156,3 +1156,13 @@ one and
   microtask (before paint).
 - Mock check: selected -> rgb(16,16,16); after the switch the same microtask reads
   rgb(220,220,220), tag removed.
+
+### black-on-yellow: retest was wired into the wrong effect (2026-11-10, local only)
+
+- The earlier etestTagged() call landed in the square-icon-button effect, whose closure has
+  no such function: every attribute mutation threw inside that handler (silently swallowed by
+  the shared observer) and skipped its deferred sweep.
+- The black-on-yellow effect - the one that owns the tagged set - never retested on attribute
+  changes, so tab deselect and ghost-button hover-out still waited for the 1.2s sweep.
+- Moved the call to the correct effect (attributes branch), kept the hover retest chain and the
+  transitionend retest, and removed it from the icon-button effect.

@@ -3547,7 +3547,6 @@ html[${MARKER}][data-zzz-glass-lite] body{
               }
             } else if (rec.type === 'attributes') {
               test(rec.target)
-              retestTagged()
             }
           }
           scheduleSweep()
@@ -3749,6 +3748,10 @@ html[${MARKER}][data-zzz-glass-lite] body{
               }
             } else if (rec.type === 'attributes') {
               test(rec.target)
+              // selection/state attributes are how tab strips and ghost buttons switch:
+              // retest every tagged surface so a surface that stopped being yellow is
+              // untagged in the mutation microtask, not on the 1.2s sweep
+              retestTagged()
             }
           }
           if (queued) return
@@ -3757,14 +3760,39 @@ html[${MARKER}][data-zzz-glass-lite] body{
             sweep()
           }, 1200)
         }
-        // Untag synchronously when the pointer leaves: the observer callback runs after
-        // paint, and a frame with the forced black glyph on an already-dark disc reads as
-        // a flicker. A forced style recalc here sees the post-leave :hover state.
+        // Untag when the pointer leaves. The disc recipe animates background-color with a
+        // 150ms transition, so at pointerout the element can still measure as yellow and
+        // the tag would survive until the 1.2s sweep (black text on a button that has
+        // already gone dark). Test now, again once the transition has finished, and on
+        // transitionend for any tagged surface.
+        const deferred = new Set()
+        // Retry a few times: a host may switch the hover fill with a transition longer
+        // than one tick, and transitionend does not fire when a rule stops matching
+        // mid-flight in every engine. Stop as soon as the tag is gone.
+        const scheduleRetest = (el, attempts = 4) => {
+          const timer = setTimeout(() => {
+            deferred.delete(timer)
+            test(el)
+            retestTagged()
+            if (attempts > 1 && el.hasAttribute && el.hasAttribute('data-zzz-on-yellow')) {
+              scheduleRetest(el, attempts - 1)
+            }
+          }, 220)
+          deferred.add(timer)
+        }
         const onPointerOut = (event) => {
           const host = event.target && event.target.closest
             ? event.target.closest('[data-zzz-on-yellow]')
             : null
-          if (host) test(host)
+          if (!host) return
+          test(host)
+          scheduleRetest(host)
+        }
+        const onTransitionEnd = (event) => {
+          const prop = event.propertyName
+          if (prop === 'background-color' || prop === 'background' || prop === 'color') {
+            retestTagged()
+          }
         }
         // Hover-only yellow never mutates the DOM, so the observer never sees it.
         // On enter, walk up and tag the first yellow ancestor while :hover is live.
@@ -3780,6 +3808,7 @@ html[${MARKER}][data-zzz-glass-lite] body{
         }
         document.addEventListener('pointerover', onPointerOver, true)
         document.addEventListener('pointerout', onPointerOut, true)
+        document.addEventListener('transitionend', onTransitionEnd, true)
         domWatchers.add(onDomChange)
         requestAnimationFrame(sweep)
         const late = setTimeout(sweep, 2500)
@@ -3788,6 +3817,9 @@ html[${MARKER}][data-zzz-glass-lite] body{
           tagged.clear()
           document.removeEventListener('pointerover', onPointerOver, true)
           document.removeEventListener('pointerout', onPointerOut, true)
+          document.removeEventListener('transitionend', onTransitionEnd, true)
+          for (const timer of deferred) clearTimeout(timer)
+          deferred.clear()
           clearTimeout(late)
           clearTimeout(queued)
         }
