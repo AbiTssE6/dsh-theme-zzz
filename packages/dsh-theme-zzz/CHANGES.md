@@ -1143,3 +1143,16 @@ one and
 - The svg stroke now follows the colour (stroke:currentColor !important): hover rules and the
   black-on-yellow rules both change color, so the dots turn black with them.
 - Mock check: tagged yellow surface gives rgb(16,16,16) for button, svg and path stroke.
+
+### tab strips: black text lingered after deselect (2026-11-10, local only)
+
+- Tab strips (e.g. the mnemon plugin's role=tablist) flip selection on aria-selected, not on
+  class. The shared MutationObserver only watched class/style/disabled, so a tab that lost the
+  yellow selection kept its data-zzz-on-yellow tag (and the forced black colour plus the inline
+  paint rewrites) until the 1.2s sweep or a pointerout.
+- The observer now also watches aria-selected / aria-current / aria-expanded / aria-pressed and
+  data-state / data-active / data-selected / data-highlighted, and every attribute mutation
+  re-tests the set of currently tagged surfaces, so the untag happens in the mutation
+  microtask (before paint).
+- Mock check: selected -> rgb(16,16,16); after the switch the same microtask reads
+  rgb(220,220,220), tag removed.
