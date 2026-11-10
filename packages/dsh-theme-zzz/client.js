@@ -2772,7 +2772,13 @@ html[${MARKER}][data-zzz-glass-lite] body{
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['class', 'style', 'disabled'],
+        attributeFilter: [
+          'class', 'style', 'disabled',
+          // selection state is often carried by ARIA/data attributes, not class:
+          // role=tab / aria-selected is the common shape for tab strips
+          'aria-selected', 'aria-current', 'aria-expanded', 'aria-pressed',
+          'data-state', 'data-active', 'data-selected', 'data-highlighted',
+        ],
       })
 
       // ===== zzz void: conversation-area background =====
@@ -3541,6 +3547,7 @@ html[${MARKER}][data-zzz-glass-lite] body{
               }
             } else if (rec.type === 'attributes') {
               test(rec.target)
+              retestTagged()
             }
           }
           scheduleSweep()
@@ -3701,11 +3708,13 @@ html[${MARKER}][data-zzz-glass-lite] body{
         }
         // The design-system discs (and their glyphs) already switch colour by state;
         // tagging them would force black after the fill is back to black.
+        const tagged = new Set()
         const test = (el) => {
           if (!el || el.nodeType !== 1) return
           if (isYellowEl(el)) {
             if (!el.hasAttribute('data-zzz-on-yellow')) {
               el.setAttribute('data-zzz-on-yellow', '')
+              tagged.add(el)
               fixPaints(el)
               fixCssPaints(el)
             }
@@ -3713,6 +3722,15 @@ html[${MARKER}][data-zzz-glass-lite] body{
             restorePaints(el)
             restoreCssPaints(el)
             el.removeAttribute('data-zzz-on-yellow')
+            tagged.delete(el)
+          }
+        }
+        // Re-test every surface we have tagged whenever any attribute changes. A tab
+        // strip flips selection on aria-selected (not class), and waiting for the 1.2s
+        // sweep is what left black text on a tab that had already gone back to white.
+        const retestTagged = () => {
+          for (const el of Array.from(tagged)) {
+            try { test(el) } catch (e) { tagged.delete(el) }
           }
         }
         const sweep = () => {
@@ -3767,6 +3785,7 @@ html[${MARKER}][data-zzz-glass-lite] body{
         const late = setTimeout(sweep, 2500)
         return () => {
           domWatchers.delete(onDomChange)
+          tagged.clear()
           document.removeEventListener('pointerover', onPointerOver, true)
           document.removeEventListener('pointerout', onPointerOut, true)
           clearTimeout(late)
