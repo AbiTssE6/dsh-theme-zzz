@@ -1,0 +1,3 @@
+dsh-theme-zzz 是本地主题插件：profiles/web、profiles/desktop 的 node_modules 里都是指向 D:\Project\DSH\ZZZ\packages\dsh-theme-zzz 的符号链接，改源码后只需在 GUI 里刷新即可生效；dist/ 只是发布产物（gitignore，scripts/make-dist.mjs 生成），自检脚本是 packages/dsh-theme-zzz/tools/check-theme.mjs。
+§
+该机器 DSH Web GUI 的有效 DPR = 1.125（Windows 显示缩放 125%，Chrome 对 http://127.0.0.1:3080 单独设了 90% 页面缩放）。排查亚像素/布局抖动问题必须在分数 DPR 下复现，Chrome 无头可用 --force-device-scale-factor=1.125 模拟。

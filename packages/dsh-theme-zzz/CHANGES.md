@@ -1166,3 +1166,17 @@ one and
   changes, so tab deselect and ghost-button hover-out still waited for the 1.2s sweep.
 - Moved the call to the correct effect (attributes branch), kept the hover retest chain and the
   transitionend retest, and removed it from the icon-button effect.
+
+### native select popup: glass via the customizable-select mechanism (2026-11-12, local only)
+
+- The provider picker is a native <select>; its dropdown is painted by the OS and is not a
+  DOM element, so no selector can reach it.
+- Adopted the platform mechanism the HTML spec / MDN recommends for this: appearance:base-select
+  plus ::picker(select) (Chromium 135+). Unsupported engines ignore both and keep their popup.
+- ::picker(select) uses the glass fill, backdrop blur, border, radius and shadow; options get
+  the plate for :checked and the hover haze; ::picker-icon follows the secondary label colour.
+- Scoped to select:not([multiple]):not([size]) outside [data-dsh-plugin], so plugin selects keep
+  their own appearance.
+- Checked in Chrome 156: appearance resolves to base-select, picker backdrop-filter is
+  blur(14px) saturate(1.8), background rgba(16,16,16,.76), radius 16px; closed control shows the
+  label plus the picker icon.
