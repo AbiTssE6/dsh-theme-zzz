@@ -1180,3 +1180,14 @@ one and
 - Checked in Chrome 156: appearance resolves to base-select, picker backdrop-filter is
   blur(14px) saturate(1.8), background rgba(16,16,16,.76), radius 16px; closed control shows the
   label plus the picker icon.
+
+### native select picker: the picker needs the base appearance too (2026-11-12, local only)
+
+- Symptom: appearance resolved to base-select and getComputedStyle(::picker(select)) reported the
+  glass background and blur, yet the popup stayed native/white.
+- Cause: Chrome only switches to the customisable picker when the ::picker(select) pseudo-element
+  also declares ppearance: base-select; with only the select opted in, the computed styles are
+  still resolvable but painting stays native.
+- Fix: ppearance:base-select added to the ::picker(select) rule.
+- Verified in the real browser (BrowserSkill): the popup now renders as the glass panel with the
+  yellow checked row, black label and the checkmark.
