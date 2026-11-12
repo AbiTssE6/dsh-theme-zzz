@@ -234,6 +234,7 @@ function registerTokens(palette) {
    8.  menus / tooltips / popovers
    9.  plugin-market specifics (nUhMVa)
    10. misc: watermark, brand, scrollbar
+   11. markdown tables: hover never reflows (the block at the end of this sheet)
 
    Module-hash prefixes referenced (these are the upgrade-sensitive spots):
      1rv3m  host design-system button           OMoRSG open-in-app split
@@ -1449,6 +1450,57 @@ html[${MARKER}] select{
   caret-color:#fcdd00 !important;
 }
 
+/* ---- native select: the popup is glass too ----
+   A native <select>'s dropdown is painted by the OS and cannot be styled. Chromium
+   135+ exposes the platform mechanism for exactly this: the base-select appearance
+   plus the ::picker(select) pseudo-element (the customisable select in the HTML
+   spec / MDN). Older engines ignore both declarations and keep their native popup,
+   so this is a progressive enhancement and needs no JS.
+   Plugin-owned selects opt out: their appearance belongs to the plugin. */
+html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *){
+  appearance:base-select;
+}
+html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *)::picker(select){
+  /* the picker itself must also opt into the base appearance, otherwise Chrome
+     keeps the native popup even though the select resolved to base-select */
+  appearance:base-select;
+  background-color:var(--zzz-glass-fill-strong);
+  background-image:none;
+  backdrop-filter:var(--zzz-glass-blur);
+  -webkit-backdrop-filter:var(--zzz-glass-blur);
+  border:1px solid var(--dsw-alias-border-l2);
+  border-radius:var(--zzz-glass-radius);
+  box-shadow:0 14px 36px rgba(0,0,0,.55);
+  padding:6px;
+  margin-block:6px;
+  color:var(--dsw-alias-label-primary);
+  overflow:hidden auto;
+}
+html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *) option{
+  background:transparent;
+  background-image:none;
+  color:var(--dsw-alias-label-primary);
+  padding:7px 10px;
+  border-radius:9px;
+  font-family:var(--zzz-font-text);
+}
+html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *) option:hover,
+html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *) option:focus{
+  background-color:var(--zzz-hl);
+  color:var(--dsw-alias-label-primary);
+}
+html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *) option:checked{
+  background-image:var(--zzz-plate);
+  background-color:transparent;
+  color:#101010;
+}
+html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *) option::checkmark{
+  color:#101010;
+}
+html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *)::picker-icon{
+  color:var(--dsw-alias-label-secondary);
+}
+
 /* ---- icons: one weight everywhere ----
    every glyph in this UI is a stroked svg, and the host ships them at mixed
    weights; forcing one value on the svg itself (not on a single component) keeps
@@ -2264,6 +2316,35 @@ html[${MARKER}][data-zzz-glass-lite] body{
   --zzz-glass-blur:none;
   --zzz-glass-fill:rgba(16,16,16,.66);
   --zzz-glass-fill-strong:rgba(16,16,16,.76);
+}
+
+/* ============================================================
+   11. markdown tables: hovering must not reflow the message
+
+   Why: the host renders any table whose first row has >= 4 columns inside a scroll
+   wrapper ('.md-table-wide', which also gets tabindex=0). At rest that wrapper hides
+   the horizontal scrollbar with 'overflow-x:hidden' plus a
+   'padding-bottom:var(--dsh-scrollbar-width)' reserve, and on :hover it swaps the
+   reserve for a real scrollbar. The two only cancel out when the 5px of padding and
+   the 5px of scrollbar land on the same device pixels. At a fractional device pixel
+   ratio - Windows 125% scaling x Chrome 90% page zoom = 1.125 on this machine - they
+   round differently, the wrapper loses about half a pixel on hover and everything
+   after the table in the same message (text, code blocks, later bubbles) jumps up.
+   Measured at DPR 1.125: 139.67px -> 139.11px, offsetHeight snapping 140 -> 139.
+
+   What: show the scrollbar as soon as the table overflows and never reserve padding,
+   so :hover changes no geometry at all - identical at integer and fractional DPR.
+
+   Revert: delete this block and the "11." line in the table of contents above.
+   Note: '.md-table-wide' is the renderer's plain utility class and is upgrade-stable;
+   the hashed class next to it (_tableScroll_...) is not, so only the plain one is
+   used here.
+   ============================================================ */
+html[${MARKER}] .md-table-wide,
+html[${MARKER}] .md-table-wide:hover,
+html[${MARKER}] .md-table-wide:focus-visible{
+  overflow-x:auto;
+  padding-bottom:0;
 }
 `
 
