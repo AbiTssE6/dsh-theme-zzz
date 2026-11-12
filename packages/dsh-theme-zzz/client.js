@@ -1461,6 +1461,9 @@ html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *){
   appearance:base-select;
 }
 html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *)::picker(select){
+  /* the picker itself must also opt into the base appearance, otherwise Chrome
+     keeps the native popup even though the select resolved to base-select */
+  appearance:base-select;
   background-color:var(--zzz-glass-fill-strong);
   background-image:none;
   backdrop-filter:var(--zzz-glass-blur);
