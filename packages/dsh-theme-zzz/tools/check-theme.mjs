@@ -13,6 +13,8 @@
 //      ignored.
 //   5. RATCHET: the two debt counters (!important and :not(#zzz-guard) overrides) may
 //      only go down. When a change lowers them, lower the baseline in the same commit.
+//   6. void geometry / interaction invariants
+//   7. markdown wide tables: hovering must not reflow (fractional-DPR layout shift)
 
 import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
@@ -180,6 +182,47 @@ if (!source.includes("name: 'settings.section', id: 'zzz-theme'")) {
   problems.push('void: official settings.section registration missing')
 }
 if (!source.includes('w = VOID.BAND_W')) problems.push('void: band width does not read VOID.BAND_W')
+
+// ---- 7. markdown wide tables: hovering must not reflow ---------------------
+// 2026-11-10: the host renders a table whose first row has >= 4 columns into a
+// .md-table-wide scroll wrapper that hides the horizontal scrollbar with
+// overflow-x:hidden plus a --dsh-scrollbar-width padding reserve, then swaps that
+// reserve for a real scrollbar on :hover. The reserve and the scrollbar only cancel
+// out at integer device pixel ratios; at the fractional ratio this machine runs
+// (125% scaling x 90% page zoom = 1.125) the wrapper lost ~0.5px on hover and every
+// element below the table jumped up. Our override drops the reserve and keeps
+// overflow-x:auto in every state, so the geometry never depends on hover. Guard it:
+// deleting that block silently brings the jump back.
+{
+  const cssStart = source.indexOf('const CSS = `')
+  const cssEnd = source.indexOf('\n`', cssStart)
+  const sheet = cssStart >= 0 && cssEnd >= 0 ? source.slice(cssStart + 'const CSS = `'.length, cssEnd) : ''
+  // ${...} template interpolations carry braces of their own; swap them out so the
+  // sheet can be split into rules
+  const plain = sheet
+    .replace(/\$\{[^}]*\}/g, 'TPL')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+  const rules = [...plain.matchAll(/([^{}]*)\{([^{}]*)\}/g)].map((match) => ({
+    selector: match[1].replace(/\s+/g, ' ').trim(),
+    body: match[2].replace(/\s+/g, ' ').trim(),
+  }))
+  const wide = rules.filter((rule) => /\.md-table-wide\b/.test(rule.selector))
+  const base = wide.find((rule) => /\.md-table-wide(?![\w:-])/.test(rule.selector))
+  const hover = wide.find((rule) => /\.md-table-wide:hover/.test(rule.selector))
+  const focus = wide.find((rule) => /\.md-table-wide:focus-visible/.test(rule.selector))
+  if (!base || !hover || !focus) {
+    problems.push('table: .md-table-wide hover-stability override missing (the fractional-DPR jump returns)')
+  } else {
+    const found = []
+    for (const rule of [base, hover, focus]) {
+      if (!/overflow-x: ?auto/.test(rule.body)) found.push(`table: ${rule.selector} must set overflow-x:auto`)
+      if (!/padding-bottom: ?0/.test(rule.body)) found.push(`table: ${rule.selector} must set padding-bottom:0`)
+      if (/dsh-scrollbar-width/.test(rule.body)) found.push(`table: ${rule.selector} must not reserve scrollbar padding`)
+    }
+    problems.push(...found)
+    if (!found.length) report.push('table: .md-table-wide geometry is hover-independent')
+  }
+}
 
 console.log(report.join('\n'))
 if (problems.length) {

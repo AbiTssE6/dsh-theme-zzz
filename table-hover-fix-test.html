@@ -1,0 +1,83 @@
+<!doctype html>
+<html data-dsh-theme-zzz>
+<head>
+<meta charset="utf-8">
+<style>
+  /* ===== 1. HOST rules, verbatim from dsh-web-frontend index-BNyAYEM7.css ===== */
+  body {
+    --dsh-scrollbar-width: 5px;
+  }
+  ::-webkit-scrollbar { width: var(--dsh-scrollbar-width); height: var(--dsh-scrollbar-width); }
+  ::-webkit-scrollbar-thumb { background:#999; background-clip:content-box; border-radius:999px; }
+
+  ._tableScroll_1ypvv_192 { max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; }
+  ._tableScroll_1ypvv_192.md-table-wide { overflow-x:hidden; padding-bottom:var(--dsh-scrollbar-width, 5px); }
+  ._tableScroll_1ypvv_192.md-table-wide:hover,
+  ._tableScroll_1ypvv_192.md-table-wide:focus-visible { overflow-x:scroll; padding-bottom:0; }
+  ._tableScroll_1ypvv_192 table { border-collapse:collapse; width:max-content; max-width:max-content; }
+  ._tableScroll_1ypvv_192 th { text-align:start; padding:10px 16px; border-bottom:.5px solid #333; }
+  ._tableScroll_1ypvv_192 td { padding:10px 16px; border-bottom:.5px solid #2a2a2a; }
+
+  /* ===== 2. THEME override (the block shipped in dsh-theme-zzz client.js, #11) ===== */
+  html[data-dsh-theme-zzz] .md-table-wide,
+  html[data-dsh-theme-zzz] .md-table-wide:hover,
+  html[data-dsh-theme-zzz] .md-table-wide:focus-visible {
+    overflow-x:auto;
+    padding-bottom:0;
+  }
+
+  body { margin:0; font:14px/24px system-ui; background:#131313; color:#eee; }
+  .frame { width:640px; padding:0 16px; }
+  td, th { white-space:nowrap; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <p id="above">above the table</p>
+  <div class="_tableScroll_1ypvv_192 md-table-wide" id="wrap">
+    <table>
+      <thead><tr><th>alpha column one</th><th>beta column two</th><th>gamma column three</th><th>delta column four</th></tr></thead>
+      <tbody>
+        <tr><td>row one value lorem ipsum</td><td>second value</td><td>third value</td><td>fourth value</td></tr>
+        <tr><td>row two value lorem ipsum</td><td>second value</td><td>third value</td><td>fourth value</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p id="below">below the table - this line must not move</p>
+</div>
+<pre id="out"></pre>
+<script>
+  const wrap = document.getElementById('wrap');
+  const below = document.getElementById('below');
+  const cs = getComputedStyle(wrap);
+  const rest = {
+    paddingBottom: cs.paddingBottom,
+    overflowX: cs.overflowX,
+    height: wrap.getBoundingClientRect().height,
+    belowTop: below.getBoundingClientRect().top,
+    clientHeight: wrap.clientHeight,
+    scrollWidth: wrap.scrollWidth,
+    clientWidth: wrap.clientWidth,
+  };
+  // emulate the host :hover state winning (worst case: our override fails)
+  wrap.style.setProperty('overflow-x', 'scroll', 'important');
+  wrap.style.setProperty('padding-bottom', '0', 'important');
+  const hover = {
+    height: wrap.getBoundingClientRect().height,
+    belowTop: below.getBoundingClientRect().top,
+    clientHeight: wrap.clientHeight,
+  };
+  document.getElementById('out').textContent = [
+    'at rest   : padding-bottom=' + rest.paddingBottom + ' overflow-x=' + rest.overflowX +
+      ' height=' + rest.height.toFixed(2) + ' clientH=' + rest.clientHeight +
+      ' scrollW=' + rest.scrollWidth + ' clientW=' + rest.clientWidth,
+    'hover sim : padding-bottom=' + getComputedStyle(wrap).paddingBottom +
+      ' height=' + hover.height.toFixed(2) + ' clientH=' + hover.clientHeight,
+    'below.top : rest=' + rest.belowTop.toFixed(2) + ' hover=' + hover.belowTop.toFixed(2) +
+      ' delta=' + (hover.belowTop - rest.belowTop).toFixed(3) + 'px',
+    'height delta=' + (hover.height - rest.height).toFixed(3) + 'px',
+    'overflows=' + (rest.scrollWidth > rest.clientWidth),
+  ].join('\n');
+</script>
+</body>
+</html>

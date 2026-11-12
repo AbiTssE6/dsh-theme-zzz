@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  /* --- scrollbar.css from packages/client/ui-theme (verbatim) --- */
+  body {
+    --dsh-scrollbar-thumb: #999;
+    --dsh-scrollbar-thumb-hover: #777;
+    --dsh-scrollbar-thumb-border: 0px;
+    --dsh-scrollbar-track-margin: 0px;
+    --dsh-scrollbar-width: 5px;
+  }
+  ::-webkit-scrollbar { width: var(--dsh-scrollbar-width); height: var(--dsh-scrollbar-width); }
+  ::-webkit-scrollbar-track { margin-block: var(--dsh-scrollbar-track-margin); background: 0 0; }
+  ::-webkit-scrollbar-thumb {
+    border: var(--dsh-scrollbar-thumb-border) solid transparent;
+    background: var(--dsh-scrollbar-thumb);
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+
+  /* --- markdown table rules (verbatim, hashed class names replaced) --- */
+  .tableScroll { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
+  .tableScroll.md-table-wide { overflow-x: hidden; padding-bottom: var(--dsh-scrollbar-width, 5px); }
+  .tableScroll table { border-collapse: collapse; width: max-content; max-width: max-content; }
+  .tableScroll th, .tableScroll td { padding: 10px 16px; border-bottom: .5px solid #ddd; }
+  .tableFill table { width: 100%; max-width: none; }
+
+  body { margin: 0; font: 14px/24px system-ui; }
+  .frame { width: 640px; padding: 0 16px; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <p id="above">above the table</p>
+  <div class="tableScroll md-table-wide" id="wrap">
+    <table>
+      <thead><tr><th>a</th><th>b</th><th>c</th><th>d</th></tr></thead>
+      <tbody>
+        <tr><td>1 long text long text long text</td><td>x</td><td>y</td><td>z</td></tr>
+        <tr><td>2 long text long text long text</td><td>x</td><td>y</td><td>z</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p id="below">below the table — this line and everything after it should not move</p>
+</div>
+<pre id="out"></pre>
+<script>
+  const wrap = document.getElementById('wrap');
+  const below = document.getElementById('below');
+  const above = document.getElementById('above');
+  const out = [];
+  function snap(label) {
+    const r = wrap.getBoundingClientRect();
+    out.push(label + ': wrap.offsetHeight=' + wrap.offsetHeight +
+      ' wrap.rect.height=' + r.height.toFixed(2) +
+      ' clientHeight=' + wrap.clientHeight +
+      ' offsetWidth=' + wrap.offsetWidth + ' clientWidth=' + wrap.clientWidth +
+      ' below.top=' + below.getBoundingClientRect().top.toFixed(2) +
+      ' above.top=' + above.getBoundingClientRect().top.toFixed(2));
+  }
+  const hasWebkitScrollbar = CSS.supports('selector(::-webkit-scrollbar)');
+  snap('rest');
+  // hover state: overflow-x:scroll; padding-bottom:0
+  wrap.style.overflowX = 'scroll';
+  wrap.style.paddingBottom = '0';
+  snap('hover');
+  document.getElementById('out').textContent =
+    'webkitScrollbarSelectorSupported=' + hasWebkitScrollbar + '\n' + out.join('\n');
+</script>
+</body>
+</html>
