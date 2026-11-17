@@ -1191,3 +1191,12 @@ one and
 - Fix: ppearance:base-select added to the ::picker(select) rule.
 - Verified in the real browser (BrowserSkill): the popup now renders as the glass panel with the
   yellow checked row, black label and the checkmark.
+
+### conversation view tabs overlapped after the DSH update (2026-11-17, local only)
+
+- The updated host changed .wSkVaW_tab to carry a negative hit-area margin (margin-inline:
+  -10px) paired with a 32px gap in .viewTabs. The theme pinned the strip gap to 4px, so two
+  adjacent tabs overlapped by 16px.
+- The tab margins are now neutralised (margin 0) inside the tablists/containers the theme
+  already styles, so the 4px gap reads as 4px of real space.
+- Mock check with the host geometry: margins 0px, gap 4px, tabs 56-102 and 106-148, overlap 0.
