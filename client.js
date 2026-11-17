@@ -1297,6 +1297,16 @@ html[${MARKER}] div:has(> [role="tab"]):not([class*="_sidebarCol"] *):not([style
   column-gap:4px !important;
   row-gap:4px !important;
 }
+/* The conversation view strip changed: each tab now carries a negative hit-area
+   margin (margin-inline: -10px) that the host pairs with a 32px gap. With the 4px
+   gap above the two tabs overlapped by 16px, so neutralise the margins instead of
+   fighting the gap. */
+html[${MARKER}] [role="tablist"]:has(> [role="tab"]):not([class*="_sidebarCol"] *) > [role="tab"],
+html[${MARKER}] div:has(> [role="tab"]):not([class*="_sidebarCol"] *) > [role="tab"]{
+  margin-left:0;
+  margin-right:0;
+  margin-top:0;
+}
 /* segmented controls compute their indicator width from a 2px gap and 4px padding;
    restoring that keeps the sliding thumb exactly one slot wide */
 html[${MARKER}] [style*="--dsh-segment-count"]:not(#zzz-guard){
