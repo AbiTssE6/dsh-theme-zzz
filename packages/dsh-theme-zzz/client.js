@@ -517,7 +517,9 @@ html[${MARKER}] [data-conversation-tabs] * {
    The inventory below is the authoritative list of framed elements. When a new
    "all cards" change is requested, audit this list first: the misses always
    came from broad selectors that did not actually name these components. */
-html[${MARKER}] [class*="_bubble"],
+/* the host nests .*_bubbleWidth > .*_bubble; only the bubble itself is the card,
+   the width wrapper matched the substring and painted a second frame */
+html[${MARKER}] [class*="_bubble"]:not([class*="_bubbleWidth"]),
 html[${MARKER}] [role="dialog"],
 html[${MARKER}] [data-composer-card="true"],
 html[${MARKER}] button[class*="_newSession"],
@@ -621,7 +623,7 @@ html[${MARKER}] [class*="_tabHost_"] button:empty::after{
 html[${MARKER}] [data-composer-card="true"]{
   padding:0 !important;
 }
-html[${MARKER}] [class*="_bubble"]{border-radius:16px !important}
+html[${MARKER}] [class*="_bubble"]:not([class*="_bubbleWidth"]){border-radius:16px !important}
 html[${MARKER}] [data-composer-card="true"]{border-radius:22px !important}
 /* the to-bottom slot is a 0px-tall placeholder that draws the dark rule above the
    composer; its module hash changes between builds (V4vHZW_/EvIC1a_), so match the

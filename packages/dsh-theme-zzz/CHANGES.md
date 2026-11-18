@@ -1200,3 +1200,11 @@ one and
 - The tab margins are now neutralised (margin 0) inside the tablists/containers the theme
   already styles, so the 4px gap reads as 4px of real space.
 - Mock check with the host geometry: margins 0px, gap 4px, tabs 56-102 and 106-148, overlap 0.
+
+### nested bubble painted two cards (2026-11-18, local only)
+
+- The host nests .*_bubbleWidth > .*_bubble. The card inventory matched [class*="_bubble"], so the
+  width wrapper and the bubble itself both received the #282828 frame, shadow and radius.
+- The wrapper is excluded now (:not([class*="_bubbleWidth"])): the bubble keeps the card, the
+  wrapper stays invisible. Mock check: wrapper transparent / no border / radius 0; bubble
+  rgb(40,40,40), 1px frame, radius 16.
