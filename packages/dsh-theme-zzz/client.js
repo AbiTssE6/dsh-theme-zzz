@@ -2191,16 +2191,16 @@ html[${MARKER}] [data-zzz-glass]{
 }
 /* L3: nothing inside the glass paints its own plate (switches, inputs and
    progress shapes keep their geometry) */
-html[${MARKER}] [data-zzz-glass] *:not(input):not(progress):not([role="switch"]):not([role="switch"] *):not([class*="linkButton"]):not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]){
+html[${MARKER}] [data-zzz-glass] *:not(input):not(progress):not([role="switch"]):not([role="switch"] *):not([class*="linkButton"]):not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]){
   background-color:transparent !important;
   background-image:none !important;
   box-shadow:none !important;
 }
 /* interaction: hover is light, on/selected is the yellow theme accent */
 @media (hover:hover){
-  html[${MARKER}] [data-zzz-glass] button:not(:disabled):hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]),
-  html[${MARKER}] [data-zzz-glass] a:hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]),
-  html[${MARKER}] [data-zzz-glass] [role="button"]:hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]){
+  html[${MARKER}] [data-zzz-glass] button:not(:disabled):hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]),
+  html[${MARKER}] [data-zzz-glass] a:hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]),
+  html[${MARKER}] [data-zzz-glass] [role="button"]:hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]){
     background-color:var(--zzz-hl) !important;
   }
 }

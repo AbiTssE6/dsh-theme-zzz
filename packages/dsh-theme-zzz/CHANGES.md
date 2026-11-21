@@ -1342,3 +1342,16 @@ one and
   transparent with a red keyline only (the reported bug), primary yellow; after ->
   secondary rgb(28,28,28), danger rgb(200,24,0) filled with a white label, primary yellow.
   Debt unchanged at 678 (the fix removes the need for !important on these two recipes).
+
+### guards against "my change did nothing" (2026-11-21, local only)
+
+- tools/check-paint.mjs: renders the real stylesheet over mock surfaces (plain dialog,
+  settings glass row, plugin panel) for every key family and state, forces :hover /
+  :focus-visible through same-specificity class selectors, and asserts the computed
+  background, label and radius against the token layer. Exits 1 on any mismatch. 14 cases.
+- It immediately found a second instance of the same bug: a 1rv3m_ icon key inside a glass
+  row lost its yellow hover (transparent plate, black glyph on a dark surface). The glass
+  flatten and hover rules now skip [class*="1rv3m_"] as well, and all 14 cases pass.
+- tools/check-theme.mjs: new ratchet "blanket paint rules" (surface + " *" + background/color
+  !important). 39 today; a new one fails the check until the baseline is edited on purpose,
+  because that shape is what silently flattened key recipes three times.

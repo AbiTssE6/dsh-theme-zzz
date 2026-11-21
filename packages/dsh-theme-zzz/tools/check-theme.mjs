@@ -34,6 +34,10 @@ import path from 'node:path'
 // (primaryButton / dangerButton) needed none and carry none.
 const BASELINE = {
   important: 678,
+  // 2026-11-21: rules of the shape "[some surface] * + background/color !important"
+  // they flatten everything inside, which is how a key recipe silently stopped
+  // working three times. The count may not grow without a deliberate edit here.
+  blanketPaint: 39,
   // 2026-11-08: +4 for the black-on-yellow rules (component :not() chains outranked them).
   idHacks: 13,
 }
@@ -98,6 +102,39 @@ if (cssStart >= 0 && cssEnd >= 0) {
   const important = [...code.matchAll(/!important/g)].length
   report.push(`debt: ${important} !important (baseline ${BASELINE.important})`)
   report.push(`debt: ${hacks} id-level overrides (baseline ${BASELINE.idHacks})`)
+
+  // A blanket rule is "descendant wildcard + paint + !important": it outranks any
+  // component recipe that does not also shout, so every new one is a future
+  // "my change did nothing" report. Count them instead of trusting review.
+  const flat = code.replace(/\/\*[\s\S]*?\*\//g, '')
+  let blanketPaint = 0
+  for (let i = 0; i < flat.length; ) {
+    const brace = flat.indexOf('{', i)
+    if (brace < 0) break
+    const head = flat.slice(i, brace)
+    let depth = 0
+    let j = brace
+    for (; j < flat.length; j += 1) {
+      if (flat[j] === '{') depth += 1
+      else if (flat[j] === '}') {
+        depth -= 1
+        if (depth === 0) break
+      }
+    }
+    const body = flat.slice(brace + 1, j)
+    if (head.includes(' *') && /(background|color)[^;]*!important/.test(body)) blanketPaint += 1
+    i = j + 1
+  }
+  report.push(`debt: ${blanketPaint} blanket paint rules (baseline ${BASELINE.blanketPaint})`)
+  if (blanketPaint > BASELINE.blanketPaint) {
+    problems.push(
+      `blanket paint rules grew: ${blanketPaint} > ${BASELINE.blanketPaint}` +
+        ' (a "*" + background !important rule flattens every component inside it)',
+    )
+  }
+  if (blanketPaint < BASELINE.blanketPaint) {
+    report.push('blanket paint rules went DOWN - lower BASELINE.blanketPaint')
+  }
 
   if (important > BASELINE.important) {
     problems.push(`!important grew: ${important} > ${BASELINE.important}`)
