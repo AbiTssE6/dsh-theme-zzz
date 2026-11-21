@@ -33,7 +33,7 @@ import path from 'node:path'
 // the neutral icon-key paint and the design-system haze. The text families
 // (primaryButton / dangerButton) needed none and carry none.
 const BASELINE = {
-  important: 652,
+  important: 653,
   // 2026-11-21: rules of the shape "[some surface] * + background/color !important"
   // they flatten everything inside, which is how a key recipe silently stopped
   // working three times. The count may not grow without a deliberate edit here.

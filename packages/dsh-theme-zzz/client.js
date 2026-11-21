@@ -945,6 +945,16 @@ html[${MARKER}] div:has(> [data-composer-card="true"]){
   -webkit-backdrop-filter:var(--zzz-glass-blur) !important;
 }
 
+/* The primitives Surface (tooltips, popovers, hover cards) paints a fixed backing layer
+   SIBLING to its surface with --dsw-alias-bg-base, an opaque #131313 - it exists so Chromium
+   has something to blur against. Everything above it can be as transparent as it likes and
+   the popup still reads solid, which is why the workspace tooltips stayed grey while our own
+   [role="menu"] overrides looked like glass. Clearing the backing lets the blur sample the
+   page itself. */
+html[${MARKER}] [class*="_backing_"]:not([data-zzz-keep-backing]){
+  background:transparent !important;
+}
+
 /* tooltip interior sits straight on the glass: no card, no chips but the keys.
    EVERY descendant, not just "> *": the bubble sits one level deeper and kept its
    card frame, weave and black ring, which is why tooltips still looked like cards. */

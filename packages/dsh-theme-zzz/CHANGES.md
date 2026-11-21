@@ -1468,3 +1468,16 @@ one and
   fix: a tooltip is a tooltip, not a card that happens to be nested.
 - Verified live with dsh-doyourweb: hovering "添加工作区" now shows a translucent, blurred pill
   with no frame, no dots and no ring.
+
+### the plate behind every popup (2026-11-22, local only)
+
+- The primitives Surface - which renders tooltips, popovers and hover cards - paints a fixed
+  backing layer SIBLING to the surface, filled with --dsw-alias-bg-base (#131313 opaque). Its
+  only job is to give Chromium something to blur against, but it also sits behind our glass, so
+  the popup read solid however transparent the fill was. This is why tooltips kept looking like
+  grey plates while [role="menu"], which we paint ourselves, already looked like glass.
+- The backing is transparent now (data-zzz-keep-backing opts one back in), so the blur samples
+  the page itself. Verified in a mock that mirrors the primitive's DOM: with the opt-out the
+  backing is rgb(19,19,19), with the rule it is transparent.
+- Note for the record: the tooltip is primitives' Tooltip (label + delayMs 500 + portal), not a
+  native title tooltip - the host source shows it wrapped around the workspace header buttons.
