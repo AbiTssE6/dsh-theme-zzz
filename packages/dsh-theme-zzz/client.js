@@ -309,8 +309,7 @@ html[${MARKER}] body{
   --zzz-float-menu-fill:rgba(16,16,16,.72);
   --zzz-float-menu-blur:blur(18px) saturate(180%);
   --zzz-float-menu-radius:14px;
-  --zzz-float-menu-stroke:var(--dsw-alias-border-l2);
-  --zzz-float-shadow:0 14px 36px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.6);
+  --zzz-float-shadow:0 16px 40px rgba(0,0,0,.55);
   --zzz-glass-blur:blur(14px) saturate(180%);
   --zzz-ctl-radius:8px;
   --zzz-glass-radius-sm:12px;
@@ -887,7 +886,7 @@ html[${MARKER}] [role="listbox"]{
      drop shadow instead, which is what tells it apart from the page. */
   background-color:var(--zzz-float-menu-fill) !important;
   background-image:none !important;
-  border:1px solid var(--zzz-float-menu-stroke) !important;
+  border:0 !important;
   border-radius:var(--zzz-float-menu-radius) !important;
   box-sizing:border-box !important;
   padding:8px !important;
@@ -1500,7 +1499,7 @@ html[${MARKER}] .dshwv-menu{
   background-color:var(--zzz-float-menu-fill) !important;
   background-image:none !important;
   color:var(--zzz-fg-panel) !important;
-  border:1px solid var(--zzz-float-menu-stroke) !important;
+  border:0 !important;
   border-radius:var(--zzz-float-menu-radius) !important;
   box-shadow:var(--zzz-float-shadow) !important;
   backdrop-filter:var(--zzz-float-menu-blur) !important;
@@ -1567,7 +1566,7 @@ html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *)::pic
   background-image:none;
   backdrop-filter:var(--zzz-float-menu-blur);
   -webkit-backdrop-filter:var(--zzz-float-menu-blur);
-  border:1px solid var(--zzz-float-menu-stroke);
+  border:0;
   border-radius:var(--zzz-float-menu-radius);
   box-shadow:var(--zzz-float-shadow);
   padding:6px;
@@ -2300,7 +2299,7 @@ html[${MARKER}] [data-team-panel="true"]{
      popover never looks like a different product from the dropdown next to it */
   background-color:var(--zzz-float-menu-fill) !important;
   background-image:none !important;
-  border:1px solid var(--zzz-float-menu-stroke) !important;
+  border:0 !important;
   border-radius:var(--zzz-float-menu-radius) !important;
   box-shadow:var(--zzz-float-shadow) !important;
   backdrop-filter:var(--zzz-float-menu-blur) !important;

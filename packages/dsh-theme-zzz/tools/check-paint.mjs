@@ -160,6 +160,7 @@ const floatOut = window.__floats.map((name, i) => {
     name,
     bg: cs.backgroundColor,
     blur: cs.backdropFilter || cs.webkitBackdropFilter || 'none',
+    border: cs.borderTopWidth,
     radius: cs.borderRadius,
   }
 })
@@ -259,11 +260,11 @@ if (!floatMatch) {
     const alphaMatch = /rgba\([^)]*,\s*([0-9.]+)\)/.exec(f.bg ?? '')
     const alpha = alphaMatch ? Number(alphaMatch[1]) : f.bg === 'transparent' ? 0 : 1
     const blurred = /blur\(/.test(f.blur ?? '')
-    const bad = f.error || alpha >= 1 || !blurred
+    const bad = f.error || alpha >= 1 || !blurred || f.border !== '0px'
     console.log((bad ? 'x ' : '  ') + pad(f.name, 18) + pad(f.bg ?? '-', 30) + (f.blur ?? '-'))
     if (bad) {
       problems.push(
-        `${f.name} -> bg=${f.bg} blur=${f.blur}; want a translucent fill and a blur (opaque fill hides the blur)`,
+        `${f.name} -> bg=${f.bg} blur=${f.blur} border=${f.border}; want a translucent fill, a blur and no border`,
       )
     }
   }

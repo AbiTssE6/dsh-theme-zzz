@@ -1433,3 +1433,13 @@ one and
   blur14, menu+listbox+team+third-party .72 / blur18, preview card .55 / blur14.
 - tools/check-theme.mjs ignores --zzz-float-* token definitions in the glass invariant, same as
   the --zzz-glass-* ones, so the recipe has one home.
+
+### floats lost their border (2026-11-22, local only)
+
+- Requirement: frosted glass should not be outlined. Every float tier is now borderless -
+  menu, listbox, select picker, team/subagent panels and the third-party menu drop their
+  1px keyline, and --zzz-float-shadow lost the 1px black ring that read as a border
+  (0 16px 40px rgba(0,0,0,.55) only). --zzz-float-menu-stroke is gone with its last user.
+- Separation is carried by the fill + blur + shadow alone, which is the point of glass.
+- check-paint now asserts border-width 0 on all six popups alongside the translucency and
+  the blur, so a stray border cannot come back unnoticed.
