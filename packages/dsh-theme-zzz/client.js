@@ -85,8 +85,13 @@ const BUILD = '2026-11-05T22'
       '--dsw-alias-button-ghost-active-hover': 'var(--dsw-static-neutral-bluish-700)',
       '--dsw-alias-button-info-fill': 'var(--dsw-static-deepseek-400)',
       '--dsw-alias-button-info-hover': 'var(--dsw-static-deepseek-500)',
-      '--dsw-alias-button-primary-dimmed': 'var(--dsw-static-neutral-bluish-750)',
-      '--dsw-alias-button-primary-hover': 'var(--dsw-static-neutral-bluish-100)',
+      /* the primary action key: yellow plate, black label. The host derives the
+         fill from --dsw-alias-brand-primary, but a component that reads the
+         button tokens directly was left with no fill at all when only brand was
+         overridden - declare the whole set so both routes resolve. */
+      '--dsw-alias-button-primary-fill': 'var(--zzz-yellow)',
+      '--dsw-alias-button-primary-hover': 'var(--zzz-yellow-hover)',
+      '--dsw-alias-button-primary-dimmed': 'var(--zzz-yellow-dim)',
       '--dsw-alias-code-diff-added': 'var(--dsw-static-green-500-a12)',
       '--dsw-alias-code-diff-deleted': 'var(--dsw-static-red-400-a12)',
       '--dsw-alias-file-diff-added-bg': '#1f3124',
@@ -264,8 +269,8 @@ function registerTokens(palette) {
 
 html[${MARKER}],
 html[${MARKER}] body{
-  background-color:#131313 !important;
-  color:#f7f7f7 !important;
+  background-color:var(--dsw-alias-bg-base) !important;
+  color:var(--dsw-alias-label-primary) !important;
   /* forced dark palette: the light scheme must resolve to exactly these */
   ${tokenBlock(DARK)}
   --zzz-weave-size:6px 6px,6px 6px,6px 6px,6px 6px;
@@ -307,6 +312,8 @@ html[${MARKER}] body{
   --zzz-red:#c81800;
   --zzz-blue:#05bbff;
   --zzz-yellow:#fcdd00;
+  --zzz-yellow-hover:#ffe14d;
+  --zzz-yellow-dim:#7a6400;
   --zzz-slider-from:#4a3dff;
   --zzz-slider-to:#05bbff;
   --zzz-slider-track:#222222;
@@ -317,6 +324,39 @@ html[${MARKER}] body{
   --zzz-slider-keyline:#000;
   --zzz-slider-thumb:#f7f7f7;
   --zzz-slider-glow:rgba(5,187,255,.55);
+  /* ---- panel ink ramp ----
+     The panels used to repeat these values inline. Anything the design system
+     already names stays a var(--dsw-*) reference in the rules; these are the
+     values it does not name, so a palette change is one edit here instead of a
+     hunt through every panel block. Names are role-based, not hue-based. */
+  --zzz-disc:#0b0b0b;             /* disc / dark key base */
+  --zzz-fg-button:#dcdcdc;        /* label on a dark key */
+  --zzz-fg-panel:#eaeaea;         /* dialog / menu body text */
+  --zzz-fg-panel-strong:#e8e8e8;  /* emphasised row text */
+  --zzz-fg-dim:#bdbdbd;           /* secondary sidebar text */
+  --zzz-fg-muted:#9f9f9f;         /* tertiary hint text */
+  --zzz-fg-tip:#f0f0f0;           /* tooltip text */
+  --zzz-fg-tip-strong:#f2f2f2;    /* tooltip key text */
+  --zzz-chip:#2b2b2b;             /* flat info pill */
+  --zzz-chip-alt:#2c2c2e;         /* sticky head */
+  --zzz-well:#1a1a1a;             /* recessed groove low stop */
+  --zzz-orange-hot:#ff6a22;       /* hot accent (top-up) */
+  --zzz-void-base:#0d0d13;        /* hollow backdrop base */
+  /* one alpha per elevation step, so shadows stop drifting apart */
+  --zzz-sh-35:rgba(0,0,0,.35);
+  --zzz-sh-45:rgba(0,0,0,.45);
+  --zzz-sh-55:rgba(0,0,0,.55);
+  --zzz-sh-60:rgba(0,0,0,.60);
+  --zzz-sh-70:rgba(0,0,0,.70);
+  --zzz-sh-85:rgba(0,0,0,.85);
+  --zzz-divider:#4a4a4a;          /* 1px sidebar rule */
+  --zzz-frame-strong:#4f4f4f;     /* hover frame of a flat key */
+  --zzz-fg-faint:#7d7d7d;         /* placeholder / disabled label */
+  --zzz-hairline:rgba(255,255,255,.07);
+  --zzz-hl-strong:rgba(255,255,255,.09);
+  --zzz-glow-soft:rgba(5,187,255,.28);
+  --zzz-glow-mid:rgba(5,187,255,.45);
+  --zzz-glow-cyan:rgba(41,180,255,.45);
 }
 
 /* ---- fonts: display for chrome, body for reading ----
@@ -418,7 +458,7 @@ html[${MARKER}] img.zzz-brand{
 html[${MARKER}] [class*="_navCell"]{
   background:transparent !important;
   background-image:none !important;
-  color:#bdbdbd !important;
+  color:var(--zzz-fg-dim) !important;
   border:0 !important;
   border-radius:8px !important;
   box-shadow:none !important;
@@ -438,7 +478,7 @@ html[${MARKER}] [class*="_navCell"] [class*="_navLabel"]{
 }
 html[${MARKER}] [class*="_navCell"]:hover{
   background:var(--zzz-hl) !important;
-  color:#e8e8e8 !important;
+  color:var(--zzz-fg-panel-strong) !important;
 }
 /* the selected plate: darkening overlay + hatch + breathing gradient, written once
    and declared on EVERY selected surface. It must be declared on the element itself:
@@ -479,8 +519,8 @@ html[${MARKER}] [class*="_navCell"][class*="active"],
 html[${MARKER}] [class*="_navCell"][class*="current"]{
   background-color:transparent !important;
   background-image:var(--zzz-plate) !important;
-  color:#101010 !important;
-  box-shadow:inset 0 0 0 1px rgba(0,0,0,.45) !important;
+  color:var(--dsw-alias-label-inverse) !important;
+  box-shadow:inset 0 0 0 1px var(--zzz-sh-45) !important;
   animation:zzz-plate-breath var(--zzz-ring-t) ease-in-out infinite;
 }
 @media (prefers-reduced-motion:reduce){ /* zzz-plate-reduce */
@@ -501,7 +541,7 @@ html[${MARKER}] [class*="_navCell"][class*="active"] *,
 html[${MARKER}] [class*="_navCell"][class*="current"] *{
   /* colour only: icons follow currentColor; forcing stroke/fill turns outline icons
      into solid blobs */
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 
 /* the conversation tab row is text tabs, not a segmented pill */
@@ -525,7 +565,7 @@ html[${MARKER}] [data-composer-card="true"],
 html[${MARKER}] button[class*="_newSession"],
 html[${MARKER}] [class*="_regionArea"],
 html[${MARKER}] [data-sidebar-right-guide-entry]{
-  background-color:#282828 !important;
+  background-color:var(--dsw-alias-bg-layer-2) !important;
   background-image:var(--zzz-sheen),var(--zzz-weave) !important;
   background-size:100% 100%,var(--zzz-weave-size) !important;
   background-position:0 0,var(--zzz-weave-position) !important;
@@ -536,8 +576,8 @@ html[${MARKER}] [data-sidebar-right-guide-entry]{
     var(--zzz-bevel-hi),
     var(--zzz-bevel-lo),
     0 0 0 3px #000,
-    inset 0 0 0 0.5px rgba(0,0,0,.6),
-    inset 0 0 10px rgba(0,0,0,.35) !important;
+    inset 0 0 0 0.5px var(--zzz-sh-60),
+    inset 0 0 10px var(--zzz-sh-35) !important;
 }
 /* dialogs keep the frame but read as frosted glass again: the card rule above fills
    them opaque, which hid the host's own backdrop-filter (it reads
@@ -568,8 +608,8 @@ html[${MARKER}] [data-sidebar-right-guide-entry]:hover:not(#zzz-guard){
     var(--zzz-bevel-lo),
     0 0 0 3px #000,
     inset 0 0 0 999px var(--zzz-hl),
-    inset 0 0 0 0.5px rgba(0,0,0,.6),
-    inset 0 0 10px rgba(0,0,0,.35) !important;
+    inset 0 0 0 0.5px var(--zzz-sh-60),
+    inset 0 0 10px var(--zzz-sh-35) !important;
 }
 
 /* the inner button just fills it */
@@ -651,15 +691,15 @@ html[${MARKER}] button[class*="_newSession"]{border-radius:999px !important}
 /* one style for the host's design-system buttons: same surface, same ring,
    same radius. The composer's send/stop disc is a different component. */
 html[${MARKER}] button[class*="1rv3m_"]:not([class*="_tabHost_ "] *):not([data-sidebar-right-guide-entry] *){
-  background:#0b0b0b !important;
+  background:var(--zzz-disc) !important;
   background-image:none !important;
-  color:#dcdcdc !important;
+  color:var(--zzz-fg-button) !important;
   border:0 !important;
   border-radius:var(--zzz-ctl-radius) !important;
   box-shadow:none !important;
 }
 html[${MARKER}] button[class*="1rv3m_"]:hover{
-  background-color:#0b0b0b !important;
+  background-color:var(--zzz-disc) !important;
   background-image:linear-gradient(var(--zzz-hl),var(--zzz-hl)) !important;
 }
 /* small icon buttons flip to the yellow plate on hover, like the workspace
@@ -673,18 +713,18 @@ html[${MARKER}] button[class*="_sm_"][class*="1rv3m_"]:hover{
   background-image:none !important;
   /* the label may be a bare text node, so the colour must come from the button
      itself - children inherit it */
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 html[${MARKER}] button[class*="1rv3m_"][class*="_sm_"]:hover svg,
 html[${MARKER}] button[class*="_sm_"][class*="1rv3m_"]:hover svg{
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 html[${MARKER}] button[class*="1rv3m_"][class*="_sm_"]:hover *,
 html[${MARKER}] button[class*="_sm_"][class*="1rv3m_"]:hover *{
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 html[${MARKER}] button[class*="1rv3m_"] svg{
-  color:#dcdcdc !important;
+  color:var(--zzz-fg-button) !important;
   /* follow the colour instead of pinning one value: the three-dot glyph is a stroked
      path, and a fixed stroke kept it light when :hover turned the disc yellow or when a
      selected yellow row forced the button colour to black */
@@ -711,9 +751,9 @@ html[${MARKER}] button[class*="1rv3m_"][aria-disabled="true"]{
 html[${MARKER}] button[class*="_button"]:not([class*="1rv3m_"]):not([class*="ypSjoa_"]):not([data-dsh-plugin]):not([data-dsh-plugin] *):not(:has([data-dsh-plugin])):not([class*="_tabHost_"] *),
 html[${MARKER}] [class*="_stepper"],
 html[${MARKER}] [class*="_stepper"] *{
-  background:#0b0b0b !important;
+  background:var(--zzz-disc) !important;
   background-image:none !important;
-  color:#dcdcdc !important;
+  color:var(--zzz-fg-button) !important;
   border:0 !important;
   border-radius:var(--zzz-ctl-radius) !important;
   box-shadow:none !important;
@@ -722,7 +762,7 @@ html[${MARKER}] [class*="_moreAnchor"] button,
 html[${MARKER}] button[class*="_toggle"],
 html[${MARKER}] button[class*="_button"]:not([class*="1rv3m_"]):not([class*="ypSjoa_"]):not([data-dsh-plugin]):not([data-dsh-plugin] *):not(:has([data-dsh-plugin])):not([class*="_tabHost_"] *):hover,
 html[${MARKER}] [class*="_stepper"]:hover{
-  background:#1a1a1a !important;
+  background:var(--zzz-well) !important;
 }
 
 /* sidebar panel rows paint themselves #1A1A1A; flatten them onto the column
@@ -747,7 +787,7 @@ html[${MARKER}] [data-sidebar-right-guide-entry]{
      outline always paints over box-shadow and hid the bevel completely */
   outline:0 !important;
   box-shadow:var(--zzz-bevel-hi), var(--zzz-bevel-lo), 0 0 0 3px #000,
-    inset 0 0 0 0.5px rgba(0,0,0,.6) !important;
+    inset 0 0 0 0.5px var(--zzz-sh-60) !important;
 }
 
 
@@ -756,7 +796,7 @@ html[${MARKER}] [class*="_regionArea"]{
   padding:8px 6px 10px 6px !important;
   /* a margin keeps the 3px ring inside the clipping sidebar column */
   margin:2px 4px !important;
-  box-shadow:var(--zzz-bevel-hi), var(--zzz-bevel-lo), 0 0 0 3px #000, inset 0 0 0 0.5px rgba(0,0,0,.6) !important;
+  box-shadow:var(--zzz-bevel-hi), var(--zzz-bevel-lo), 0 0 0 3px #000, inset 0 0 0 0.5px var(--zzz-sh-60) !important;
 }
 
 /* the tree rows read in the secondary weight: nav items and section titles take
@@ -783,12 +823,12 @@ html[${MARKER}] [role="tooltip"]{
   border:0 !important;
   border-radius:0 !important;
   box-shadow:none !important;
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
 }
 html[${MARKER}] [role="menu"] *,
 html[${MARKER}] [role="listbox"] *,
 html[${MARKER}] [role="tooltip"] *{
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
 }
 
 /* the menu container is the card: its width is content-driven, so the 9.75px
@@ -810,8 +850,8 @@ html[${MARKER}] [role="listbox"]{
     var(--zzz-bevel-hi),
     var(--zzz-bevel-lo),
     0 0 0 3px #000,
-    inset 0 0 0 0.5px rgba(0,0,0,.6),
-    inset 0 0 10px rgba(0,0,0,.35) !important;
+    inset 0 0 0 0.5px var(--zzz-sh-60),
+    inset 0 0 10px var(--zzz-sh-35) !important;
 }
 /* tooltips: borderless dark frosted glass. The card language (grey frame,
    halftone, chamfer) is intentionally dropped, and so is every depth cue:
@@ -824,7 +864,7 @@ html[${MARKER}] [role="tooltip"]{
   border-radius:var(--zzz-glass-radius-sm) !important;
   box-sizing:border-box !important;
   padding:8px 10px !important;
-  color:#f2f2f2 !important;
+  color:var(--zzz-fg-tip-strong) !important;
   box-shadow:none !important;
   backdrop-filter:var(--zzz-glass-blur) !important;
   -webkit-backdrop-filter:var(--zzz-glass-blur) !important;
@@ -837,7 +877,7 @@ html[${MARKER}] [class~="_card_38jqx_9"][role="button"]{
   background-image:none !important;
   border:0 !important;
   border-radius:var(--zzz-glass-radius-sm) !important;
-  color:#f2f2f2 !important;
+  color:var(--zzz-fg-tip-strong) !important;
   box-shadow:none !important;
   backdrop-filter:var(--zzz-glass-blur) !important;
   -webkit-backdrop-filter:var(--zzz-glass-blur) !important;
@@ -871,14 +911,14 @@ html[${MARKER}] [role="tooltip"] > *{
   padding:0 !important;
 }
 html[${MARKER}] [role="tooltip"] [class*="_label"]{
-  color:#f0f0f0 !important;
+  color:var(--zzz-fg-tip) !important;
   line-height:1.35 !important;
 }
 html[${MARKER}] [role="tooltip"] [class*="_key"],
 html[${MARKER}] [role="tooltip"] [class*="_keys"]{
   background-color:var(--dsw-alias-tooltip-key-bg) !important;
   background-image:none !important;
-  color:#f0f0f0 !important;
+  color:var(--zzz-fg-tip) !important;
   border-radius:4px !important;
   box-shadow:none !important;
 }
@@ -912,7 +952,7 @@ html[${MARKER}] [role="listbox"]::-webkit-scrollbar-corner{
 }
 html[${MARKER}] [role="menu"]::-webkit-scrollbar-thumb,
 html[${MARKER}] [role="listbox"]::-webkit-scrollbar-thumb{
-  background:#3a3a3a !important;
+  background:var(--dsw-alias-border-l1) !important;
   border:0 !important;
   border-radius:999px !important;
 }
@@ -939,14 +979,14 @@ html[${MARKER}] a[class*="linkButton"][class*="primary"],
 html[${MARKER}] a[class*="linkButton"][class*="Primary"]{
   background:var(--zzz-orange) !important;
   background-image:none !important;
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
   border:0 !important;
   box-shadow:none !important;
 }
 html[${MARKER}] a[class*="linkButton"][class*="primary"]:hover,
 html[${MARKER}] a[class*="linkButton"][class*="Primary"]:hover{
-  background:#ff6a22 !important;
-  color:#101010 !important;
+  background:var(--zzz-orange-hot) !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 
 /* changed-files card: one glass surface, keyed on the semantic marker rather than
@@ -987,7 +1027,7 @@ html[${MARKER}] img[data-zzz-broken]{
 html[${MARKER}] [class*="nUhMVa_cardShot"]{
   /* match the card fill exactly: the clip below exposes the rim, and any colour
      step there reads as a hairline */
-  background-color:#2b2b2b !important;
+  background-color:var(--zzz-chip) !important;
   border-radius:var(--zzz-glass-radius-sm) !important;
   color:transparent !important;
   font-size:0 !important;
@@ -998,7 +1038,7 @@ html[${MARKER}] [class*="nUhMVa_cardShot"]{
 html[${MARKER}] [class*="nUhMVa_cardShots"]{
   color-scheme:dark !important;
   scrollbar-width:thin !important;
-  scrollbar-color:#3a3a3a transparent !important;
+  scrollbar-color:var(--dsw-alias-border-l1) transparent !important;
 }
 html[${MARKER}] [class*="nUhMVa_cardShots"]::-webkit-scrollbar{
   height:6px !important;
@@ -1009,7 +1049,7 @@ html[${MARKER}] [class*="nUhMVa_cardShots"]::-webkit-scrollbar-corner{
   background:transparent !important;
 }
 html[${MARKER}] [class*="nUhMVa_cardShots"]::-webkit-scrollbar-thumb{
-  background:#3a3a3a !important;
+  background:var(--dsw-alias-border-l1) !important;
   border:0 !important;
   border-radius:999px !important;
 }
@@ -1030,7 +1070,7 @@ html[${MARKER}] [class*="nUhMVa_stickyHead"]::before{
 }
 
 html[${MARKER}] [class*="nUhMVa_card"]{
-  background-color:#2b2b2b !important;
+  background-color:var(--zzz-chip) !important;
   background-image:none !important;
   border:0 !important;
   box-shadow:none !important;
@@ -1098,23 +1138,23 @@ html[${MARKER}] [class*="_toBottom"],
 html[${MARKER}] button[class*="_add"],
 html[${MARKER}] [class*="_badge"],
 html[${MARKER}] [class*="_tag_"]{
-  background:#2b2b2b !important;
+  background:var(--zzz-chip) !important;
   background-image:none !important;
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
   border:0 !important;
   border-radius:999px !important;
   box-shadow:0 0 0 1px #000 !important;
 }
 html[${MARKER}] [class*="_toBottom"] svg,
 html[${MARKER}] button[class*="_add"] svg{
-  color:#f7f7f7 !important;
-  stroke:#f7f7f7 !important;
+  color:var(--dsw-alias-label-primary) !important;
+  stroke:var(--dsw-alias-label-primary) !important;
 }
 /* hosts that render a bare button with no class at all */
 html[${MARKER}] button:not([class]){
-  background:#2b2b2b !important;
+  background:var(--zzz-chip) !important;
   background-image:none !important;
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
   border:0 !important;
   border-radius:var(--zzz-ctl-radius) !important;
   box-shadow:0 0 0 1px #000 !important;
@@ -1125,7 +1165,7 @@ html[${MARKER}] button:not([class]){
 html[${MARKER}] [class*="_header"]{
   background-color:transparent !important;
   background-image:none !important;
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
 }
 
 /* the plate is whatever wraps the file-type image, so match by structure:
@@ -1166,8 +1206,8 @@ html[${MARKER}] [role="dialog"] [class*="_field"],
 html[${MARKER}] [role="dialog"] [class*="_control"]{
   background:transparent !important;
   background-image:none !important;
-  color:#eaeaea !important;
-  -webkit-text-fill-color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
+  -webkit-text-fill-color:var(--zzz-fg-panel) !important;
   border:0 !important;
   box-shadow:none !important;
 }
@@ -1175,19 +1215,19 @@ html[${MARKER}] [role="dialog"] [class*="_control"]{
 html[${MARKER}] [role="dialog"] input:not([type="checkbox"]):not([type="radio"]),
 html[${MARKER}] [role="dialog"] select,
 html[${MARKER}] [role="dialog"] textarea{
-  box-shadow:inset 0 0 0 1px #3a3a3a !important;
+  box-shadow:inset 0 0 0 1px var(--dsw-alias-border-l1) !important;
 }
 /* switches are styled by the unified switch block (slider language); this legacy
    dialog paint would otherwise win on specificity and force a yellow track */
 html[${MARKER}] [role="dialog"] [class*="_track"]{
-  background:#333333 !important;
+  background:var(--dsw-alias-bg-layer-3) !important;
   background-image:none !important;
   border:0 !important;
-  box-shadow:inset 0 0 0 1px #444444 !important;
+  box-shadow:inset 0 0 0 1px var(--dsw-alias-border-l2) !important;
 }
 html[${MARKER}] [role="dialog"] input::placeholder,
 html[${MARKER}] [role="dialog"] textarea::placeholder{
-  color:#7a7a7a !important;
+  color:var(--zzz-fg-faint) !important;
 }
 
 /* a number field ships as a white pill wrapping a transparent input */
@@ -1195,15 +1235,15 @@ html[${MARKER}] [role="dialog"] *:has(> input:not([type="checkbox"]):not([type="
 html[${MARKER}] [role="dialog"] *:has(> textarea){
   background:transparent !important;
   background-image:none !important;
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
   border:0 !important;
   box-shadow:none !important;
 }
 html[${MARKER}] [role="dialog"] input:not([type="checkbox"]):not([type="radio"]),
 html[${MARKER}] [role="dialog"] textarea{
   background:transparent !important;
-  color:#eaeaea !important;
-  -webkit-text-fill-color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
+  -webkit-text-fill-color:var(--zzz-fg-panel) !important;
   box-shadow:none !important;
 }
 
@@ -1218,22 +1258,22 @@ html[${MARKER}] [role="dialog"] [class*="_preview"],
 html[${MARKER}] [role="dialog"] button[class*="_value"]{
   background:transparent !important;
   background-image:none !important;
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
   border:0 !important;
   box-shadow:none !important;
 }
 
 /* sidebar divider: measured from the reference capture - 1px of #4A4A4A (74) on
-   the #131313 page. A 0.5px 6%-white hairline resolved too dark against the
+   the var(--dsw-alias-bg-base) page. A 0.5px 6%-white hairline resolved too dark against the
    dotted paper, so the line uses an explicit solid grey. */
 html[${MARKER}] [class*="_sidebarCol"]{
-  border-right:1px solid #4a4a4a !important;
+  border-right:1px solid var(--zzz-divider) !important;
 }
 
 /* tab strip: rounded-rect track with capsule tabs, so the active tab reads as a
    pill rather than a flat block */
 html[${MARKER}] [role="tablist"]:not([class*="_sidebarCol"] *):not([data-conversation-tabs]){
-  background:#242424 !important;
+  background:var(--dsw-specific-tip) !important;
   background-image:none !important;
   border:0 !important;
   border-radius:14px !important;
@@ -1351,14 +1391,14 @@ html[${MARKER}] [role="tab"][aria-selected="true"][aria-selected="true"]:not([cl
 html[${MARKER}] [role="tab"][data-state="active"][data-state="active"]:not([class*="_sidebarCol"] *){
   background-image:var(--zzz-plate) !important;
   background-color:transparent !important;
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
   border-radius:8px !important;
   box-shadow:none !important;
   animation:zzz-plate-breath var(--zzz-ring-t) ease-in-out infinite;
 }
 html[${MARKER}] [role="tab"][aria-selected="true"]:not([class*="_sidebarCol"] *) *,
 html[${MARKER}] [role="tab"][data-state="active"]:not([class*="_sidebarCol"] *) *{
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 @media (prefers-reduced-motion:reduce){
   html[${MARKER}] [role="tab"][aria-selected="true"]:not([class*="_sidebarCol"] *),
@@ -1372,7 +1412,7 @@ html[${MARKER}] [role="tab"][data-state="active"]:not([class*="_sidebarCol"] *) 
 html[${MARKER}] [role="tablist"] > *:not([class*="_sidebarCol"] *){
   background:transparent !important;
   background-image:none !important;
-  color:#bdbdbd !important;
+  color:var(--zzz-fg-dim) !important;
   box-shadow:none !important;
   border:0 !important;
 }
@@ -1396,7 +1436,7 @@ html[${MARKER}] [role="dialog"]:not([data-shortcut-modal]) [class*="_row"]:not([
 html[${MARKER}] [role="dialog"] [role="listitem"]:not([aria-selected="true"]) {
   background-color:transparent !important;
   background-image:none !important;
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
   box-shadow:none !important;
 }
 
@@ -1408,25 +1448,25 @@ html[${MARKER}] [class*="_tag"]:not([class*="_sidebarCol"] *):not([aria-selected
 html[${MARKER}] [class*="_badge"]:not([class*="_sidebarCol"] *):not([aria-selected="true"]) {
   background-color:transparent !important;
   background-image:none !important;
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
   box-shadow:none !important;
 }
 
 /* a third-party panel ships its own light menu and number input */
 html[${MARKER}] .dshwv-menu{
-  background:#1c1c1c !important;
-  color:#eaeaea !important;
+  background:var(--dsw-alias-bg-layer-1) !important;
+  color:var(--zzz-fg-panel) !important;
   border:0 !important;
-  box-shadow:0 0 0 1px #3a3a3a !important;
+  box-shadow:0 0 0 1px var(--dsw-alias-border-l1) !important;
 }
 html[${MARKER}] .dshwv-menu *{
-  color:#eaeaea !important;
+  color:var(--zzz-fg-panel) !important;
 }
 html[${MARKER}] .dshwv-number{
-  background:#282828 !important;
-  color:#eaeaea !important;
+  background:var(--dsw-alias-bg-layer-2) !important;
+  color:var(--zzz-fg-panel) !important;
   border:0 !important;
-  box-shadow:0 0 0 1px #3a3a3a !important;
+  box-shadow:0 0 0 1px var(--dsw-alias-border-l1) !important;
 }
 
 /* muted text drift: these classes read lighter in light mode because the host
@@ -1441,25 +1481,25 @@ html[${MARKER}] [class*="_time"],
 html[${MARKER}] [class*="_shortcut"],
 html[${MARKER}] kbd,
 html[${MARKER}] [class*="_keys_"]{
-  color:#9e9e9e !important;
+  color:var(--dsw-alias-label-secondary) !important;
 }
 
 /* text colours that tokens do not cover: placeholders, selection, caret and
    the native form text colour all default to the OS light scheme */
 html[${MARKER}] ::placeholder{
-  color:#7d7d7d !important;
+  color:var(--zzz-fg-faint) !important;
   opacity:1 !important;
 }
 html[${MARKER}] ::selection{
   background:var(--zzz-yellow) !important;
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 html[${MARKER}] input,
 html[${MARKER}] textarea,
 html[${MARKER}] select{
-  color:#f7f7f7 !important;
-  -webkit-text-fill-color:#f7f7f7 !important;
-  caret-color:#fcdd00 !important;
+  color:var(--dsw-alias-label-primary) !important;
+  -webkit-text-fill-color:var(--dsw-alias-label-primary) !important;
+  caret-color:var(--dsw-alias-brand-primary) !important;
 }
 
 /* ---- native select: the popup is glass too ----
@@ -1482,7 +1522,7 @@ html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *)::pic
   -webkit-backdrop-filter:var(--zzz-glass-blur);
   border:1px solid var(--dsw-alias-border-l2);
   border-radius:var(--zzz-glass-radius);
-  box-shadow:0 14px 36px rgba(0,0,0,.55);
+  box-shadow:0 14px 36px var(--zzz-sh-55);
   padding:6px;
   margin-block:6px;
   color:var(--dsw-alias-label-primary);
@@ -1504,10 +1544,10 @@ html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *) opti
 html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *) option:checked{
   background-image:var(--zzz-plate);
   background-color:transparent;
-  color:#101010;
+  color:var(--dsw-alias-label-inverse);
 }
 html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *) option::checkmark{
-  color:#101010;
+  color:var(--dsw-alias-label-inverse);
 }
 html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *)::picker-icon{
   color:var(--dsw-alias-label-secondary);
@@ -1524,7 +1564,7 @@ html[${MARKER}] svg:not([data-dsh-plugin]):not([data-dsh-plugin] *) *{
 /* The plugin's own action button (button.ypSjoa_button) is left alone: the plugin
    owns its icon, colour and weight. The only thing the theme still does is exempt it
    from the broad host-button rule above (see :not([class*="ypSjoa_"])), because that
-   blanket rule would otherwise paint a #0b0b0b tile behind the glyph. */
+   blanket rule would otherwise paint a var(--zzz-disc) tile behind the glyph. */
 
 /* some glyphs are drawn as filled paths, where a wider stroke does nothing.
    A 0.4px drop-shadow in the current colour grows the silhouette by about half a
@@ -1564,9 +1604,9 @@ html[${MARKER}] button[class*="_searchButton"]{
 html[${MARKER}] [class*="_headerActions"] button[class*="_iconButton"],
 html[${MARKER}] [class*="_headerActions"] button[class*="_searchButton"],
 html[${MARKER}] [class*="_searchSlot"] button[class*="_searchButton"]{
-  background:#0b0b0b !important;
+  background:var(--zzz-disc) !important;
   background-image:none !important;
-  color:#dcdcdc;
+  color:var(--zzz-fg-button);
   /* no border and no outer ring: a light 1px ring around a 28px disc reads as a
      grey halo, and a dimmed glyph colour makes the icon strokes look thinner */
   border:0 !important;
@@ -1580,7 +1620,7 @@ html[${MARKER}] [class*="_headerActions"] button[class*="_searchButton"]:hover,
 html[${MARKER}] [class*="_searchSlot"] button[class*="_searchButton"]:hover{
   background-color:var(--zzz-yellow) !important;
   background-image:none;
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 html[${MARKER}] [class*="_headerActions"] button[class*="_iconButton"] svg,
 html[${MARKER}] [class*="_headerActions"] button[class*="_iconButton"] svg *,
@@ -1597,8 +1637,8 @@ html[${MARKER}] [class*="_searchSlot"] button[class*="_searchButton"] svg *{
 html[${MARKER}] [data-composer-card="true"] button[class*="_primary"]{
   background:var(--zzz-green) !important;
   background-image:none !important;
-  color:#0b0b0b !important;
-  border:4px solid #0b0b0b !important;
+  color:var(--zzz-disc) !important;
+  border:4px solid var(--zzz-disc) !important;
   border-radius:999px !important;
   box-shadow:none !important;
   /* a true circle with a centred glyph: a non-square box renders as a stadium
@@ -1626,14 +1666,75 @@ html[${MARKER}] [data-composer-card="true"] button[class*="_primary"]:has(svg re
   background:var(--zzz-red) !important;
 }
 html[${MARKER}] [data-composer-card="true"] button[class*="_primary"] svg{
-  color:#0b0b0b !important;
-  stroke:#0b0b0b !important;
-  fill:#0b0b0b !important;
+  color:var(--zzz-disc) !important;
+  stroke:var(--zzz-disc) !important;
+  fill:var(--zzz-disc) !important;
+}
+
+/* ---- C1 class: primary action key in panels, dialogs and plugin settings ----
+   One recipe for every "confirm" button that is not the composer disc:
+   yellow plate, black label, 8px radius (--zzz-ctl-radius), 36px tall.
+   Matching is by class substring, both spellings in the wild (primaryButton and
+   _primary_), one selector per surface so nothing relies on :is()/complex :not()
+   support; the design-system ghost discs are excluded and a plugin may opt out
+   with data-zzz-plain. Only the paint needs !important - the geometry here
+   matches what those components already declare. */
+html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]),
+html[${MARKER}] [role="dialog"] button[class*="Primary"]:not([class*="1rv3m_"]),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="Primary"]:not([class*="1rv3m_"]),
+html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]),
+html[${MARKER}] [data-dsh-plugin] button[class*="Primary"]:not([class*="1rv3m_"]),
+html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]){
+  background-color:var(--zzz-yellow) !important;
+  background-image:linear-gradient(180deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,0) 52%) !important;
+  color:var(--dsw-alias-label-inverse) !important;
+  border:1px solid #000 !important;
+  border-radius:var(--zzz-ctl-radius) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 2px #000 !important;
+  -webkit-text-fill-color:var(--dsw-alias-label-inverse);
+  text-shadow:none;
+  text-decoration:none;
+  height:36px;
+  min-height:36px;
+  padding:0 14px;
+  font-size:14px;
+  font-weight:600;
+  line-height:1;
+}
+html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
+html[${MARKER}] [role="dialog"] button[class*="Primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="Primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
+html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
+html[${MARKER}] [data-dsh-plugin] button[class*="Primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
+html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):hover:not(:disabled){
+  background-color:var(--zzz-yellow-hover) !important;
+}
+html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):disabled,
+html[${MARKER}] [role="dialog"] button[class*="Primary"]:not([class*="1rv3m_"]):disabled,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):disabled,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="Primary"]:not([class*="1rv3m_"]):disabled,
+html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):disabled,
+html[${MARKER}] [data-dsh-plugin] button[class*="Primary"]:not([class*="1rv3m_"]):disabled,
+html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):disabled{
+  background-color:var(--zzz-yellow-dim) !important;
+  color:var(--zzz-fg-panel) !important;
+  cursor:not-allowed;
+}
+html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]) *,
+html[${MARKER}] [role="dialog"] button[class*="Primary"]:not([class*="1rv3m_"]) *,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]) *,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="Primary"]:not([class*="1rv3m_"]) *,
+html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]) *,
+html[${MARKER}] [data-dsh-plugin] button[class*="Primary"]:not([class*="1rv3m_"]) *,
+html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]) *{
+  color:inherit !important;
 }
 
 /* ---- B2 class: read-only info pills, deliberately flat ---- */
 html[${MARKER}] [data-composer-stat] button{
-  background:#2b2b2b !important;
+  background:var(--zzz-chip) !important;
   background-image:none !important;
   border:0 !important;
   box-shadow:none !important;
@@ -1644,12 +1745,12 @@ html[${MARKER}] [data-composer-stat] button{
 html[${MARKER}] [class*="_sessionRow"][class*="_selected"],
 html[${MARKER}] [class*="_sidebarCol"] [data-state="selected"]{
   background-image:var(--zzz-plate) !important;
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
   animation:zzz-plate-breath var(--zzz-ring-t) ease-in-out infinite;
   border-radius:8px !important;
 }
 html[${MARKER}] [class*="_sessionRow"][class*="_selected"] *,
-html[${MARKER}] [class*="_sidebarCol"] [data-state="selected"] *{color:#101010 !important}
+html[${MARKER}] [class*="_sidebarCol"] [data-state="selected"] *{color:var(--dsw-alias-label-inverse) !important}
 
 /* ---- D class: view tabs ----
    These used to be yellow text plus a 3px underline. The strip now shares the
@@ -1661,12 +1762,12 @@ html[${MARKER}] [role="tab"][class*="_tabActive"]{
 /* the dock's own tab is a state badge, so it takes the C-class plate */
 html[${MARKER}] [class*="_tabHost_"] [class*="_tabActive_"]{
   background-image:var(--zzz-plate) !important;
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
   border:0 !important;
   border-radius:999px !important;
   box-shadow:0 0 0 1px #000 !important;
 }
-html[${MARKER}] [class*="_tabHost_"] [class*="_tabActive_"] *{color:#101010 !important}
+html[${MARKER}] [class*="_tabHost_"] [class*="_tabActive_"] *{color:var(--dsw-alias-label-inverse) !important}
 
 /* ---- E class: focus ring ---- */
 @keyframes zzz-ring-breath{
@@ -1680,13 +1781,13 @@ html[${MARKER}] [data-composer-card="true"]{
   position:relative !important;
 }
 html[${MARKER}] [data-composer-card="true"]:focus-within{
-  border-color:#444444 !important;
+  border-color:var(--dsw-alias-border-l2) !important;
   box-shadow:
     var(--zzz-bevel-hi),
     var(--zzz-bevel-lo),
     0 0 0 5px #000,
-    inset 0 0 0 0.5px rgba(0,0,0,.6),
-    inset 0 0 10px rgba(0,0,0,.35) !important;
+    inset 0 0 0 0.5px var(--zzz-sh-60),
+    inset 0 0 10px var(--zzz-sh-35) !important;
 }
 html[${MARKER}] [data-composer-card="true"]:focus-within::after{
   content:"" !important;
@@ -1726,11 +1827,11 @@ html[${MARKER}] [data-zzz-mini][data-zzz-glyph][data-zzz-glyph]{
   min-width:19px !important;
   min-height:19px !important;
   padding:0 !important;
-  color:#8f8f8f !important;
+  color:var(--zzz-fg-faint) !important;
 }
 html[${MARKER}] [data-zzz-mini][data-zzz-glyph][data-zzz-glyph]:hover{
-  background:rgba(255,255,255,.09) !important;
-  color:#f2f2f2 !important;
+  background:var(--zzz-hl-strong) !important;
+  color:var(--zzz-fg-tip-strong) !important;
 }
 
 /* a dock tool card: the same three-layer card as the bubble, but on the card's
@@ -1738,7 +1839,7 @@ html[${MARKER}] [data-zzz-mini][data-zzz-glyph][data-zzz-glyph]:hover{
 html[${MARKER}] [class*="_tabHost_"] [class*="_entryCell"] button,
 html[${MARKER}] [class*="_tabHost_"] [class*="_entryCell"] a,
 html[${MARKER}] [class*="_tabHost_"] [class*="_moreAnchor"] button{
-  background-color:#282828 !important;
+  background-color:var(--dsw-alias-bg-layer-2) !important;
   background-image:var(--zzz-sheen),var(--zzz-weave) !important;
   background-size:100% 100%,var(--zzz-weave-size) !important;
   background-position:0 0,var(--zzz-weave-position) !important;
@@ -1750,13 +1851,13 @@ html[${MARKER}] [class*="_tabHost_"] [class*="_moreAnchor"] button{
     var(--zzz-bevel-hi),
     var(--zzz-bevel-lo),
     0 0 0 1px #000,
-    inset 0 0 0 0.5px rgba(0,0,0,.6),
-    inset 0 0 10px rgba(0,0,0,.35) !important;
+    inset 0 0 0 0.5px var(--zzz-sh-60),
+    inset 0 0 10px var(--zzz-sh-35) !important;
 }
 html[${MARKER}] [class*="_tabHost_"] [class*="_entryCell"] button:hover,
 html[${MARKER}] [class*="_tabHost_"] [class*="_entryCell"] a:hover,
 html[${MARKER}] [class*="_tabHost_"] [class*="_moreAnchor"] button:hover{
-  border-color:#4f4f4f !important;
+  border-color:var(--zzz-frame-strong) !important;
 }
 /* the three dock toggles sit in a chrome strip: round them like every other
    icon button in this UI (F3: an icon button is a disc, not a rounded square) */
@@ -1814,7 +1915,7 @@ html[${MARKER}] input[type="range"]::-webkit-slider-runnable-track{
   background-size:var(--zzz-fill,0%) 100%,var(--zzz-fill,0%) 100%,100% 100% !important;
   box-shadow:
     0 0 0 1.5px var(--zzz-slider-keyline),
-    inset 0 0 6px rgba(0,0,0,.55) !important;
+    inset 0 0 6px var(--zzz-sh-55) !important;
 }
 html[${MARKER}] input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none !important;
@@ -1827,10 +1928,10 @@ html[${MARKER}] input[type="range"]::-webkit-slider-thumb{
   box-shadow:
     0 0 0 2px var(--zzz-slider-glow),
     0 0 10px 1px var(--zzz-slider-glow),
-    0 0 20px 2px rgba(5,187,255,.28) !important;
+    0 0 20px 2px var(--zzz-glow-soft) !important;
 }
 html[${MARKER}] input[type="range"]:focus-visible::-webkit-slider-thumb{
-  box-shadow:0 0 0 3px #fcdd00;
+  box-shadow:0 0 0 3px var(--dsw-alias-brand-primary);
 }
 html[${MARKER}] progress{
   -webkit-appearance:none;
@@ -1839,7 +1940,7 @@ html[${MARKER}] progress{
   border:0 !important;
   border-radius:999px !important;
   background:var(--zzz-slider-track) !important;
-  box-shadow:0 0 0 1.5px #000, inset 0 0 6px rgba(0,0,0,.55) !important;
+  box-shadow:0 0 0 1.5px #000, inset 0 0 6px var(--zzz-sh-55) !important;
   overflow:hidden;
 }
 html[${MARKER}] progress::-webkit-progress-bar{
@@ -1849,7 +1950,7 @@ html[${MARKER}] progress::-webkit-progress-bar{
 html[${MARKER}] progress::-webkit-progress-value{
   background:var(--zzz-slider);
   border-radius:999px;
-  box-shadow:0 0 10px rgba(41,180,255,.45);
+  box-shadow:0 0 10px var(--zzz-glow-cyan);
 }
 
 /* Page plane of the centre column: the background watermark plus the screen
@@ -1867,7 +1968,7 @@ html[${MARKER}] [class*="_centerCol"]{
   background-size:auto 56vh,6px 6px,6px 6px,6px 6px,6px 6px !important;
 }
 
-/* The conversation panel paints its own opaque #131313 over the whole column,
+/* The conversation panel paints its own opaque var(--dsw-alias-bg-base) over the whole column,
    which hides the watermark.  It is the same colour as the column underneath,
    so dropping it changes nothing except letting the paper show through. */
 html[${MARKER}] [class*="_centerCol"] [data-slot="main.conversation"] > [class*="_root"]{
@@ -1908,7 +2009,7 @@ html[${MARKER}] [data-zzz-glass] *:not(input):not(progress):not([role="switch"])
    They resolve as the host defines them:
      idle      transparent, border --dsw-alias-border-l4      (theme: #525252)
      hover     background --dsw-alias-interactive-bg-hover    (#ffffff14)
-     selected  background --dsw-alias-bg-module-platform      (theme: #333333)
+     selected  background --dsw-alias-bg-module-platform      (theme: var(--dsw-alias-bg-layer-3))
                border-color --dsw-static-neutral-bluish-400   (host #adb2b8)
      radius    --dsw-radius-xl (20px)
    The selected rim comes from a raw palette token shared with 9 other references, so
@@ -1916,13 +2017,13 @@ html[${MARKER}] [data-zzz-glass] *:not(input):not(progress):not([role="switch"])
 
 /* ===== agent preset cards: selected = white text + breathing outline =====
    Token-first: the fill stays the token's job (--dsw-alias-bg-module-platform,
-   which this theme binds to a neutral #333333) and the label colour is the host's
+   which this theme binds to a neutral var(--dsw-alias-bg-layer-3)) and the label colour is the host's
    own white - no colour override here at all. The breathing outline is the part a
    token cannot express, so it lives in the pseudo-element below. */
 html[${MARKER}] [class*="_cardActive"]{
   position:relative !important;
   /* same translucent glass as the sibling cards: the host fill for the active card
-     is an opaque #333333, which reads as a white plate next to the glass. The
+     is an opaque var(--dsw-alias-bg-layer-3), which reads as a white plate next to the glass. The
      shared token is left alone (20+ consumers); this is the single exception. */
   background-color:var(--zzz-glass-fill) !important;
   background-image:none !important;
@@ -1952,14 +2053,14 @@ html[${MARKER}] [data-zzz-glass] a[class*="linkButton"][class*="primary"],
 html[${MARKER}] [data-zzz-glass] a[class*="linkButton"][class*="Primary"]{
   background:var(--zzz-orange) !important;
   background-image:none !important;
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
   border:0 !important;
   box-shadow:none !important;
 }
 html[${MARKER}] [data-zzz-glass] a[class*="linkButton"][class*="primary"]:hover,
 html[${MARKER}] [data-zzz-glass] a[class*="linkButton"][class*="Primary"]:hover{
-  background:#ff6a22 !important;
-  color:#101010 !important;
+  background:var(--zzz-orange-hot) !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 
 html[${MARKER}] [data-zzz-glass] :is(
@@ -1968,7 +2069,7 @@ html[${MARKER}] [data-zzz-glass] :is(
   [class$="_active"],[class$="_Active"],[class$="_tabActive"],[class$="_selected"]):not([class*="_cardMain"]):not([role="switch"]):not([class*="_switch"]){
   background-color:var(--zzz-yellow) !important;
   background-image:none !important;
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
   border-color:transparent !important;
   box-shadow:none !important;
 }
@@ -1976,8 +2077,8 @@ html[${MARKER}] [data-zzz-glass] :is(
   [aria-current="true"],[aria-selected="true"],[aria-checked="true"],
   [aria-pressed="true"],[data-state="on"],[data-state="active"],[data-state="checked"],
   [class$="_active"],[class$="_Active"],[class$="_tabActive"],[class$="_selected"]):not([class*="_cardMain"]):not([role="switch"]):not([class*="_switch"]) *{
-  color:#101010 !important;
-  -webkit-text-fill-color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
+  -webkit-text-fill-color:var(--dsw-alias-label-inverse) !important;
 }
 
 /* ===== subagent / agent-team popovers: frosted glass =====
@@ -2014,7 +2115,7 @@ html[${MARKER}] [data-team-panel="true"] *{
 }
 html[${MARKER}] [class*="VoX2oq_member"],
 html[${MARKER}] [class*="VoX2oq_task"]{
-  box-shadow:inset 0 0 0 0.5px rgba(255,255,255,.07) !important;
+  box-shadow:inset 0 0 0 0.5px var(--zzz-hairline) !important;
 }
 
 /* dockkit pane tabs: no edge fade at all. The host's 24px mask reads as a grey
@@ -2032,22 +2133,22 @@ html[${MARKER}] [data-dockkit-tab-title]{
 }
 
 /* composer "+" button: solid disc with a STATIC black background (no hover lift).
-   #0b0b0b rest and hover, #dcdcdc glyph.
+   var(--zzz-disc) rest and hover, var(--zzz-fg-button) glyph.
 
    The host fill token (--dsw-specific-selector) is shared with the voice-input disc,
    so the change is scoped here rather than rebinding the token. */
 html[${MARKER}] [data-composer-card="true"] button[class*="uV2eYG_add"]{
-  background:#0b0b0b !important;
+  background:var(--zzz-disc) !important;
   background-image:none !important;
-  color:#dcdcdc !important;
+  color:var(--zzz-fg-button) !important;
   border:0 !important;
   box-shadow:none !important;
 }
 
-/* open-in-app split button: one STATIC #0b0b0b pill (no hover lift).
+/* open-in-app split button: one STATIC var(--zzz-disc) pill (no hover lift).
    The host draws a .5px box with a divider between main and chevron; both go away. */
 html[${MARKER}] [class*="OMoRSG_split"]{
-  background:#0b0b0b !important;
+  background:var(--zzz-disc) !important;
   background-image:none !important;
   border:0 !important;
   border-radius:999px !important;
@@ -2057,7 +2158,7 @@ html[${MARKER}] [class*="OMoRSG_main"],
 html[${MARKER}] [class*="OMoRSG_chevron"]{
   background:transparent !important;
   background-image:none !important;
-  color:#dcdcdc !important;
+  color:var(--zzz-fg-button) !important;
   border:0 !important;
 }
 
@@ -2091,7 +2192,7 @@ html[${MARKER}] [class*="_chip"][aria-pressed="true"]:not([class*="_sidebarCol"]
      hatch + a corner darkening overlay, no inset ring. Only the radius is a
      capsule instead of the row's 8px. */
   background-image:var(--zzz-plate) !important;
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
   box-shadow:none !important;
   border-radius:999px !important;
   animation:zzz-plate-breath var(--zzz-ring-t) ease-in-out infinite;
@@ -2108,8 +2209,8 @@ html[${MARKER}] [class*="_pill"][class*="_active"]:not([class*="_sidebarCol"] *)
 html[${MARKER}] [class*="_chip"][class*="_active"]:not([class*="_sidebarCol"] *) *,
 html[${MARKER}] [class*="_pill"][aria-selected="true"]:not([class*="_sidebarCol"] *) *,
 html[${MARKER}] [class*="_chip"][aria-selected="true"]:not([class*="_sidebarCol"] *) *{
-  color:#101010 !important;
-  -webkit-text-fill-color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
+  -webkit-text-fill-color:var(--dsw-alias-label-inverse) !important;
 }
 
 /* ===== square icon buttons become circles =====
@@ -2159,7 +2260,7 @@ html[${MARKER}] [class*="JObwrW_fill"]{
    being yellow. */
 html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard){
   /* colour needs the important: the host ships color: … !important in places */
-  color:#101010 !important;
+  color:var(--dsw-alias-label-inverse) !important;
 }
 html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) *,
 html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg,
@@ -2167,8 +2268,8 @@ html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg *{
   /* colour only. fill/stroke are NOT forced: outline icons (fill="none") would be
      painted solid, and fill-only icons would grow an outline. Icons whose paint is
      hard-coded white are rewritten to currentColor by the tagging effect instead. */
-  color:#101010 !important;
-  -webkit-text-fill-color:#101010;
+  color:var(--dsw-alias-label-inverse) !important;
+  -webkit-text-fill-color:var(--dsw-alias-label-inverse);
 }
 
 /* ===== markdown table: frosted glass wrapper =====
@@ -2210,7 +2311,7 @@ html[${MARKER}] [class*="_7yHdaG_panel"]::after{
   border:0;
 }
 html[${MARKER}] [class*="_7yHdaG_row"] + [class*="_7yHdaG_row"]{
-  box-shadow:inset 0 0.5px 0 rgba(255,255,255,.07);
+  box-shadow:inset 0 0.5px 0 var(--zzz-hairline);
 }
 
 /* ===== unified switch =====
@@ -2254,7 +2355,7 @@ html[${MARKER}] button[role="switch"][aria-checked="true"] > span{
   background:var(--zzz-slider-thumb) !important;
   box-shadow:
     0 0 0 1.5px var(--zzz-slider-glow),
-    0 0 8px 1px rgba(5,187,255,.45) !important;
+    0 0 8px 1px var(--zzz-glow-mid) !important;
 }
 /* the plugin switch (checkbox + i) follows the same recipe */
 html[${MARKER}] .dsh-tbp-switch i{
@@ -2272,15 +2373,15 @@ html[${MARKER}] .dsh-tbp-switch input:checked + i::after{
   background:var(--zzz-slider-thumb) !important;
   box-shadow:
     0 0 0 1.5px var(--zzz-slider-glow),
-    0 0 8px 1px rgba(5,187,255,.45) !important;
+    0 0 8px 1px var(--zzz-glow-mid) !important;
 }
 
 /* conversation text sits above the moving void: dark shadow base for legibility */
 html[${MARKER}] [data-slot="main.conversation"]{
   text-shadow:
-    0 0 2px rgba(0,0,0,.85),
-    0 1px 3px rgba(0,0,0,.70),
-    0 0 12px rgba(0,0,0,.45);
+    0 0 2px var(--zzz-sh-85),
+    0 1px 3px var(--zzz-sh-70),
+    0 0 12px var(--zzz-sh-45);
 }
 html[${MARKER}] [data-slot="main.conversation"] :where(pre, code){
   text-shadow:none;
@@ -2290,7 +2391,7 @@ html[${MARKER}] [data-slot="main.conversation"] :where(pre, code){
   object-fit:contain;
   pointer-events:none;
   user-select:none;
-  filter:drop-shadow(0 1px 0 rgba(0,0,0,.55));
+  filter:drop-shadow(0 1px 0 var(--zzz-sh-55));
 }
 
 /* the settings section title: force the display face even if a host rule or an
@@ -2309,7 +2410,7 @@ html[${MARKER}] .zzz-void-dome{
   position:absolute; left:50%; top:50%; width:268px; height:268px;
   transform:translate(-50%,-50%); border-radius:50%;
   clip-path:circle(50% at 50% 50%);
-  background:#0d0d13;
+  background:var(--zzz-void-base);
 }
 html[${MARKER}] .zzz-void-fresnel{
   position:absolute; left:50%; top:50%; width:268px; height:268px;
@@ -2492,7 +2593,7 @@ html[${MARKER}] .md-table-wide:focus-visible{
         style: {
           position: 'absolute', top: '2px', left: on ? '22px' : '2px',
           width: '18px', height: '18px', borderRadius: '50%',
-          background: on ? '#101010' : 'var(--dsw-alias-label-secondary)',
+          background: on ? 'var(--dsw-alias-label-inverse)' : 'var(--dsw-alias-label-secondary)',
           transition: 'left .15s ease',
         },
       }))
