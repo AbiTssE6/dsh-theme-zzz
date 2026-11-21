@@ -1384,3 +1384,16 @@ one and
   superseded by the 1rv3m_ paint that follows it.
 - Debt: !important 678 -> 652, blanket paint rules 39 -> 33, id-level 13 unchanged. Baselines
   lowered in the same commit; dist gate rebuilt clean and the app screenshots unchanged.
+
+### team panel drew a ring around every child (2026-11-21, local only)
+
+- The row hairline was written as [class*="VoX2oq_member"] / [class*="VoX2oq_task"]. Those are
+  CSS-module tokens, and substring matching also hit VoX2oq_memberDot, _memberName,
+  _memberNameText, _memberModel, _tasks, _taskState and _taskTitle - so a ring appeared on
+  every child instead of on the row. In the agent-team popover that read as stray frames
+  inside the panel.
+- Now matched by exact token ([class~="VoX2oq_member"] / _memberCurrent / _task]), which is what
+  the block's own note already asked for. Measured on a replica of the panel: 9 ringed nodes
+  before, 2 after (the member row and the task row).
+- Principle for the rest of the sheet: class*= is only for a token used as a prefix on purpose;
+  a CSS-module class name must be matched with class~= so children never inherit the frame.

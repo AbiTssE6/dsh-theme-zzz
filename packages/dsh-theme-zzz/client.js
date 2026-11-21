@@ -2250,8 +2250,12 @@ html[${MARKER}] [data-team-panel="true"] *{
   background-color:transparent !important;
   background-image:none !important;
 }
-html[${MARKER}] [class*="VoX2oq_member"],
-html[${MARKER}] [class*="VoX2oq_task"]{
+/* the row hairline, matched by exact token: substring matching also hit
+   VoX2oq_memberName / _memberDot / _memberText / _taskState / _taskTitle / _tasks,
+   which drew a ring around every child instead of around the row */
+html[${MARKER}] [class~="VoX2oq_member"],
+html[${MARKER}] [class~="VoX2oq_memberCurrent"],
+html[${MARKER}] [class~="VoX2oq_task"]{
   box-shadow:inset 0 0 0 0.5px var(--zzz-hairline) !important;
 }
 
