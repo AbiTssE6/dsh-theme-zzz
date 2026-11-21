@@ -1367,3 +1367,20 @@ one and
   failed" and dist/package.json keeps its old mtime; adding one "surface * + !important"
   rule fails with "blanket paint rules grew: 40 > 39"; the clean tree builds and prints
   the paint line (14 cases) before "dist/ built".
+
+### cleanup: one recipe per role, CardKey named, debt down (2026-11-21, local only)
+
+- CardKey is now an explicit role in the stylesheet instead of an accident: dock entry cards
+  (.*_entryCell button/a, .*_moreAnchor button) and the session hover-preview card
+  (._card_38jqx_9[role="button"]) keep the card recipe and are declared out of scope for the key
+  recipes. Test used to decide: content-sized box = CardKey, fixed 28/36px target = key.
+- Folded the duplicated key blocks (C1b primaryButton, the dangerButton block and the *Danger icon
+  block from 440d326) into C1/C3, so each role has one recipe again. The harness caught one real
+  slip while folding (the icon-danger family missed the C3 hover rule, leaving a red keyline only);
+  the named selectors are in the hover/focus rule now.
+- C1 shed all 18 !important: with the glass rules excluding keys, nothing competes with its
+  attribute chain. Verified by measurement, not by reading: all 14 paint cases stay exact.
+- Removed a dead selector: [class*="_moreAnchor"] button in the generic hover rule was always
+  superseded by the 1rv3m_ paint that follows it.
+- Debt: !important 678 -> 652, blanket paint rules 39 -> 33, id-level 13 unchanged. Baselines
+  lowered in the same commit; dist gate rebuilt clean and the app screenshots unchanged.

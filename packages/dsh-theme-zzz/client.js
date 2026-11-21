@@ -790,7 +790,6 @@ html[${MARKER}] [class*="_stepper"] *{
   border-radius:var(--zzz-ctl-radius) !important;
   box-shadow:none !important;
 }
-html[${MARKER}] [class*="_moreAnchor"] button,
 html[${MARKER}] button[class*="_toggle"],
 html[${MARKER}] button[class*="_button"]:not([class*="1rv3m_"]):not([class*="ypSjoa_"]):not([data-dsh-plugin]):not([data-dsh-plugin] *):not(:has([data-dsh-plugin])):not([class*="_tabHost_"] *):hover,
 html[${MARKER}] [class*="_stepper"]:hover{
@@ -901,9 +900,10 @@ html[${MARKER}] [role="tooltip"]{
   backdrop-filter:var(--zzz-glass-blur) !important;
   -webkit-backdrop-filter:var(--zzz-glass-blur) !important;
 }
-/* session hover-preview card in the workspace tree: same glass surface as the
-   tooltips (measured: fixed, 244x96, host fill #2C2C2E, no blur). The exact
-   class token keeps code/attachment cards of the same module untouched. */
+/* CardKey, not a key: the session hover-preview card in the workspace tree. Same
+   glass surface as the tooltips (measured: fixed, 244x96, host fill #2C2C2E, no
+   blur); the exact class token keeps code/attachment cards of the same module
+   untouched. */
 html[${MARKER}] [class~="_card_38jqx_9"][role="button"]{
   background-color:var(--zzz-glass-fill) !important;
   background-image:none !important;
@@ -1712,18 +1712,19 @@ html[${MARKER}] [data-composer-card="true"] button[class*="_primary"] svg{
    (primaryButton, _primary_) hit; the design-system ghost discs and the
    composer keep their own recipes above, and a plugin can opt out with
    data-zzz-plain on the button.
-   Only the paint needs !important: geometry and type already match what the
+   Only the paint needs: geometry and type already match what the
    components declare, so they ride along at normal priority. */
 html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
 html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *),
 html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *){
-  background-color:var(--zzz-key-fill) !important;
-  background-image:none !important;
-  color:var(--zzz-key-fg) !important;
-  border:1px solid var(--zzz-key-stroke) !important;
-  border-radius:var(--zzz-ctl-radius) !important;
-  box-shadow:var(--zzz-key-shadow) !important;
+  background-color:var(--zzz-key-fill);
+  background-image:none;
+  color:var(--zzz-key-fg);
+  border:1px solid var(--zzz-key-stroke);
+  border-radius:var(--zzz-ctl-radius);
+  box-shadow:var(--zzz-key-shadow);
   -webkit-text-fill-color:var(--zzz-key-fg);
   text-shadow:none;
   text-decoration:none;
@@ -1738,34 +1739,38 @@ html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-
 html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
 html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
 html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
 html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
 html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible,
 html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible{
-  background-color:var(--zzz-key-fill-hover) !important;
-  background-image:var(--zzz-key-sheen-hover) !important;
-  color:var(--zzz-key-fg-hover) !important;
-  -webkit-text-fill-color:var(--zzz-key-fg-hover) !important;
-  border-color:var(--zzz-key-stroke-hover) !important;
-  box-shadow:var(--zzz-key-shadow-hover) !important;
+  background-color:var(--zzz-key-fill-hover);
+  background-image:var(--zzz-key-sheen-hover);
+  color:var(--zzz-key-fg-hover);
+  -webkit-text-fill-color:var(--zzz-key-fg-hover);
+  border-color:var(--zzz-key-stroke-hover);
+  box-shadow:var(--zzz-key-shadow-hover);
   filter:none;
 }
 html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):disabled,
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):disabled,
 html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):disabled,
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):disabled,
 html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):disabled{
-  background-color:var(--zzz-key-fill-disabled) !important;
-  color:var(--zzz-key-fg-disabled) !important;
-  border-color:var(--zzz-key-stroke) !important;
-  box-shadow:none !important;
+  background-color:var(--zzz-key-fill-disabled);
+  color:var(--zzz-key-fg-disabled);
+  border-color:var(--zzz-key-stroke);
+  box-shadow:none;
   cursor:not-allowed;
 }
 html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]) *,
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]) *,
 html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]) *,
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *) *,
 html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *) *{
-  color:inherit !important;
+  color:inherit;
 }
 
 /* ---- C2 class: secondary key (cancel / close) ----
@@ -1810,6 +1815,8 @@ html[${MARKER}] [role="dialog"] button[class*="destructive"]:not([class*="1rv3m_
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
 html[${MARKER}] [data-dsh-plugin] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
 html[${MARKER}] [data-dsh-plugin] button[class*="destructive"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] button[class*="dangerButton"]:not([data-zzz-plain]):not([data-composer-card="true"] *),
+html[${MARKER}] button[class*="Danger"]:not([data-zzz-plain]):not([data-composer-card="true"] *),
 html[${MARKER}] button[data-variant="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *){
   background-color:var(--zzz-key-fill-ghost);
   background-image:none;
@@ -1829,90 +1836,12 @@ html[${MARKER}] [role="dialog"] button[class*="destructive"]:not([class*="1rv3m_
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
 html[${MARKER}] [data-dsh-plugin] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
 html[${MARKER}] [data-dsh-plugin] button[class*="destructive"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] button[class*="dangerButton"]:not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
+html[${MARKER}] button[class*="Danger"]:not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
 html[${MARKER}] button[data-variant="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled){
   background-color:var(--zzz-key-danger);
   color:var(--zzz-key-fg-danger-hover);
   border-color:var(--zzz-key-danger);
-}
-
-/* ---- C1b class: keys named by the component, wherever they render ----
-   The panels above cover keys inside a dialog / settings modal / plugin surface.
-   These two families are named by the components themselves, so they get their own
-   coverage: a confirm key reads dark-with-light-label at rest and yellow-with-black
-   type when pointed at, and a destructive key FILLS solid red instead of just
-   brightening its keyline. Importance appears only where a competing !important
-   exists (noted per block); everywhere else the attribute chain already wins. */
-html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *){
-  background-color:var(--zzz-key-fill);
-  background-image:none;
-  color:var(--zzz-key-fg);
-  -webkit-text-fill-color:var(--zzz-key-fg);
-  border:1px solid var(--zzz-key-stroke);
-  border-radius:var(--zzz-ctl-radius);
-  box-shadow:var(--zzz-key-shadow);
-  text-shadow:none;
-  height:var(--zzz-key-h);
-  min-height:var(--zzz-key-h);
-  padding:var(--zzz-key-pad);
-  font-size:14px;
-  font-weight:500;
-  line-height:1;
-}
-html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
-html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible{
-  background-color:var(--zzz-key-fill-hover);
-  background-image:none;
-  color:var(--zzz-key-fg-hover);
-  -webkit-text-fill-color:var(--zzz-key-fg-hover);
-  border-color:var(--zzz-key-stroke-hover);
-}
-html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]) *{
-  color:inherit;
-}
-html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):disabled{
-  background-color:var(--zzz-key-fill-disabled);
-  color:var(--zzz-key-fg-disabled);
-  -webkit-text-fill-color:var(--zzz-key-fg-disabled);
-  border-color:var(--zzz-key-stroke);
-  box-shadow:none;
-}
-
-/* destructive key, text family (dangerButton): nothing else paints it */
-html[${MARKER}] button[class*="dangerButton"]:not([data-zzz-plain]):not([data-composer-card="true"] *){
-  background-color:var(--zzz-key-fill-ghost);
-  background-image:none;
-  color:var(--zzz-key-fg-danger);
-  -webkit-text-fill-color:var(--zzz-key-fg-danger);
-  border:1px solid var(--zzz-key-fg-danger);
-  border-radius:var(--zzz-ctl-radius);
-  box-shadow:none;
-  text-shadow:none;
-}
-html[${MARKER}] button[class*="dangerButton"]:not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
-html[${MARKER}] button[class*="dangerButton"]:not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible{
-  background-color:var(--zzz-key-danger);
-  background-image:none;
-  color:var(--zzz-key-fg-danger-hover);
-  -webkit-text-fill-color:var(--zzz-key-fg-danger-hover);
-  border-color:var(--zzz-key-danger);
-}
-
-/* destructive key, icon family (…Danger, e.g. iconButtonDanger): the neutral icon-key
-   rule paints this family with !important, so the override has to match its weight */
-html[${MARKER}] button[class*="Danger"]:not([data-zzz-plain]):not([data-composer-card="true"] *){
-  background-color:var(--zzz-key-fill-ghost) !important;
-  background-image:none !important;
-  color:var(--zzz-key-fg-danger) !important;
-  border:1px solid var(--zzz-key-fg-danger) !important;
-  border-radius:var(--zzz-ctl-radius);
-  box-shadow:none !important;
-}
-html[${MARKER}] button[class*="Danger"]:not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
-html[${MARKER}] button[class*="Danger"]:not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible{
-  background-color:var(--zzz-key-danger) !important;
-  background-image:none !important;
-  color:var(--zzz-key-fg-danger-hover) !important;
-  border-color:var(--zzz-key-danger) !important;
 }
 
 /* ---- C4 class: a confirm key never answers with the neutral haze ----
@@ -2033,6 +1962,15 @@ html[${MARKER}] [data-zzz-mini][data-zzz-glyph][data-zzz-glyph]:hover{
   color:var(--zzz-fg-tip-strong) !important;
 }
 
+/* ---- CardKey: a card that happens to be clickable ----
+   Two families are cards first and controls second, so they keep the card recipe
+   (9.75px frame, weave, bevel) and stay OUT of the key recipes:
+     .*_entryCell button / a        dock tool cards
+     .*_moreAnchor button           the dock's overflow card
+     ._card_38jqx_9[role="button"]  session hover-preview card (glass, 12px)
+   Rule of thumb: if the element's own size is driven by content (a card), it is a
+   CardKey; if it is a fixed 28/36px target, it is a key and reads the --zzz-key-*
+   tokens. Nothing in C1/C2/C3/C4 may claim these families. */
 /* a dock tool card: the same three-layer card as the bubble, but on the card's
    own button so the frame and the plate belong to one element */
 html[${MARKER}] [class*="_tabHost_"] [class*="_entryCell"] button,
