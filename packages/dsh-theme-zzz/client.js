@@ -1167,7 +1167,6 @@ html[${MARKER}]{
    badges, a white scroll-to-bottom disc). They have no theme tokens, so they are
    defined here explicitly instead of being left to the host. */
 html[${MARKER}] [class*="_toBottom"],
-html[${MARKER}] button[class*="_add"],
 html[${MARKER}] [class*="_badge"],
 html[${MARKER}] [class*="_tag_"]{
   background:var(--zzz-chip) !important;
@@ -1177,8 +1176,7 @@ html[${MARKER}] [class*="_tag_"]{
   border-radius:999px !important;
   box-shadow:0 0 0 1px #000 !important;
 }
-html[${MARKER}] [class*="_toBottom"] svg,
-html[${MARKER}] button[class*="_add"] svg{
+html[${MARKER}] [class*="_toBottom"] svg{
   color:var(--dsw-alias-label-primary) !important;
   stroke:var(--dsw-alias-label-primary) !important;
 }
@@ -1807,6 +1805,52 @@ html[${MARKER}] button[data-variant="secondary"]:not([class*="1rv3m_"]):not([dat
   border-color:var(--zzz-key-stroke-soft);
 }
 
+/* ---- C2b class: add key ("添加…", "＋ 新建") ----
+   A create action, so it is a key, not a chip badge. One dashed keyline says
+   "there is nothing here yet"; pointing at it uses the same commit language as
+   the confirm key (yellow plate, black type) instead of a quiet wash, because the
+   click creates something. Full-width adders keep the ghost plate at rest so the
+   panel does not grow a second heavy block. */
+html[${MARKER}] [role="dialog"] button[class*="_add"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="_add"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [data-dsh-plugin] button[class*="_add"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] button[data-variant="add"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *){
+  background-color:var(--zzz-key-fill-ghost);
+  background-image:none;
+  color:var(--zzz-key-fg-ghost);
+  border:1px dashed var(--zzz-key-stroke-ghost);
+  border-radius:var(--zzz-ctl-radius);
+  box-shadow:none;
+  height:var(--zzz-key-h);
+  min-height:var(--zzz-key-h);
+  padding:var(--zzz-key-pad);
+  font-size:14px;
+  font-weight:500;
+  line-height:1;
+}
+html[${MARKER}] [role="dialog"] button[class*="_add"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [role="dialog"] button[class*="_add"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="_add"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="_add"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
+html[${MARKER}] [data-dsh-plugin] button[class*="_add"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [data-dsh-plugin] button[class*="_add"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible{
+  background-color:var(--zzz-key-fill-hover);
+  background-image:none;
+  color:var(--zzz-key-fg-hover);
+  border-style:solid;
+  border-color:var(--zzz-key-stroke-hover);
+}
+html[${MARKER}] [role="dialog"] button[class*="_add"]:not([class*="1rv3m_"]) *,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="_add"]:not([class*="1rv3m_"]) *,
+html[${MARKER}] [data-dsh-plugin] button[class*="_add"]:not([class*="1rv3m_"]) *{
+  color:inherit;
+}
+html[${MARKER}] [role="dialog"] button[class*="_add"]:not([class*="1rv3m_"]):hover *,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="_add"]:not([class*="1rv3m_"]):hover *,
+html[${MARKER}] [data-dsh-plugin] button[class*="_add"]:not([class*="1rv3m_"]):hover *{
+  color:var(--zzz-key-fg-hover);
+}
+
 /* ---- C3 class: danger key (delete / stop / clear) ----
    The label carries the meaning at rest; only the pointer state fills the plate,
    so a destructive action is never the loudest thing on screen. */
@@ -2129,16 +2173,16 @@ html[${MARKER}] [data-zzz-glass]{
 }
 /* L3: nothing inside the glass paints its own plate (switches, inputs and
    progress shapes keep their geometry) */
-html[${MARKER}] [data-zzz-glass] *:not(input):not(progress):not([role="switch"]):not([role="switch"] *):not([class*="linkButton"]):not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]){
+html[${MARKER}] [data-zzz-glass] *:not(input):not(progress):not([role="switch"]):not([role="switch"] *):not([class*="linkButton"]):not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]):not([class*="_add"]){
   background-color:transparent !important;
   background-image:none !important;
   box-shadow:none !important;
 }
 /* interaction: hover is light, on/selected is the yellow theme accent */
 @media (hover:hover){
-  html[${MARKER}] [data-zzz-glass] button:not(:disabled):hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]),
-  html[${MARKER}] [data-zzz-glass] a:hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]),
-  html[${MARKER}] [data-zzz-glass] [role="button"]:hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]){
+  html[${MARKER}] [data-zzz-glass] button:not(:disabled):hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]):not([class*="_add"]),
+  html[${MARKER}] [data-zzz-glass] a:hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]):not([class*="_add"]),
+  html[${MARKER}] [data-zzz-glass] [role="button"]:hover:not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="destructive"]):not([class*="1rv3m_"]):not([class*="_add"]){
     background-color:var(--zzz-hl) !important;
   }
 }

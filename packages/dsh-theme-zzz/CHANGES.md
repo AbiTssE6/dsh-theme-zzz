@@ -1397,3 +1397,19 @@ one and
   before, 2 after (the member row and the task row).
 - Principle for the rest of the sheet: class*= is only for a token used as a prefix on purpose;
   a CSS-module class name must be matched with class~= so children never inherit the frame.
+
+### the add key was being painted as a chip badge (2026-11-21, local only)
+
+- Answer to "is this button classified?": it was not a key. button[class*="_add"] put it in the
+  leftover-chrome chip group, so it got #2b2b2b, a 999px pill radius and a 1px black ring, which
+  is why it read as a badge on top of the model rows.
+- New role C2b (add key, "添加…/＋ 新建"): ghost plate, ONE dashed keyline (nothing there yet),
+  8px radius, --zzz-key-h height; hover and focus flip to the commit language - yellow plate,
+  black label, solid keyline - because the click creates something. Covers *add* buttons inside
+  dialogs, the settings modal and plugin surfaces, plus [data-variant="add"].
+- Removed _add from the chip group (fill, radius, ring and the svg colour rule); the glass flatten
+  and haze rules now exclude _add keys as well, otherwise a settings row would have flattened the
+  new plate.
+- check-paint covers 17 cases now, including the add key in a dialog and inside a glass row:
+  rest transparent / rgb(234,234,234) / dashed / 8px / 36px, hover rgb(252,221,0) / rgb(16,16,16)
+  / solid. Debt unchanged (652 / 33).

@@ -85,12 +85,15 @@ const CASES = [
   ['dialog', 'zGbnIq_dangerButton', 'rest', { bg: 'rgba(0, 0, 0, 0)', fg: REDLABEL }],
   ['dialog', 'zGbnIq_dangerButton zzz-h', 'hover', { bg: RED, fg: LABEL }],
   ['dialog', 'zGbnIq_iconButtonDanger zzz-h', 'hover', { bg: RED, fg: LABEL }],
+  ['dialog', 'zGbnIq_addButton', 'rest', { bg: 'rgba(0, 0, 0, 0)', fg: P(234, 234, 234), radius: '8px' }],
+  ['dialog', 'zGbnIq_addButton zzz-h', 'hover', { bg: YELLOW, fg: ONYELLOW }],
   ['dialog', 'X_button_1rv3m_2 X_sm_1rv3m_28', 'rest', { bg: INK, fg: DIMLABEL }],
   ['dialog', 'X_button_1rv3m_2 X_sm_1rv3m_28 zzz-h', 'hover', { bg: YELLOW, fg: ONYELLOW }],
   // the surface the editor lives on: a settings row tagged as glass
   ['glass', 'zGbnIq_primaryButton', 'rest', { bg: INK, fg: LABEL }],
   ['glass', 'zGbnIq_secondaryButton zzz-h', 'hover', { bg: QUIET, fg: LABEL }],
   ['glass', 'zGbnIq_dangerButton zzz-h', 'hover', { bg: RED, fg: LABEL }],
+  ['glass', 'zGbnIq_addButton zzz-h', 'hover', { bg: YELLOW, fg: ONYELLOW }],
   ['glass', 'X_button_1rv3m_2 X_sm_1rv3m_28 zzz-h', 'hover', { bg: YELLOW, fg: ONYELLOW }],
   // plugin panels keep their own rows but the theme's keys must still read right
   ['plugin', 'zGbnIq_dangerButton zzz-h', 'hover', { bg: RED, fg: LABEL }],
