@@ -9,8 +9,8 @@
 //   3. each palette object has no duplicate keys (DARK and LIGHT may share keys -
 //      that is the point of two palettes)
 //   4. glass surfaces read --zzz-glass-* tokens: no raw rgba(16,16,16,...) / blur(14px)
-//      in declarations. Comments, base64 data URIs and the token definitions are
-//      ignored.
+//      in declarations. Comments, base64 data URIs and the glass/float token definitions
+//      are ignored (the float tiers are the popup half of the same recipe).
 //   5. RATCHET: the two debt counters (!important and :not(#zzz-guard) overrides) may
 //      only go down. When a change lowers them, lower the baseline in the same commit.
 //   6. void geometry / interaction invariants
@@ -26,8 +26,18 @@ import path from 'node:path'
 // 2026-11-05: +3 for the settings section title (display face, weight 900, no synthesis).
 // 2026-11-05: +3 for the bold settings sidebar cells (display face, 800, no synthesis).
 // 2026-11-05: +3 for the nav label span inside those cells.
+// 2026-11-21: the IconDisc hover rules merged into one block, so the ratchet moves down.
+//            (kept the date line above for the step that raised it.)
+// 2026-11-21: +13 for the named key families (danger icon keys and the yellow
+// confirm hover). Every one of them is an override of an existing !important rule:
+// the neutral icon-key paint and the design-system haze. The text families
+// (primaryButton / dangerButton) needed none and carry none.
 const BASELINE = {
-  important: 649,
+  important: 653,
+  // 2026-11-21: rules of the shape "[some surface] * + background/color !important"
+  // they flatten everything inside, which is how a key recipe silently stopped
+  // working three times. The count may not grow without a deliberate edit here.
+  blanketPaint: 33,
   // 2026-11-08: +4 for the black-on-yellow rules (component :not() chains outranked them).
   idHacks: 13,
 }
@@ -60,18 +70,71 @@ if (cssStart >= 0 && cssEnd >= 0) {
   const code = css
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/url\("data:[^"]*"\)/g, 'url()')
-    .replace(/--zzz-glass-[a-z-]+:[^;]*;/g, '')
+    .replace(/--zzz-(?:glass|float)-[a-z-]+:[^;]*;/g, '')
 
   const rawGlass = [...code.matchAll(/rgba\(16,\s*16,\s*16,/g)].length
   const rawBlur = [...code.matchAll(/blur\(14px\) saturate\(180%\)/g)].length
   if (rawGlass > 0) problems.push(`glass: ${rawGlass} raw rgba(16,16,16,...) declaration(s)`)
   if (rawBlur > 0) problems.push(`glass: ${rawBlur} raw blur(14px) declaration(s)`)
-  if (rawGlass + rawBlur === 0) report.push('glass: every surface uses --zzz-glass-*')
+  if (rawGlass + rawBlur === 0) report.push('glass: every surface uses --zzz-glass-* / --zzz-float-*')
+
+  // A browser drops the WHOLE rule when its selector list is invalid, and a rule
+  // that swallows its own closing brace takes every later rule with it - the sheet
+  // then still "looks" fine in review while the tail is gone (that shipped once:
+  // an :is()/:not() selector mix silently removed the nav, card and composer CSS).
+  // These two checks cannot prove validity, but they catch the truncation shape.
+  const openBraces = [...css.matchAll(/\{/g)].length
+  const closeBraces = [...css.matchAll(/\}/g)].length
+  if (openBraces !== closeBraces) {
+    problems.push(`css: unbalanced braces (${openBraces} '{' vs ${closeBraces} '}')`)
+  } else {
+    report.push('css: braces balanced')
+  }
+  // the last block in the sheet is the markdown-table guard; if it is missing the
+  // parser stopped earlier and everything after the break is dead
+  if (!css.trimEnd().endsWith('}') || !css.includes('.md-table-wide')) {
+    problems.push('css: tail missing - a rule earlier in the sheet failed to parse')
+  } else {
+    report.push('css: tail present')
+  }
 
   const hacks = [...code.matchAll(/:not\(#zzz-guard\)/g)].length
   const important = [...code.matchAll(/!important/g)].length
   report.push(`debt: ${important} !important (baseline ${BASELINE.important})`)
   report.push(`debt: ${hacks} id-level overrides (baseline ${BASELINE.idHacks})`)
+
+  // A blanket rule is "descendant wildcard + paint + !important": it outranks any
+  // component recipe that does not also shout, so every new one is a future
+  // "my change did nothing" report. Count them instead of trusting review.
+  const flat = code.replace(/\/\*[\s\S]*?\*\//g, '')
+  let blanketPaint = 0
+  for (let i = 0; i < flat.length; ) {
+    const brace = flat.indexOf('{', i)
+    if (brace < 0) break
+    const head = flat.slice(i, brace)
+    let depth = 0
+    let j = brace
+    for (; j < flat.length; j += 1) {
+      if (flat[j] === '{') depth += 1
+      else if (flat[j] === '}') {
+        depth -= 1
+        if (depth === 0) break
+      }
+    }
+    const body = flat.slice(brace + 1, j)
+    if (head.includes(' *') && /(background|color)[^;]*!important/.test(body)) blanketPaint += 1
+    i = j + 1
+  }
+  report.push(`debt: ${blanketPaint} blanket paint rules (baseline ${BASELINE.blanketPaint})`)
+  if (blanketPaint > BASELINE.blanketPaint) {
+    problems.push(
+      `blanket paint rules grew: ${blanketPaint} > ${BASELINE.blanketPaint}` +
+        ' (a "*" + background !important rule flattens every component inside it)',
+    )
+  }
+  if (blanketPaint < BASELINE.blanketPaint) {
+    report.push('blanket paint rules went DOWN - lower BASELINE.blanketPaint')
+  }
 
   if (important > BASELINE.important) {
     problems.push(`!important grew: ${important} > ${BASELINE.important}`)

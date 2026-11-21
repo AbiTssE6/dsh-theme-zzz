@@ -1200,3 +1200,311 @@ one and
 - The tab margins are now neutralised (margin 0) inside the tablists/containers the theme
   already styles, so the 4px gap reads as 4px of real space.
 - Mock check with the host geometry: margins 0px, gap 4px, tabs 56-102 and 106-148, overlap 0.
+
+### nested bubble painted two cards (2026-11-18, local only)
+
+- The host nests .*_bubbleWidth > .*_bubble. The card inventory matched [class*="_bubble"], so the
+  width wrapper and the bubble itself both received the #282828 frame, shadow and radius.
+- The wrapper is excluded now (:not([class*="_bubbleWidth"])): the bubble keeps the card, the
+  wrapper stays invisible. Mock check: wrapper transparent / no border / radius 0; bubble
+  rgb(40,40,40), 1px frame, radius 16.
+
+### panel colours: tokens first, the rest named (2026-11-21, local only)
+
+- 126 literal colours in rule bodies now read the design-system token with the same
+  value (label-inverse, bg-base, bg-layer-1/2/3, border-l1/l2, brand-primary,
+  label-primary/secondary, specific-tip), and the brand values the system does not
+  name moved into a documented ink ramp (--zzz-disc, -fg-button, -fg-panel,
+  -fg-faint, -chip, -sh-35/45/55/60/70/85, divider, hairline, glow-*).
+- Remaining literals in the CSS block are the plate gradient source (@property /
+  @keyframes / the --zzz-plate stops), glass fill fallbacks and comments.
+
+### primary action key: one recipe, and why the save button lost its fill (2026-11-21, local only)
+
+- The settings-models row paints its confirm button with
+  background:var(--dsw-alias-button-primary-fill) and text with
+  label-primary-foreground. Only the text token was declared, so the fill resolved
+  to nothing and the button showed as bare black text on the card.
+- The whole button-primary-* set is declared now (fill = --zzz-yellow, hover =
+  --zzz-yellow-hover, dimmed = --zzz-yellow-dim), and one recipe covers every
+  confirm key outside the composer: yellow plate with a 1px black keyline, black
+  label, 8px radius (--zzz-ctl-radius), 36px tall, plus hover and disabled states.
+  Selectors are plain attribute matches (one per surface, both class spellings);
+  data-zzz-plain opts a button out.
+- The first version of that rule used :is() plus a complex :not(). The parser
+  rejected the rule and dropped every rule after it, which is what wrecked the
+  layout; the plain selectors parse and the sheet reaches its last block again.
+- tools/check-theme.mjs now fails on unbalanced braces or a missing tail so a
+  dropped-tail sheet cannot pass the self-check again.
+
+### primary keys rest dark, yellow is the hover language (2026-11-21, local only)
+
+- Confirmed against the baseline snapshot: the theme never styled panel confirm buttons. Only the
+  composer _primary disc had a recipe; the token trio (dimmed/hover/foreground) existed but
+  --dsw-alias-button-primary-fill was never declared, so a component reading it painted nothing.
+- Corrected the state model to match the rest of the theme: the key rests as a dark plate
+  (--zzz-disc, #0b0b0b) with the light label (--dsw-alias-label-primary) and a 1px
+  --dsw-alias-border-l2 keyline, and flips to the yellow plate with black type on hover/focus.
+  A permanent yellow plate is reserved for "selected / you are on it".
+- Disabled reads as --zzz-chip with --zzz-fg-faint; children inherit the label so icon+text keys
+  stay in one colour.
+- Measured in the mock with the settings-models CSS: rest rgb(11,11,11) / rgb(247,247,247), radius
+  8px, 1px border; disabled rgb(43,43,43) / rgb(125,125,125); hover rule paints
+  var(--zzz-yellow) + var(--dsw-alias-label-inverse). Full sheet parses to its last block (253
+  rules), so the dropped-tail guard stays green.
+
+### button unification, step 1: the key token layer (2026-11-21, local only)
+
+- Added the role tokens the next steps will switch to, and nothing else: radius scale
+  (--zzz-ctl-radius for square keys, --zzz-pill for discs), heights (36 / 28 / 34), padding,
+  and one fill/label/stroke triple per state. No rule references them yet.
+- Proof that step 1 is visual-neutral: the same mock page (dialog row, primary key, secondary
+  key, icon disc, unclassed button, plugin key) rendered from HEAD and from the working tree
+  produced byte-identical screenshots (sha256 D94F4B7B...), identical computed styles for all
+  four buttons, and the same rule count (251). The only measurable difference is that
+  --zzz-key-fill now resolves to #0b0b0b instead of the empty string.
+
+### button unification, step 2.1: IconDisc reads the key tokens (2026-11-21, local only)
+
+- The 1rv3m_ disc recipe now states its surface, label, hover fill and hover label through the
+  key tokens instead of the palette aliases; the two hover behaviours are documented in place as
+  deliberate (big key = haze lift, small icon key = plate flip).
+- The duplicated ":_sm_:hover svg" and ":_sm_:hover *" rules are one rule now, so one fewer
+  declaration block to keep in sync.
+- Rest state is byte-identical to HEAD: same screenshot hash (6B90398B8CF6DAC5) and identical
+  computed values for all three sampled discs (rgb(11,11,11) / rgb(220,220,220) / 8px / 0px, and
+  opacity 0.45 on the disabled one). The hover rules now read --zzz-key-fill(-hover) and
+  --zzz-key-fg(-dim/-hover), which resolve to the values they used to hard-code (#0b0b0b,
+  #fcdd00, #dcdcdc, #101010).
+
+### button unification, step 2.2: Primary reads the key tokens (2026-11-21, local only)
+
+- The confirm-key recipe now references the key layer instead of restating paint:
+  --zzz-key-fill / -fg / -stroke / -shadow at rest, -fill-hover / -fg-hover / -stroke-hover /
+  -shadow-hover / -sheen-hover when the plate turns yellow, and -fill-disabled / -fg-disabled for
+  the inert state. Geometry moved to --zzz-key-h and --zzz-key-pad.
+- Three new tokens carry the two shadows and the hover sheen, so the recipe has no raw colour
+  left except the 1px black keyline, which is the token's value anyway.
+- Proof: the same settings-row mock rendered from HEAD and from the working tree gives identical
+  computed styles in all four states (rest, forced :hover, forced :focus-visible, :disabled) and
+  byte-identical screenshots (sha256 A9CDA03E...). Yellow-on-black, dark-with-white-label and the
+  muted disabled plate all unchanged.
+
+### button unification, step 2.3: Secondary and Danger, header discs on tokens (2026-11-21, local only)
+
+- Header discs and the search key now read the key layer (--zzz-key-fill, -fg-dim, -fill-hover,
+  -fg-hover) and --zzz-pill instead of restating the values. Verified byte-identical: the disc
+  mock rendered from HEAD and from the working tree has the same screenshot hash (3D48873A...)
+  and the same computed paint (rgb(11,11,11) / rgb(220,220,220) / 999px / 0 border).
+- New C2 recipe (secondary: cancel / close): no plate, one soft keyline, panel label; hover and
+  focus raise it to the quiet fill with the primary label. New C3 recipe (danger: delete / stop /
+  clear): bright-red label (#ff6152) and keyline at rest, solid --zzz-red plate with a white
+  label once pointed at, so a destructive action is never the loudest thing on screen.
+- Neither recipe carries !important: their subject selectors (attribute + surface + :not chain)
+  already outrank a plugin's single class rule, and nothing else in the theme paints these
+  buttons. Measured on the settings row: secondary rest transparent / rgb(234,234,234) / 8px /
+  1px rgb(68,68,68); hover rgb(28,28,28) / rgb(247,247,247); danger rest rgb(255,97,82) label;
+  hover rgb(200,24,0) plate with rgb(247,247,247); primary unchanged. Debt stays at 665.
+
+### keys: destructive fills on hover, confirm always answers in yellow (2026-11-21, local only)
+
+- Why the delete key only lit its keyline: the component ships
+  .zGbnIq_dangerButton{background:0 0;border:none} and a hover of
+  background:var(--dsw-alias-interactive-bg-hover-danger) = #f25a5a26, a 15% red wash. A rule
+  that only wins on border-color therefore leaves the plate empty, and the family names differ
+  (dangerButton vs iconButtonDanger), so a container-scoped rule can miss the icon variant.
+- Added the two families by name, container-independent: primaryButton gets dark plate +
+  light label at rest, yellow plate + black type on hover/focus, muted plate when disabled;
+  dangerButton and the *Danger icon family exist as a red keyline at rest and FILL solid
+  --zzz-red with white type on hover/focus. The *Danger rules carry !important because the
+  neutral icon-key paint uses it; the text families needed none and carry none.
+- Confirm keys no longer mix in the neutral haze: any 1rv3m_ key whose class says primary /
+  submit / confirm / save turns yellow with black type, while neutral discs keep their quiet
+  lift. That override needs !important to beat the design-system haze.
+- Measured with :hover rewritten to a class (identical specificity): primary rest
+  rgb(11,11,11)/rgb(247,247,247) -> hover rgb(252,221,0)/rgb(16,16,16); danger rest
+  transparent/rgb(255,97,82) -> hover rgb(200,24,0)/rgb(247,247,247); icon-danger same pair;
+  neutral disc unchanged at rest. Debt 665 -> 678, all 13 of the additions overriding an
+  existing !important.
+
+### glass cards were flattening the keys inside them (2026-11-21, local only)
+
+- Root cause of "the delete key only lights its keyline": settings rows are tagged data-zzz-glass,
+  and L3 says nothing inside the glass paints its own plate -
+  [data-zzz-glass] *{background-color:transparent !important;background-image:none !important}.
+  That outranked the secondary/danger recipes (which deliberately carry no !important), so the
+  hover fill was discarded while border-color still changed. The neutral white haze on
+  [data-zzz-glass] button:hover is the "looks whiter instead of yellow" the confirm keys showed.
+- Both glass rules now skip the key families (primary/Primary, secondary/Secondary,
+  danger/Danger, destructive). The flatten rule still covers every other descendant, so nested
+  panels keep behaving as before; keys simply own their own paint again.
+- Measured on a glass row, hovered: before -> secondary transparent (no feedback), danger
+  transparent with a red keyline only (the reported bug), primary yellow; after ->
+  secondary rgb(28,28,28), danger rgb(200,24,0) filled with a white label, primary yellow.
+  Debt unchanged at 678 (the fix removes the need for !important on these two recipes).
+
+### guards against "my change did nothing" (2026-11-21, local only)
+
+- tools/check-paint.mjs: renders the real stylesheet over mock surfaces (plain dialog,
+  settings glass row, plugin panel) for every key family and state, forces :hover /
+  :focus-visible through same-specificity class selectors, and asserts the computed
+  background, label and radius against the token layer. Exits 1 on any mismatch. 14 cases.
+- It immediately found a second instance of the same bug: a 1rv3m_ icon key inside a glass
+  row lost its yellow hover (transparent plate, black glyph on a dark surface). The glass
+  flatten and hover rules now skip [class*="1rv3m_"] as well, and all 14 cases pass.
+- tools/check-theme.mjs: new ratchet "blanket paint rules" (surface + " *" + background/color
+  !important). 39 today; a new one fails the check until the baseline is edited on purpose,
+  because that shape is what silently flattened key recipes three times.
+
+### release gate (2026-11-21, local only)
+
+- scripts/make-dist.mjs runs tools/check-theme.mjs and tools/check-paint.mjs before it
+  writes anything, with inherited stdio so the release log shows the numbers. A failure
+  exits non-zero and leaves the previous dist/ untouched - a version whose keys are
+  covered up can no longer be packaged.
+- --skip-checks exists for an emergency and prints a warning into the log.
+- Proven both ways: injecting a broken rule aborts with "release aborted: theme invariants
+  failed" and dist/package.json keeps its old mtime; adding one "surface * + !important"
+  rule fails with "blanket paint rules grew: 40 > 39"; the clean tree builds and prints
+  the paint line (14 cases) before "dist/ built".
+
+### cleanup: one recipe per role, CardKey named, debt down (2026-11-21, local only)
+
+- CardKey is now an explicit role in the stylesheet instead of an accident: dock entry cards
+  (.*_entryCell button/a, .*_moreAnchor button) and the session hover-preview card
+  (._card_38jqx_9[role="button"]) keep the card recipe and are declared out of scope for the key
+  recipes. Test used to decide: content-sized box = CardKey, fixed 28/36px target = key.
+- Folded the duplicated key blocks (C1b primaryButton, the dangerButton block and the *Danger icon
+  block from 440d326) into C1/C3, so each role has one recipe again. The harness caught one real
+  slip while folding (the icon-danger family missed the C3 hover rule, leaving a red keyline only);
+  the named selectors are in the hover/focus rule now.
+- C1 shed all 18 !important: with the glass rules excluding keys, nothing competes with its
+  attribute chain. Verified by measurement, not by reading: all 14 paint cases stay exact.
+- Removed a dead selector: [class*="_moreAnchor"] button in the generic hover rule was always
+  superseded by the 1rv3m_ paint that follows it.
+- Debt: !important 678 -> 652, blanket paint rules 39 -> 33, id-level 13 unchanged. Baselines
+  lowered in the same commit; dist gate rebuilt clean and the app screenshots unchanged.
+
+### team panel drew a ring around every child (2026-11-21, local only)
+
+- The row hairline was written as [class*="VoX2oq_member"] / [class*="VoX2oq_task"]. Those are
+  CSS-module tokens, and substring matching also hit VoX2oq_memberDot, _memberName,
+  _memberNameText, _memberModel, _tasks, _taskState and _taskTitle - so a ring appeared on
+  every child instead of on the row. In the agent-team popover that read as stray frames
+  inside the panel.
+- Now matched by exact token ([class~="VoX2oq_member"] / _memberCurrent / _task]), which is what
+  the block's own note already asked for. Measured on a replica of the panel: 9 ringed nodes
+  before, 2 after (the member row and the task row).
+- Principle for the rest of the sheet: class*= is only for a token used as a prefix on purpose;
+  a CSS-module class name must be matched with class~= so children never inherit the frame.
+
+### the add key was being painted as a chip badge (2026-11-21, local only)
+
+- Answer to "is this button classified?": it was not a key. button[class*="_add"] put it in the
+  leftover-chrome chip group, so it got #2b2b2b, a 999px pill radius and a 1px black ring, which
+  is why it read as a badge on top of the model rows.
+- New role C2b (add key, "添加…/＋ 新建"): ghost plate, ONE dashed keyline (nothing there yet),
+  8px radius, --zzz-key-h height; hover and focus flip to the commit language - yellow plate,
+  black label, solid keyline - because the click creates something. Covers *add* buttons inside
+  dialogs, the settings modal and plugin surfaces, plus [data-variant="add"].
+- Removed _add from the chip group (fill, radius, ring and the svg colour rule); the glass flatten
+  and haze rules now exclude _add keys as well, otherwise a settings row would have flattened the
+  new plate.
+- check-paint covers 17 cases now, including the add key in a dialog and inside a glass row:
+  rest transparent / rgb(234,234,234) / dashed / 8px / 36px, hover rgb(252,221,0) / rgb(16,16,16)
+  / solid. Debt unchanged (652 / 33).
+
+### every floating surface is frosted glass now (2026-11-21, local only)
+
+- Three float tiers replace the seven recipes from the audit, all translucent and blurred:
+  Float-tip rgba(16,16,16,.58) + blur 14 + r10 (tooltips), Float-card .55 + blur 14 + r12
+  (hover preview), Float-menu .72 + blur 18 + r14 + 1px --dsw-alias-border-l2 +
+  0 14px 36px shadow (menu, listbox, select picker, team/subagent panels, third-party menu).
+- The menu gave up the 9.75px card frame, the weave and the 3px black ring: that is the panel
+  language and made a dropdown heavier than the dialog behind it. One hairline plus a drop
+  shadow is what separates a popup from the page.
+- Host tokens: --dsw-menu-surface-fill now points at the float fill and
+  --dsw-menu-backdrop-filter at blur 18, so host menus/selects blur too. --dsw-specific-menu is
+  shared by ~19 packages and some cannot blur, so it goes to rgba(.90) (host ships .94) instead
+  of our previous opaque #282828 - glass where the blur exists, no text bleed where it does not.
+- tools/check-paint.mjs now asserts the float tier as well: 6 popups must resolve to a fill with
+  alpha < 1 AND a real backdrop-filter, because an opaque fill silently hides the blur (that is
+  exactly how the menus read as solid plates while still declaring one). Measured: tooltip .58 /
+  blur14, menu+listbox+team+third-party .72 / blur18, preview card .55 / blur14.
+- tools/check-theme.mjs ignores --zzz-float-* token definitions in the glass invariant, same as
+  the --zzz-glass-* ones, so the recipe has one home.
+
+### floats lost their border (2026-11-22, local only)
+
+- Requirement: frosted glass should not be outlined. Every float tier is now borderless -
+  menu, listbox, select picker, team/subagent panels and the third-party menu drop their
+  1px keyline, and --zzz-float-shadow lost the 1px black ring that read as a border
+  (0 16px 40px rgba(0,0,0,.55) only). --zzz-float-menu-stroke is gone with its last user.
+- Separation is carried by the fill + blur + shadow alone, which is the point of glass.
+- check-paint now asserts border-width 0 on all six popups alongside the translucency and
+  the blur, so a stray border cannot come back unnoticed.
+
+### the last solid popups were reading unloved tokens (2026-11-22, local only)
+
+- Three fills the theme never touched kept hover surfaces opaque:
+  --dsw-alias-tooltip-bg was bluish-750 (#43454a), --dsw-alias-menu-group-header-fill was
+  #303136f0 and --dsw-alias-toast-bg was only partially glass. They now point at the float tiers
+  (tip .58 / menu .72), so tooltips, menu group headers and toasts join the glass language even
+  where the component paints from the token instead of the [role] rules.
+- Found by reading which tokens the host's floating components consume; the annotation picker
+  cannot hold a hover-only popup open long enough to click it, so the token graph is the reliable
+  route for these.
+
+### tooltips were card-shaped because the card rule reached inside them (2026-11-22, local only)
+
+- The tooltip container took the glass recipe, but the bubble inside it matched the card
+  inventory ([class*="_bubble"]) and drew the 9.75px frame, the halftone and the 3px black ring -
+  so every tooltip ("视图选项", "添加工作区 Ctrl+Alt+O", "更多会话视图") looked like a chip, not
+  like glass.
+- The flatten rule also only covered direct children ([role="tooltip"] > *), and the bubble sits
+  one level deeper. It flattens the whole subtree now; the key-chip and label rules still follow
+  it, so keyboard hints keep their own pill.
+- The card inventory and its radius twin exclude [role="tooltip"] * outright, which is the real
+  fix: a tooltip is a tooltip, not a card that happens to be nested.
+- Verified live with dsh-doyourweb: hovering "添加工作区" now shows a translucent, blurred pill
+  with no frame, no dots and no ring.
+
+### the plate behind every popup (2026-11-22, local only)
+
+- The primitives Surface - which renders tooltips, popovers and hover cards - paints a fixed
+  backing layer SIBLING to the surface, filled with --dsw-alias-bg-base (#131313 opaque). Its
+  only job is to give Chromium something to blur against, but it also sits behind our glass, so
+  the popup read solid however transparent the fill was. This is why tooltips kept looking like
+  grey plates while [role="menu"], which we paint ourselves, already looked like glass.
+- The backing is transparent now (data-zzz-keep-backing opts one back in), so the blur samples
+  the page itself. Verified in a mock that mirrors the primitive's DOM: with the opt-out the
+  backing is rgb(19,19,19), with the rule it is transparent.
+- Note for the record: the tooltip is primitives' Tooltip (label + delayMs 500 + portal), not a
+  native title tooltip - the host source shows it wrapped around the workspace header buttons.
+
+### the tooltip itself was a card, not its parent (2026-11-22, local only)
+
+- Live measurement from the app (MutationObserver on the real tooltip): the element is
+  class="_bubble_44yfq_1" role="tooltip" with background rgb(40,40,40), border 9.6px and
+  radius 16px - i.e. the card recipe, while a backdrop-filter of 14px was already there.
+- The previous fix excluded only [role="tooltip"] * (descendants), but this build puts
+  role=tooltip ON the bubble itself, so the card rule still matched it and outranked the
+  tooltip rule. Both the card inventory and its radius twin now exclude [role="tooltip"]
+  as well, so the tooltip rule finally wins.
+- tools/check-paint.mjs now mirrors the real DOM for the tooltip case (role on the bubble
+  with a _bubble_ class). That is the harness gap that let this survive two rounds: the mock
+  had the role on a wrapper, so the descendant exclusion looked sufficient.
+- Measured after the fix: tooltip rgba(16,16,16,.58) + blur(14px), radius 10, border 0.
+
+### the hover preview card drifted off its module hash (2026-11-22, local only)
+
+- Live annotation of the session hover-preview showed the element as html > body > span >
+  div[role="button"] with background rgb(44,44,46) and no blur, i.e. the theme's
+  _card_38jqx_9 selector had stopped matching: the module hash is rebuilt with every host
+  update, so a hash in a selector is a time bomb.
+- The card is now matched by token name inside the portal shape
+  (body > span > div[class*="_card_"][role="button"]), which survives rebuilds.
+- check-paint mounts the float mocks at body level with their real shapes (role on the bubble
+  itself, preview card inside a span portal) and probes the semantic node. That closed the
+  last fidelity gap in the harness: it reproduced this exact miss before the fix
+  (preview card transparent, no blur) and passes after (rgba(16,16,16,.55) + blur 14).
