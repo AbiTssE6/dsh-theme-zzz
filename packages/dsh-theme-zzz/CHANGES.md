@@ -1326,3 +1326,19 @@ one and
   transparent/rgb(255,97,82) -> hover rgb(200,24,0)/rgb(247,247,247); icon-danger same pair;
   neutral disc unchanged at rest. Debt 665 -> 678, all 13 of the additions overriding an
   existing !important.
+
+### glass cards were flattening the keys inside them (2026-11-21, local only)
+
+- Root cause of "the delete key only lights its keyline": settings rows are tagged data-zzz-glass,
+  and L3 says nothing inside the glass paints its own plate -
+  [data-zzz-glass] *{background-color:transparent !important;background-image:none !important}.
+  That outranked the secondary/danger recipes (which deliberately carry no !important), so the
+  hover fill was discarded while border-color still changed. The neutral white haze on
+  [data-zzz-glass] button:hover is the "looks whiter instead of yellow" the confirm keys showed.
+- Both glass rules now skip the key families (primary/Primary, secondary/Secondary,
+  danger/Danger, destructive). The flatten rule still covers every other descendant, so nested
+  panels keep behaving as before; keys simply own their own paint again.
+- Measured on a glass row, hovered: before -> secondary transparent (no feedback), danger
+  transparent with a red keyline only (the reported bug), primary yellow; after ->
+  secondary rgb(28,28,28), danger rgb(200,24,0) filled with a white label, primary yellow.
+  Debt unchanged at 678 (the fix removes the need for !important on these two recipes).
