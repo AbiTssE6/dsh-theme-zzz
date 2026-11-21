@@ -104,15 +104,16 @@ const CASES = [
 // looking like solid plates while still declaring a backdrop-filter). Assert both: the
 // fill keeps some transparency, and the blur is actually present.
 const FLOATS = [
-  // the real DOM puts role=tooltip ON the element that also carries a _bubble_ class,
-  // and that is what let the card recipe claim it (measured live: border 9.6px,
-  // radius 16, fill #282828 on the "view options" tooltip).
-  ['tooltip', '<div class="_bubble_44yfq_1" role="tooltip">提示</div>'],
-  ['menu', '<div role="menu"><div>菜单项</div></div>'],
-  ['listbox', '<div role="listbox"><div>选项</div></div>'],
-  ['team panel', '<div data-team-panel="true"><div>成员</div></div>'],
-  ['third-party menu', '<div class="dshwv-menu"><div>菜单</div></div>'],
-  ['preview card', '<div class="_card_38jqx_9" role="button">预览</div>'],
+  // The real DOM puts role=tooltip ON the element that also carries a _bubble_ class,
+  // and the preview card is portaled as body > span > div[role=button]. Both shapes are
+  // reproduced here: the previous mocks put the role on a wrapper, which is why the
+  // card recipe slipped through twice.
+  ['tooltip', '<div id="f0" class="_bubble_44yfq_1" role="tooltip">提示</div>'],
+  ['menu', '<div id="f1" role="menu"><div>菜单项</div></div>'],
+  ['listbox', '<div id="f2" role="listbox"><div>选项</div></div>'],
+  ['team panel', '<div id="f3" data-team-panel="true"><div>成员</div></div>'],
+  ['third-party menu', '<div id="f4" class="dshwv-menu"><div>菜单</div></div>'],
+  ['preview card', '<span id="f5"><div class="_card_44yfq_7" role="button">预览</div></span>'],
 ]
 
 const forced = css
@@ -154,7 +155,11 @@ for (const row of window.__rows) {
 }
 document.documentElement.setAttribute('data-out', JSON.stringify(out))
 const floatOut = window.__floats.map((name, i) => {
-  const el = document.querySelector('#f' + i + ' > *')
+  const root = document.getElementById('f' + i)
+  const semantic = '[role=tooltip],[role=menu],[role=listbox],[role=button],[data-team-panel],[class*=dshwv-menu]'
+  const el = !root ? null
+    : root.matches(semantic) ? root
+    : (root.querySelector(semantic) || root.firstElementChild)
   if (!el) return { name, error: 'not found' }
   const cs = getComputedStyle(el)
   return {
@@ -179,7 +184,7 @@ const page = `<!doctype html><html data-dsh-theme-zzz><head><meta charset="utf-8
 </style>
 </head><body>
 ${markup}
-<div id="floats">${FLOATS.map(([n, h], i) => `<section id="f${i}">${h}</section>`).join('')}</div>
+${FLOATS.map(([, h]) => h).join('\n')}
 <script>window.__floats = ${JSON.stringify(FLOATS.map(([name]) => name))}
 window.__rows = ${JSON.stringify(rows.map((r, i) => ({ i, surface: r.surface, cls: r.cls, label: r.label, expect: r.expect })))}
 ${probe}</script>

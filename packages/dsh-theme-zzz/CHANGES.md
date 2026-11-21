@@ -1495,3 +1495,16 @@ one and
   with a _bubble_ class). That is the harness gap that let this survive two rounds: the mock
   had the role on a wrapper, so the descendant exclusion looked sufficient.
 - Measured after the fix: tooltip rgba(16,16,16,.58) + blur(14px), radius 10, border 0.
+
+### the hover preview card drifted off its module hash (2026-11-22, local only)
+
+- Live annotation of the session hover-preview showed the element as html > body > span >
+  div[role="button"] with background rgb(44,44,46) and no blur, i.e. the theme's
+  _card_38jqx_9 selector had stopped matching: the module hash is rebuilt with every host
+  update, so a hash in a selector is a time bomb.
+- The card is now matched by token name inside the portal shape
+  (body > span > div[class*="_card_"][role="button"]), which survives rebuilds.
+- check-paint mounts the float mocks at body level with their real shapes (role on the bubble
+  itself, preview card inside a span portal) and probes the semantic node. That closed the
+  last fidelity gap in the harness: it reproduced this exact miss before the fix
+  (preview card transparent, no blur) and passes after (rgba(16,16,16,.55) + blur 14).

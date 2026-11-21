@@ -915,7 +915,7 @@ html[${MARKER}] [role="tooltip"]{
    glass surface as the tooltips (measured: fixed, 244x96, host fill #2C2C2E, no
    blur); the exact class token keeps code/attachment cards of the same module
    untouched. */
-html[${MARKER}] [class~="_card_38jqx_9"][role="button"]{
+html[${MARKER}] body > span > div[class*="_card_"][role="button"]{
   background-color:var(--zzz-float-card-fill) !important;
   background-image:none !important;
   border:0 !important;
@@ -925,7 +925,7 @@ html[${MARKER}] [class~="_card_38jqx_9"][role="button"]{
   backdrop-filter:var(--zzz-float-card-blur) !important;
   -webkit-backdrop-filter:var(--zzz-float-card-blur) !important;
 }
-html[${MARKER}] [class~="_card_38jqx_9"][role="button"] *{
+html[${MARKER}] body > span > div[class*="_card_"][role="button"] *{
   background-image:none !important;
 }
 
@@ -2039,7 +2039,8 @@ html[${MARKER}] [data-zzz-mini][data-zzz-glyph][data-zzz-glyph]:hover{
    (9.75px frame, weave, bevel) and stay OUT of the key recipes:
      .*_entryCell button / a        dock tool cards
      .*_moreAnchor button           the dock's overflow card
-     ._card_38jqx_9[role="button"]  session hover-preview card (glass, 12px)
+     body > span > div._card_*  session hover-preview card (glass, 12px; matched by token
+                              name, not by the module hash - the hash drifts on rebuild)
    Rule of thumb: if the element's own size is driven by content (a card), it is a
    CardKey; if it is a fixed 28/36px target, it is a key and reads the --zzz-key-*
    tokens. Nothing in C1/C2/C3/C4 may claim these families. */
