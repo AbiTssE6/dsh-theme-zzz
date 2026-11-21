@@ -1289,3 +1289,19 @@ one and
   computed styles in all four states (rest, forced :hover, forced :focus-visible, :disabled) and
   byte-identical screenshots (sha256 A9CDA03E...). Yellow-on-black, dark-with-white-label and the
   muted disabled plate all unchanged.
+
+### button unification, step 2.3: Secondary and Danger, header discs on tokens (2026-11-21, local only)
+
+- Header discs and the search key now read the key layer (--zzz-key-fill, -fg-dim, -fill-hover,
+  -fg-hover) and --zzz-pill instead of restating the values. Verified byte-identical: the disc
+  mock rendered from HEAD and from the working tree has the same screenshot hash (3D48873A...)
+  and the same computed paint (rgb(11,11,11) / rgb(220,220,220) / 999px / 0 border).
+- New C2 recipe (secondary: cancel / close): no plate, one soft keyline, panel label; hover and
+  focus raise it to the quiet fill with the primary label. New C3 recipe (danger: delete / stop /
+  clear): bright-red label (#ff6152) and keyline at rest, solid --zzz-red plate with a white
+  label once pointed at, so a destructive action is never the loudest thing on screen.
+- Neither recipe carries !important: their subject selectors (attribute + surface + :not chain)
+  already outrank a plugin's single class rule, and nothing else in the theme paints these
+  buttons. Measured on the settings row: secondary rest transparent / rgb(234,234,234) / 8px /
+  1px rgb(68,68,68); hover rgb(28,28,28) / rgb(247,247,247); danger rest rgb(255,97,82) label;
+  hover rgb(200,24,0) plate with rgb(247,247,247); primary unchanged. Debt stays at 665.

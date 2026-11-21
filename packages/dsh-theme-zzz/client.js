@@ -382,6 +382,11 @@ html[${MARKER}] body{
   --zzz-key-stroke-soft:var(--dsw-alias-border-l1);
   --zzz-key-stroke-hover:#000;
   --zzz-key-danger:var(--zzz-red);
+  --zzz-key-fill-ghost:transparent;
+  --zzz-key-fg-ghost:var(--zzz-fg-panel);
+  --zzz-key-stroke-ghost:var(--dsw-alias-border-l2);
+  --zzz-key-fg-danger:#ff6152;   /* readable red on the dark plate; the fill keeps --zzz-red */
+  --zzz-key-fg-danger-hover:var(--dsw-alias-label-primary);
   /* key shadows: one notch at rest, keyline + bevel when the plate turns yellow */
   --zzz-key-shadow:inset 0 1px 0 rgba(255,255,255,.06);
   --zzz-key-shadow-hover:inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 2px #000;
@@ -1619,7 +1624,7 @@ html[${MARKER}] [class*="_headerActions"] svg:has(circle:nth-of-type(2)) circle{
 /* ---- B class: raised keys ---- */
 html[${MARKER}] button[class*="_iconButton"],
 html[${MARKER}] button[class*="_searchButton"]{
-  border-radius:999px !important;
+  border-radius:var(--zzz-pill) !important;
 }
 /* only the workspace header keys are discs: the same _iconButton class is also
    used by the row action buttons that appear on hover, and painting those black
@@ -1631,9 +1636,9 @@ html[${MARKER}] button[class*="_searchButton"]{
 html[${MARKER}] [class*="_headerActions"] button[class*="_iconButton"],
 html[${MARKER}] [class*="_headerActions"] button[class*="_searchButton"],
 html[${MARKER}] [class*="_searchSlot"] button[class*="_searchButton"]{
-  background:var(--zzz-disc) !important;
+  background:var(--zzz-key-fill) !important;
   background-image:none !important;
-  color:var(--zzz-fg-button);
+  color:var(--zzz-key-fg-dim);
   /* no border and no outer ring: a light 1px ring around a 28px disc reads as a
      grey halo, and a dimmed glyph colour makes the icon strokes look thinner */
   border:0 !important;
@@ -1645,9 +1650,9 @@ html[${MARKER}] [class*="_searchSlot"] button[class*="_searchButton"]{
 html[${MARKER}] [class*="_headerActions"] button[class*="_iconButton"]:hover,
 html[${MARKER}] [class*="_headerActions"] button[class*="_searchButton"]:hover,
 html[${MARKER}] [class*="_searchSlot"] button[class*="_searchButton"]:hover{
-  background-color:var(--zzz-yellow) !important;
+  background-color:var(--zzz-key-fill-hover) !important;
   background-image:none;
-  color:var(--dsw-alias-label-inverse) !important;
+  color:var(--zzz-key-fg-hover) !important;
 }
 html[${MARKER}] [class*="_headerActions"] button[class*="_iconButton"] svg,
 html[${MARKER}] [class*="_headerActions"] button[class*="_iconButton"] svg *,
@@ -1761,6 +1766,73 @@ html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([c
 html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]) *,
 html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *) *{
   color:inherit !important;
+}
+
+/* ---- C2 class: secondary key (cancel / close) ----
+   Same geometry as the confirm key, different paint: no plate, one soft keyline,
+   panel label. Hover raises it to the quiet fill so both keys respond to the
+   pointer by lighting up, never by moving. */
+html[${MARKER}] [role="dialog"] button[class*="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [data-dsh-plugin] button[class*="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] button[data-variant="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *){
+  background-color:var(--zzz-key-fill-ghost);
+  background-image:none;
+  color:var(--zzz-key-fg-ghost);
+  border:1px solid var(--zzz-key-stroke-ghost);
+  border-radius:var(--zzz-ctl-radius);
+  box-shadow:none;
+  height:var(--zzz-key-h);
+  min-height:var(--zzz-key-h);
+  padding:var(--zzz-key-pad);
+  font-size:14px;
+  font-weight:500;
+  line-height:1;
+}
+html[${MARKER}] [role="dialog"] button[class*="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [data-dsh-plugin] button[class*="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] button[data-variant="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [role="dialog"] button[class*="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
+html[${MARKER}] [data-dsh-plugin] button[class*="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
+html[${MARKER}] button[data-variant="secondary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible{
+  background-color:var(--zzz-key-fill-quiet);
+  color:var(--zzz-key-fg);
+  border-color:var(--zzz-key-stroke-soft);
+}
+
+/* ---- C3 class: danger key (delete / stop / clear) ----
+   The label carries the meaning at rest; only the pointer state fills the plate,
+   so a destructive action is never the loudest thing on screen. */
+html[${MARKER}] [role="dialog"] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [role="dialog"] button[class*="destructive"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [data-dsh-plugin] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [data-dsh-plugin] button[class*="destructive"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] button[data-variant="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *){
+  background-color:var(--zzz-key-fill-ghost);
+  background-image:none;
+  color:var(--zzz-key-fg-danger);
+  border:1px solid var(--zzz-key-fg-danger);
+  border-radius:var(--zzz-ctl-radius);
+  box-shadow:none;
+  height:var(--zzz-key-h);
+  min-height:var(--zzz-key-h);
+  padding:var(--zzz-key-pad);
+  font-size:14px;
+  font-weight:500;
+  line-height:1;
+}
+html[${MARKER}] [role="dialog"] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [role="dialog"] button[class*="destructive"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [data-dsh-plugin] button[class*="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [data-dsh-plugin] button[class*="destructive"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] button[data-variant="danger"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled){
+  background-color:var(--zzz-key-danger);
+  color:var(--zzz-key-fg-danger-hover);
+  border-color:var(--zzz-key-danger);
 }
 
 /* ---- B2 class: read-only info pills, deliberately flat ---- */
