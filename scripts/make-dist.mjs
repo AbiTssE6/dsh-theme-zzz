@@ -5,6 +5,10 @@
  *
  *   node scripts/make-dist.mjs
  *
+ * The build runs tools/check-theme.mjs and tools/check-paint.mjs first and exits
+ * non-zero without touching dist/ if either fails. --skip-checks exists for an
+ * emergency only; it prints a warning into the release log.
+ *
  * Then publish it as the `dist` branch:
  *
  *   git worktree add .dist-worktree --detach
@@ -15,12 +19,34 @@
  */
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
+import { spawnSync } from 'node:child_process'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const pkgDir = path.join(root, 'packages', 'dsh-theme-zzz')
 const out = path.join(root, 'dist')
+
+// ---- preflight ----------------------------------------------------------------
+// check-theme guards the stylesheet invariants (parse, tail, debt ratchets).
+// check-paint measures the real computed paint of every key on every surface, which
+// is the only thing that catches "the rule is there but something flattened it".
+// Both must pass before a byte is written: a broken version must not be packageable.
+const checks = [
+  ['theme invariants', ['packages/dsh-theme-zzz/tools/check-theme.mjs']],
+  ['key paint', ['packages/dsh-theme-zzz/tools/check-paint.mjs']],
+]
+if (!process.argv.includes('--skip-checks')) {
+  for (const [label, args] of checks) {
+    const run = spawnSync(process.execPath, args, { cwd: root, stdio: 'inherit' })
+    if (run.status !== 0) {
+      console.error(`\nrelease aborted: ${label} failed (dist/ left untouched)`)
+      process.exit(run.status ?? 1)
+    }
+  }
+} else {
+  console.warn('WARNING: --skip-checks given; the theme checks did not run before this build')
+}
 
 const FILES = [
   'index.js',

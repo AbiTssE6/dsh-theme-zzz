@@ -1355,3 +1355,15 @@ one and
 - tools/check-theme.mjs: new ratchet "blanket paint rules" (surface + " *" + background/color
   !important). 39 today; a new one fails the check until the baseline is edited on purpose,
   because that shape is what silently flattened key recipes three times.
+
+### release gate (2026-11-21, local only)
+
+- scripts/make-dist.mjs runs tools/check-theme.mjs and tools/check-paint.mjs before it
+  writes anything, with inherited stdio so the release log shows the numbers. A failure
+  exits non-zero and leaves the previous dist/ untouched - a version whose keys are
+  covered up can no longer be packaged.
+- --skip-checks exists for an emergency and prints a warning into the log.
+- Proven both ways: injecting a broken rule aborts with "release aborted: theme invariants
+  failed" and dist/package.json keeps its old mtime; adding one "surface * + !important"
+  rule fails with "blanket paint rules grew: 40 > 39"; the clean tree builds and prints
+  the paint line (14 cases) before "dist/ built".
