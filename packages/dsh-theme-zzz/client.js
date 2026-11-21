@@ -122,7 +122,7 @@ const BUILD = '2026-11-05T22'
       '--dsw-alias-markdown-code-segment-unselected': 'var(--dsw-static-neutral-bluish-900)',
       '--dsw-alias-markdown-placeholder': 'var(--dsw-static-neutral-bluish-850)',
       '--dsw-alias-markdown-tag': 'var(--dsw-static-neutral-bluish-850)',
-      '--dsw-alias-menu-group-header-fill': '#303136f0',
+      '--dsw-alias-menu-group-header-fill': 'var(--zzz-float-menu-fill)',
       '--dsw-alias-menu-icon': 'var(--dsw-alias-label-primary-dimmed)',
       '--dsw-alias-onboarding-card-fill': 'color-mix(in srgb, var(--dsw-static-neutral-bluish-850) 80%, transparent)',
       '--dsw-alias-onboarding-checkbox-border': 'var(--dsw-alias-border-l2)',
@@ -134,12 +134,12 @@ const BUILD = '2026-11-05T22'
       '--dsw-alias-state-success-tertiary': 'var(--dsw-static-green-900)',
       '--dsw-alias-state-warn-tertiary': 'var(--dsw-static-amber-900)',
       '--dsw-alias-switch-thumb': 'var(--dsw-static-neutral-bluish-400)',
-      '--dsw-alias-toast-bg': 'var(--zzz-glass-fill)',
+      '--dsw-alias-toast-bg': 'var(--zzz-float-menu-fill)',
     '--dsw-shadow-lv3': 'none',
     /* file-card progress: the track is the slider groove, its fill takes the
        gradient in the stylesheet */
     '--dsw-alias-fill-tertiary': 'var(--zzz-slider-track)',
-      '--dsw-alias-tooltip-bg': 'var(--dsw-static-neutral-bluish-750)',
+      '--dsw-alias-tooltip-bg': 'var(--zzz-float-tip-fill)',
       '--dsw-alias-turn-trigger-bg': 'var(--dsw-alias-interactive-bg-hover)',
       '--dsw-alias-turn-trigger-bg-hover': 'var(--dsw-alias-interactive-bg-active)',
       '--dsw-elevation-stroke-color': 'var(--dsw-alias-border-l3)',

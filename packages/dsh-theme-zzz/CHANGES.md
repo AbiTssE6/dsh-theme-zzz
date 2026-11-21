@@ -1443,3 +1443,14 @@ one and
 - Separation is carried by the fill + blur + shadow alone, which is the point of glass.
 - check-paint now asserts border-width 0 on all six popups alongside the translucency and
   the blur, so a stray border cannot come back unnoticed.
+
+### the last solid popups were reading unloved tokens (2026-11-22, local only)
+
+- Three fills the theme never touched kept hover surfaces opaque:
+  --dsw-alias-tooltip-bg was bluish-750 (#43454a), --dsw-alias-menu-group-header-fill was
+  #303136f0 and --dsw-alias-toast-bg was only partially glass. They now point at the float tiers
+  (tip .58 / menu .72), so tooltips, menu group headers and toasts join the glass language even
+  where the component paints from the token instead of the [role] rules.
+- Found by reading which tokens the host's floating components consume; the annotation picker
+  cannot hold a hover-only popup open long enough to click it, so the token graph is the reliable
+  route for these.
