@@ -1413,3 +1413,23 @@ one and
 - check-paint covers 17 cases now, including the add key in a dialog and inside a glass row:
   rest transparent / rgb(234,234,234) / dashed / 8px / 36px, hover rgb(252,221,0) / rgb(16,16,16)
   / solid. Debt unchanged (652 / 33).
+
+### every floating surface is frosted glass now (2026-11-21, local only)
+
+- Three float tiers replace the seven recipes from the audit, all translucent and blurred:
+  Float-tip rgba(16,16,16,.58) + blur 14 + r10 (tooltips), Float-card .55 + blur 14 + r12
+  (hover preview), Float-menu .72 + blur 18 + r14 + 1px --dsw-alias-border-l2 +
+  0 14px 36px shadow (menu, listbox, select picker, team/subagent panels, third-party menu).
+- The menu gave up the 9.75px card frame, the weave and the 3px black ring: that is the panel
+  language and made a dropdown heavier than the dialog behind it. One hairline plus a drop
+  shadow is what separates a popup from the page.
+- Host tokens: --dsw-menu-surface-fill now points at the float fill and
+  --dsw-menu-backdrop-filter at blur 18, so host menus/selects blur too. --dsw-specific-menu is
+  shared by ~19 packages and some cannot blur, so it goes to rgba(.90) (host ships .94) instead
+  of our previous opaque #282828 - glass where the blur exists, no text bleed where it does not.
+- tools/check-paint.mjs now asserts the float tier as well: 6 popups must resolve to a fill with
+  alpha < 1 AND a real backdrop-filter, because an opaque fill silently hides the blur (that is
+  exactly how the menus read as solid plates while still declaring one). Measured: tooltip .58 /
+  blur14, menu+listbox+team+third-party .72 / blur18, preview card .55 / blur14.
+- tools/check-theme.mjs ignores --zzz-float-* token definitions in the glass invariant, same as
+  the --zzz-glass-* ones, so the recipe has one home.

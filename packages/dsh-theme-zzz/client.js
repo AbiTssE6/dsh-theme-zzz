@@ -49,13 +49,13 @@ const BUILD = '2026-11-05T22'
       '--dsw-specific-sidebar-fill': '#131313',
       '--dsw-specific-input-major': '#282828',
       '--dsw-specific-bubble': '#282828',
-      '--dsw-specific-menu': '#282828',
-      '--dsw-menu-surface-fill': '#282828',
+      '--dsw-specific-menu': 'rgba(16,16,16,.90)',
+      '--dsw-menu-surface-fill': 'var(--zzz-float-menu-fill)',
       '--dsw-alias-tooltip-key-bg': 'transparent',
     /* the last cool-grey in the palette: #adb2b8 tints selected rims, the context
        meter and caption text. Neutralised to keep R=G=B everywhere. */
     '--dsw-static-neutral-bluish-400': '#b0b0b0',
-      '--dsw-menu-backdrop-filter': 'var(--zzz-glass-blur)',
+      '--dsw-menu-backdrop-filter': 'var(--zzz-float-menu-blur)',
     '--dsw-alias-settings-card-fill': 'var(--zzz-glass-fill)',
     '--dsw-alias-settings-card-stroke': 'transparent',
       '--dsw-specific-tip': '#242424',
@@ -296,6 +296,21 @@ html[${MARKER}] body{
   /* frosted glass: one recipe for every translucent surface */
   --zzz-glass-fill:rgba(16,16,16,.34);
   --zzz-glass-fill-strong:rgba(16,16,16,.45);
+  /* ---- floating surfaces: three tiers, one language ----
+     Every popup is translucent and blurred; the tier only decides how much weight it
+     carries. Nothing here is opaque: an opaque fill makes the host's backdrop-filter
+     invisible, which is how the menus ended up looking like solid plates. */
+  --zzz-float-tip-fill:rgba(16,16,16,.58);
+  --zzz-float-tip-blur:blur(14px) saturate(180%);
+  --zzz-float-tip-radius:10px;
+  --zzz-float-card-fill:rgba(16,16,16,.55);
+  --zzz-float-card-blur:blur(14px) saturate(180%);
+  --zzz-float-card-radius:12px;
+  --zzz-float-menu-fill:rgba(16,16,16,.72);
+  --zzz-float-menu-blur:blur(18px) saturate(180%);
+  --zzz-float-menu-radius:14px;
+  --zzz-float-menu-stroke:var(--dsw-alias-border-l2);
+  --zzz-float-shadow:0 14px 36px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.6);
   --zzz-glass-blur:blur(14px) saturate(180%);
   --zzz-ctl-radius:8px;
   --zzz-glass-radius-sm:12px;
@@ -867,37 +882,34 @@ html[${MARKER}] [role="tooltip"] *{
    the nested menu shape, which has no _material_ plate at all. */
 html[${MARKER}] [role="menu"],
 html[${MARKER}] [role="listbox"]{
-  background-color:var(--dsw-menu-surface-fill) !important;
-  background-image:var(--zzz-sheen),var(--zzz-weave) !important;
-  background-size:100% 100%,6px 6px,6px 6px,6px 6px,6px 6px !important;
-  background-position:0 0,0 0,3px 3px,3px 0,0 3px !important;
-  background-repeat:no-repeat,repeat,repeat,repeat,repeat !important;
-  background-clip:padding-box !important;
-  border:var(--zzz-frame-w) solid var(--zzz-frame-color) !important;
-  border-radius:var(--zzz-glass-radius) !important;
+  /* Float-menu: translucent + blurred. The 9.75px card frame is the panel language and
+     made a dropdown heavier than the dialog behind it; a menu gets one hairline and a
+     drop shadow instead, which is what tells it apart from the page. */
+  background-color:var(--zzz-float-menu-fill) !important;
+  background-image:none !important;
+  border:1px solid var(--zzz-float-menu-stroke) !important;
+  border-radius:var(--zzz-float-menu-radius) !important;
   box-sizing:border-box !important;
-  padding:10px !important;
-  box-shadow:
-    var(--zzz-bevel-hi),
-    var(--zzz-bevel-lo),
-    0 0 0 3px #000,
-    inset 0 0 0 0.5px var(--zzz-sh-60),
-    inset 0 0 10px var(--zzz-sh-35) !important;
+  padding:8px !important;
+  box-shadow:var(--zzz-float-shadow) !important;
+  backdrop-filter:var(--zzz-float-menu-blur);
+  -webkit-backdrop-filter:var(--zzz-float-menu-blur);
+  overflow:hidden auto;
 }
 /* tooltips: borderless dark frosted glass. The card language (grey frame,
    halftone, chamfer) is intentionally dropped, and so is every depth cue:
    no border, no rim line, no drop shadow, no inner highlight - the surface is
    defined purely by its translucent fill and the blur. */
 html[${MARKER}] [role="tooltip"]{
-  background-color:var(--zzz-glass-fill) !important;
+  background-color:var(--zzz-float-tip-fill) !important;
   background-image:none !important;
   border:0 !important;
-  border-radius:var(--zzz-glass-radius-sm) !important;
+  border-radius:var(--zzz-float-tip-radius) !important;
   box-sizing:border-box !important;
   padding:8px 10px !important;
   color:var(--zzz-fg-tip-strong) !important;
   box-shadow:none !important;
-  backdrop-filter:var(--zzz-glass-blur) !important;
+  backdrop-filter:var(--zzz-float-tip-blur) !important;
   -webkit-backdrop-filter:var(--zzz-glass-blur) !important;
 }
 /* CardKey, not a key: the session hover-preview card in the workspace tree. Same
@@ -905,14 +917,14 @@ html[${MARKER}] [role="tooltip"]{
    blur); the exact class token keeps code/attachment cards of the same module
    untouched. */
 html[${MARKER}] [class~="_card_38jqx_9"][role="button"]{
-  background-color:var(--zzz-glass-fill) !important;
+  background-color:var(--zzz-float-card-fill) !important;
   background-image:none !important;
   border:0 !important;
-  border-radius:var(--zzz-glass-radius-sm) !important;
+  border-radius:var(--zzz-float-card-radius) !important;
   color:var(--zzz-fg-tip-strong) !important;
   box-shadow:none !important;
-  backdrop-filter:var(--zzz-glass-blur) !important;
-  -webkit-backdrop-filter:var(--zzz-glass-blur) !important;
+  backdrop-filter:var(--zzz-float-card-blur) !important;
+  -webkit-backdrop-filter:var(--zzz-float-card-blur) !important;
 }
 html[${MARKER}] [class~="_card_38jqx_9"][role="button"] *{
   background-image:none !important;
@@ -1484,10 +1496,15 @@ html[${MARKER}] [class*="_badge"]:not([class*="_sidebarCol"] *):not([aria-select
 
 /* a third-party panel ships its own light menu and number input */
 html[${MARKER}] .dshwv-menu{
-  background:var(--dsw-alias-bg-layer-1) !important;
+  /* Float-menu for the third-party panel too: it shipped an opaque light menu */
+  background-color:var(--zzz-float-menu-fill) !important;
+  background-image:none !important;
   color:var(--zzz-fg-panel) !important;
-  border:0 !important;
-  box-shadow:0 0 0 1px var(--dsw-alias-border-l1) !important;
+  border:1px solid var(--zzz-float-menu-stroke) !important;
+  border-radius:var(--zzz-float-menu-radius) !important;
+  box-shadow:var(--zzz-float-shadow) !important;
+  backdrop-filter:var(--zzz-float-menu-blur) !important;
+  -webkit-backdrop-filter:var(--zzz-float-menu-blur) !important;
 }
 html[${MARKER}] .dshwv-menu *{
   color:var(--zzz-fg-panel) !important;
@@ -1546,13 +1563,13 @@ html[${MARKER}] select:not([multiple]):not([size]):not([data-dsh-plugin] *)::pic
   /* the picker itself must also opt into the base appearance, otherwise Chrome
      keeps the native popup even though the select resolved to base-select */
   appearance:base-select;
-  background-color:var(--zzz-glass-fill-strong);
+  background-color:var(--zzz-float-menu-fill);
   background-image:none;
-  backdrop-filter:var(--zzz-glass-blur);
-  -webkit-backdrop-filter:var(--zzz-glass-blur);
-  border:1px solid var(--dsw-alias-border-l2);
-  border-radius:var(--zzz-glass-radius);
-  box-shadow:0 14px 36px var(--zzz-sh-55);
+  backdrop-filter:var(--zzz-float-menu-blur);
+  -webkit-backdrop-filter:var(--zzz-float-menu-blur);
+  border:1px solid var(--zzz-float-menu-stroke);
+  border-radius:var(--zzz-float-menu-radius);
+  box-shadow:var(--zzz-float-shadow);
   padding:6px;
   margin-block:6px;
   color:var(--dsw-alias-label-primary);
@@ -2279,15 +2296,15 @@ html[${MARKER}] [data-team-panel="true"]::before{
 html[${MARKER}] [class~="ZKlsPq_menu"],
 html[${MARKER}] [class~="VoX2oq_panel"],
 html[${MARKER}] [data-team-panel="true"]{
-  /* floating above other glass panels: the light fill would let the layer below
-     read through and look like double glass, so these take the stronger fill */
-  background-color:var(--zzz-glass-fill-strong) !important;
+  /* a floating panel reads as a menu, not as a card: same tier as [role="menu"] so a
+     popover never looks like a different product from the dropdown next to it */
+  background-color:var(--zzz-float-menu-fill) !important;
   background-image:none !important;
-  border:0 !important;
-  border-radius:var(--zzz-glass-radius-sm) !important;
-  box-shadow:none !important;
-  backdrop-filter:var(--zzz-glass-blur) !important;
-  -webkit-backdrop-filter:var(--zzz-glass-blur) !important;
+  border:1px solid var(--zzz-float-menu-stroke) !important;
+  border-radius:var(--zzz-float-menu-radius) !important;
+  box-shadow:var(--zzz-float-shadow) !important;
+  backdrop-filter:var(--zzz-float-menu-blur) !important;
+  -webkit-backdrop-filter:var(--zzz-float-menu-blur) !important;
 }
 /* nothing inside may paint a second surface; member/task rows keep only a hairline */
 html[${MARKER}] [data-team-panel="true"] *{

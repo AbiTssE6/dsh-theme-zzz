@@ -99,6 +99,19 @@ const CASES = [
   ['plugin', 'zGbnIq_dangerButton zzz-h', 'hover', { bg: RED, fg: LABEL }],
 ]
 
+// ---- floating surfaces ----------------------------------------------------------
+// A popup that goes opaque loses the blur it asks for (that is how the menus ended up
+// looking like solid plates while still declaring a backdrop-filter). Assert both: the
+// fill keeps some transparency, and the blur is actually present.
+const FLOATS = [
+  ['tooltip', '<div role="tooltip">提示</div>'],
+  ['menu', '<div role="menu"><div>菜单项</div></div>'],
+  ['listbox', '<div role="listbox"><div>选项</div></div>'],
+  ['team panel', '<div data-team-panel="true"><div>成员</div></div>'],
+  ['third-party menu', '<div class="dshwv-menu"><div>菜单</div></div>'],
+  ['preview card', '<div class="_card_38jqx_9" role="button">预览</div>'],
+]
+
 // :hover cannot be driven in a headless dump, so the same rules are mirrored with a
 // class of identical specificity (a class and a pseudo-class weigh the same).
 const forced = css
@@ -139,6 +152,18 @@ for (const row of window.__rows) {
   })
 }
 document.documentElement.setAttribute('data-out', JSON.stringify(out))
+const floatOut = window.__floats.map((name, i) => {
+  const el = document.querySelector('#f' + i + ' > *')
+  if (!el) return { name, error: 'not found' }
+  const cs = getComputedStyle(el)
+  return {
+    name,
+    bg: cs.backgroundColor,
+    blur: cs.backdropFilter || cs.webkitBackdropFilter || 'none',
+    radius: cs.borderRadius,
+  }
+})
+document.documentElement.setAttribute('data-floats', JSON.stringify(floatOut))
 `
 
 const page = `<!doctype html><html data-dsh-theme-zzz><head><meta charset="utf-8">
@@ -152,7 +177,9 @@ const page = `<!doctype html><html data-dsh-theme-zzz><head><meta charset="utf-8
 </style>
 </head><body>
 ${markup}
-<script>window.__rows = ${JSON.stringify(rows.map((r, i) => ({ i, surface: r.surface, cls: r.cls, label: r.label, expect: r.expect })))}
+<div id="floats">${FLOATS.map(([n, h], i) => `<section id="f${i}">${h}</section>`).join('')}</div>
+<script>window.__floats = ${JSON.stringify(FLOATS.map(([name]) => name))}
+window.__rows = ${JSON.stringify(rows.map((r, i) => ({ i, surface: r.surface, cls: r.cls, label: r.label, expect: r.expect })))}
 ${probe}</script>
 </body></html>`
 
@@ -215,6 +242,30 @@ for (const r of results) {
       .map(([k, v]) => `${k}=${v}`)
       .join(', ')
     problems.push(`${r.surface}/${r.cls}/${r.label} -> got bg=${got.bg} fg=${got.fg} radius=${got.radius}; want ${want}`)
+  }
+}
+
+// floats: translucent background (alpha < 1) + a real blur
+const floatMatch = dump.match(/data-floats="([^"]*)"/)
+if (!floatMatch) {
+  problems.push('floats: no measurement')
+} else {
+  const decode = (v) =>
+    v.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+  const floats = JSON.parse(decode(floatMatch[1]))
+  console.log('')
+  console.log(pad('float', 18) + pad('fill', 30) + 'blur')
+  for (const f of floats) {
+    const alphaMatch = /rgba\([^)]*,\s*([0-9.]+)\)/.exec(f.bg ?? '')
+    const alpha = alphaMatch ? Number(alphaMatch[1]) : f.bg === 'transparent' ? 0 : 1
+    const blurred = /blur\(/.test(f.blur ?? '')
+    const bad = f.error || alpha >= 1 || !blurred
+    console.log((bad ? 'x ' : '  ') + pad(f.name, 18) + pad(f.bg ?? '-', 30) + (f.blur ?? '-'))
+    if (bad) {
+      problems.push(
+        `${f.name} -> bg=${f.bg} blur=${f.blur}; want a translucent fill and a blur (opaque fill hides the blur)`,
+      )
+    }
   }
 }
 

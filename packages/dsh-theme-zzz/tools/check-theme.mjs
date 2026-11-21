@@ -9,8 +9,8 @@
 //   3. each palette object has no duplicate keys (DARK and LIGHT may share keys -
 //      that is the point of two palettes)
 //   4. glass surfaces read --zzz-glass-* tokens: no raw rgba(16,16,16,...) / blur(14px)
-//      in declarations. Comments, base64 data URIs and the token definitions are
-//      ignored.
+//      in declarations. Comments, base64 data URIs and the glass/float token definitions
+//      are ignored (the float tiers are the popup half of the same recipe).
 //   5. RATCHET: the two debt counters (!important and :not(#zzz-guard) overrides) may
 //      only go down. When a change lowers them, lower the baseline in the same commit.
 //   6. void geometry / interaction invariants
@@ -70,13 +70,13 @@ if (cssStart >= 0 && cssEnd >= 0) {
   const code = css
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/url\("data:[^"]*"\)/g, 'url()')
-    .replace(/--zzz-glass-[a-z-]+:[^;]*;/g, '')
+    .replace(/--zzz-(?:glass|float)-[a-z-]+:[^;]*;/g, '')
 
   const rawGlass = [...code.matchAll(/rgba\(16,\s*16,\s*16,/g)].length
   const rawBlur = [...code.matchAll(/blur\(14px\) saturate\(180%\)/g)].length
   if (rawGlass > 0) problems.push(`glass: ${rawGlass} raw rgba(16,16,16,...) declaration(s)`)
   if (rawBlur > 0) problems.push(`glass: ${rawBlur} raw blur(14px) declaration(s)`)
-  if (rawGlass + rawBlur === 0) report.push('glass: every surface uses --zzz-glass-*')
+  if (rawGlass + rawBlur === 0) report.push('glass: every surface uses --zzz-glass-* / --zzz-float-*')
 
   // A browser drops the WHOLE rule when its selector list is invalid, and a rule
   // that swallows its own closing brace takes every later rule with it - the sheet
