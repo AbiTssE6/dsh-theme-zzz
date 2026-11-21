@@ -26,8 +26,10 @@ import path from 'node:path'
 // 2026-11-05: +3 for the settings section title (display face, weight 900, no synthesis).
 // 2026-11-05: +3 for the bold settings sidebar cells (display face, 800, no synthesis).
 // 2026-11-05: +3 for the nav label span inside those cells.
+// 2026-11-21: +10 for the primary action key recipe (yellow plate, black label,
+// 8px radius) that the panel/dialog/plugin confirm buttons share.
 const BASELINE = {
-  important: 649,
+  important: 659,
   // 2026-11-08: +4 for the black-on-yellow rules (component :not() chains outranked them).
   idHacks: 13,
 }
@@ -67,6 +69,26 @@ if (cssStart >= 0 && cssEnd >= 0) {
   if (rawGlass > 0) problems.push(`glass: ${rawGlass} raw rgba(16,16,16,...) declaration(s)`)
   if (rawBlur > 0) problems.push(`glass: ${rawBlur} raw blur(14px) declaration(s)`)
   if (rawGlass + rawBlur === 0) report.push('glass: every surface uses --zzz-glass-*')
+
+  // A browser drops the WHOLE rule when its selector list is invalid, and a rule
+  // that swallows its own closing brace takes every later rule with it - the sheet
+  // then still "looks" fine in review while the tail is gone (that shipped once:
+  // an :is()/:not() selector mix silently removed the nav, card and composer CSS).
+  // These two checks cannot prove validity, but they catch the truncation shape.
+  const openBraces = [...css.matchAll(/\{/g)].length
+  const closeBraces = [...css.matchAll(/\}/g)].length
+  if (openBraces !== closeBraces) {
+    problems.push(`css: unbalanced braces (${openBraces} '{' vs ${closeBraces} '}')`)
+  } else {
+    report.push('css: braces balanced')
+  }
+  // the last block in the sheet is the markdown-table guard; if it is missing the
+  // parser stopped earlier and everything after the break is dead
+  if (!css.trimEnd().endsWith('}') || !css.includes('.md-table-wide')) {
+    problems.push('css: tail missing - a rule earlier in the sheet failed to parse')
+  } else {
+    report.push('css: tail present')
+  }
 
   const hacks = [...code.matchAll(/:not\(#zzz-guard\)/g)].length
   const important = [...code.matchAll(/!important/g)].length

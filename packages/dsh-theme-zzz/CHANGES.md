@@ -1208,3 +1208,31 @@ one and
 - The wrapper is excluded now (:not([class*="_bubbleWidth"])): the bubble keeps the card, the
   wrapper stays invisible. Mock check: wrapper transparent / no border / radius 0; bubble
   rgb(40,40,40), 1px frame, radius 16.
+
+### panel colours: tokens first, the rest named (2026-11-21, local only)
+
+- 126 literal colours in rule bodies now read the design-system token with the same
+  value (label-inverse, bg-base, bg-layer-1/2/3, border-l1/l2, brand-primary,
+  label-primary/secondary, specific-tip), and the brand values the system does not
+  name moved into a documented ink ramp (--zzz-disc, -fg-button, -fg-panel,
+  -fg-faint, -chip, -sh-35/45/55/60/70/85, divider, hairline, glow-*).
+- Remaining literals in the CSS block are the plate gradient source (@property /
+  @keyframes / the --zzz-plate stops), glass fill fallbacks and comments.
+
+### primary action key: one recipe, and why the save button lost its fill (2026-11-21, local only)
+
+- The settings-models row paints its confirm button with
+  background:var(--dsw-alias-button-primary-fill) and text with
+  label-primary-foreground. Only the text token was declared, so the fill resolved
+  to nothing and the button showed as bare black text on the card.
+- The whole button-primary-* set is declared now (fill = --zzz-yellow, hover =
+  --zzz-yellow-hover, dimmed = --zzz-yellow-dim), and one recipe covers every
+  confirm key outside the composer: yellow plate with a 1px black keyline, black
+  label, 8px radius (--zzz-ctl-radius), 36px tall, plus hover and disabled states.
+  Selectors are plain attribute matches (one per surface, both class spellings);
+  data-zzz-plain opts a button out.
+- The first version of that rule used :is() plus a complex :not(). The parser
+  rejected the rule and dropped every rule after it, which is what wrecked the
+  layout; the plain selectors parse and the sheet reaches its last block again.
+- tools/check-theme.mjs now fails on unbalanced braces or a missing tail so a
+  dropped-tail sheet cannot pass the self-check again.
