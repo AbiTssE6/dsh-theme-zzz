@@ -1454,3 +1454,17 @@ one and
 - Found by reading which tokens the host's floating components consume; the annotation picker
   cannot hold a hover-only popup open long enough to click it, so the token graph is the reliable
   route for these.
+
+### tooltips were card-shaped because the card rule reached inside them (2026-11-22, local only)
+
+- The tooltip container took the glass recipe, but the bubble inside it matched the card
+  inventory ([class*="_bubble"]) and drew the 9.75px frame, the halftone and the 3px black ring -
+  so every tooltip ("视图选项", "添加工作区 Ctrl+Alt+O", "更多会话视图") looked like a chip, not
+  like glass.
+- The flatten rule also only covered direct children ([role="tooltip"] > *), and the bubble sits
+  one level deeper. It flattens the whole subtree now; the key-chip and label rules still follow
+  it, so keyboard hints keep their own pill.
+- The card inventory and its radius twin exclude [role="tooltip"] * outright, which is the real
+  fix: a tooltip is a tooltip, not a card that happens to be nested.
+- Verified live with dsh-doyourweb: hovering "添加工作区" now shows a translucent, blurred pill
+  with no frame, no dots and no ring.
