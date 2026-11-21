@@ -1276,3 +1276,16 @@ one and
   opacity 0.45 on the disabled one). The hover rules now read --zzz-key-fill(-hover) and
   --zzz-key-fg(-dim/-hover), which resolve to the values they used to hard-code (#0b0b0b,
   #fcdd00, #dcdcdc, #101010).
+
+### button unification, step 2.2: Primary reads the key tokens (2026-11-21, local only)
+
+- The confirm-key recipe now references the key layer instead of restating paint:
+  --zzz-key-fill / -fg / -stroke / -shadow at rest, -fill-hover / -fg-hover / -stroke-hover /
+  -shadow-hover / -sheen-hover when the plate turns yellow, and -fill-disabled / -fg-disabled for
+  the inert state. Geometry moved to --zzz-key-h and --zzz-key-pad.
+- Three new tokens carry the two shadows and the hover sheen, so the recipe has no raw colour
+  left except the 1px black keyline, which is the token's value anyway.
+- Proof: the same settings-row mock rendered from HEAD and from the working tree gives identical
+  computed styles in all four states (rest, forced :hover, forced :focus-visible, :disabled) and
+  byte-identical screenshots (sha256 A9CDA03E...). Yellow-on-black, dark-with-white-label and the
+  muted disabled plate all unchanged.

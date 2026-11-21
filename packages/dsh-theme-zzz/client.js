@@ -382,6 +382,10 @@ html[${MARKER}] body{
   --zzz-key-stroke-soft:var(--dsw-alias-border-l1);
   --zzz-key-stroke-hover:#000;
   --zzz-key-danger:var(--zzz-red);
+  /* key shadows: one notch at rest, keyline + bevel when the plate turns yellow */
+  --zzz-key-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+  --zzz-key-shadow-hover:inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 2px #000;
+  --zzz-key-sheen-hover:linear-gradient(180deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,0) 52%);
 }
 
 /* ---- fonts: display for chrome, body for reading ----
@@ -1709,18 +1713,18 @@ html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
 html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
 html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *){
-  background-color:var(--zzz-disc) !important;
+  background-color:var(--zzz-key-fill) !important;
   background-image:none !important;
-  color:var(--dsw-alias-label-primary) !important;
-  border:1px solid var(--dsw-alias-border-l2) !important;
+  color:var(--zzz-key-fg) !important;
+  border:1px solid var(--zzz-key-stroke) !important;
   border-radius:var(--zzz-ctl-radius) !important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.06) !important;
-  -webkit-text-fill-color:var(--dsw-alias-label-primary);
+  box-shadow:var(--zzz-key-shadow) !important;
+  -webkit-text-fill-color:var(--zzz-key-fg);
   text-shadow:none;
   text-decoration:none;
-  height:36px;
-  min-height:36px;
-  padding:0 14px;
+  height:var(--zzz-key-h);
+  min-height:var(--zzz-key-h);
+  padding:var(--zzz-key-pad);
   font-size:14px;
   font-weight:500;
   line-height:1;
@@ -1734,21 +1738,21 @@ html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
 html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
 html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible{
-  background-color:var(--zzz-yellow) !important;
-  background-image:linear-gradient(180deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,0) 52%) !important;
-  color:var(--dsw-alias-label-inverse) !important;
-  -webkit-text-fill-color:var(--dsw-alias-label-inverse) !important;
-  border-color:#000 !important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 2px #000 !important;
+  background-color:var(--zzz-key-fill-hover) !important;
+  background-image:var(--zzz-key-sheen-hover) !important;
+  color:var(--zzz-key-fg-hover) !important;
+  -webkit-text-fill-color:var(--zzz-key-fg-hover) !important;
+  border-color:var(--zzz-key-stroke-hover) !important;
+  box-shadow:var(--zzz-key-shadow-hover) !important;
   filter:none;
 }
 html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):disabled,
 html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):disabled,
 html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):disabled,
 html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):disabled{
-  background-color:var(--zzz-chip) !important;
-  color:var(--zzz-fg-faint) !important;
-  border-color:var(--dsw-alias-border-l2) !important;
+  background-color:var(--zzz-key-fill-disabled) !important;
+  color:var(--zzz-key-fg-disabled) !important;
+  border-color:var(--zzz-key-stroke) !important;
   box-shadow:none !important;
   cursor:not-allowed;
 }
