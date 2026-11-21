@@ -1263,3 +1263,16 @@ one and
   produced byte-identical screenshots (sha256 D94F4B7B...), identical computed styles for all
   four buttons, and the same rule count (251). The only measurable difference is that
   --zzz-key-fill now resolves to #0b0b0b instead of the empty string.
+
+### button unification, step 2.1: IconDisc reads the key tokens (2026-11-21, local only)
+
+- The 1rv3m_ disc recipe now states its surface, label, hover fill and hover label through the
+  key tokens instead of the palette aliases; the two hover behaviours are documented in place as
+  deliberate (big key = haze lift, small icon key = plate flip).
+- The duplicated ":_sm_:hover svg" and ":_sm_:hover *" rules are one rule now, so one fewer
+  declaration block to keep in sync.
+- Rest state is byte-identical to HEAD: same screenshot hash (6B90398B8CF6DAC5) and identical
+  computed values for all three sampled discs (rgb(11,11,11) / rgb(220,220,220) / 8px / 0px, and
+  opacity 0.45 on the disabled one). The hover rules now read --zzz-key-fill(-hover) and
+  --zzz-key-fg(-dim/-hover), which resolve to the values they used to hard-code (#0b0b0b,
+  #fcdd00, #dcdcdc, #101010).

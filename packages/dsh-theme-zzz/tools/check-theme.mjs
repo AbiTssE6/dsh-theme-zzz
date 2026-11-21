@@ -26,10 +26,10 @@ import path from 'node:path'
 // 2026-11-05: +3 for the settings section title (display face, weight 900, no synthesis).
 // 2026-11-05: +3 for the bold settings sidebar cells (display face, 800, no synthesis).
 // 2026-11-05: +3 for the nav label span inside those cells.
-// 2026-11-21: +10 for the primary action key recipe (dark key at rest, yellow
-//           plate on hover/focus) that panel/dialog/plugin confirm buttons share.
+// 2026-11-21: the IconDisc hover rules merged into one block, so the ratchet moves down.
+//            (kept the date line above for the step that raised it.)
 const BASELINE = {
-  important: 666,
+  important: 665,
   // 2026-11-08: +4 for the black-on-yellow rules (component :not() chains outranked them).
   idHacks: 13,
 }

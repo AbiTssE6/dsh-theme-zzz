@@ -713,43 +713,42 @@ html[${MARKER}] [class*="toBottomSlot"]::after {
    the other cards have; the stray rule above it came from the toBottom slot,
    which is handled separately */
 html[${MARKER}] button[class*="_newSession"]{border-radius:999px !important}
-/* one style for the host's design-system buttons: same surface, same ring,
-   same radius. The composer's send/stop disc is a different component. */
+/* ---- IconDisc: the design-system disc keys ----
+   One recipe for every button the host builds from 1rv3m_ - same surface, same ring,
+   same radius; the composer's send/stop disc keeps its own block. The values are the
+   key-token layer, so changing what a disc looks like is one edit there.
+   Two hover behaviours on purpose: a big key lifts by haze, a small icon key flips to
+   the plate (the workspace header trio and the row actions live on that rule). */
 html[${MARKER}] button[class*="1rv3m_"]:not([class*="_tabHost_ "] *):not([data-sidebar-right-guide-entry] *){
-  background:var(--zzz-disc) !important;
+  background:var(--zzz-key-fill) !important;
   background-image:none !important;
-  color:var(--zzz-fg-button) !important;
+  color:var(--zzz-key-fg-dim) !important;
   border:0 !important;
   border-radius:var(--zzz-ctl-radius) !important;
   box-shadow:none !important;
 }
 html[${MARKER}] button[class*="1rv3m_"]:hover{
-  background-color:var(--zzz-disc) !important;
+  background-color:var(--zzz-key-fill) !important;
   background-image:linear-gradient(var(--zzz-hl),var(--zzz-hl)) !important;
 }
-/* small icon buttons flip to the yellow plate on hover, like the workspace
-   header trio; large cards keep the subtle fill */
 html[${MARKER}] button[class*="1rv3m_"][class*="_sm_"]:hover,
 html[${MARKER}] button[class*="_sm_"][class*="1rv3m_"]:hover{
   /* flat, animatable fill: a background-image gradient cannot transition, so the yellow
      used to vanish in one frame while the icon colour was still fading - the icon
      momentarily sat dark-on-dark and looked like it disappeared */
-  background-color:var(--zzz-yellow) !important;
+  background-color:var(--zzz-key-fill-hover) !important;
   background-image:none !important;
-  /* the label may be a bare text node, so the colour must come from the button
-     itself - children inherit it */
-  color:var(--dsw-alias-label-inverse) !important;
+  /* the label may be a bare text node, so the colour must come from the button itself */
+  color:var(--zzz-key-fg-hover) !important;
 }
 html[${MARKER}] button[class*="1rv3m_"][class*="_sm_"]:hover svg,
-html[${MARKER}] button[class*="_sm_"][class*="1rv3m_"]:hover svg{
-  color:var(--dsw-alias-label-inverse) !important;
-}
+html[${MARKER}] button[class*="_sm_"][class*="1rv3m_"]:hover svg,
 html[${MARKER}] button[class*="1rv3m_"][class*="_sm_"]:hover *,
 html[${MARKER}] button[class*="_sm_"][class*="1rv3m_"]:hover *{
-  color:var(--dsw-alias-label-inverse) !important;
+  color:var(--zzz-key-fg-hover) !important;
 }
 html[${MARKER}] button[class*="1rv3m_"] svg{
-  color:var(--zzz-fg-button) !important;
+  color:var(--zzz-key-fg-dim) !important;
   /* follow the colour instead of pinning one value: the three-dot glyph is a stroked
      path, and a fixed stroke kept it light when :hover turned the disc yellow or when a
      selected yellow row forced the button colour to black */
@@ -760,8 +759,7 @@ html[${MARKER}] button[class*="1rv3m_"] svg{
 html[${MARKER}] button[class*="1rv3m_"]{
   transition:background-color .15s ease;
 }
-/* the glyph must not fade: only the fill animates, so un-hovering can never leave a dark
-   icon on a disc that has already returned to black */
+/* the glyph must not fade: only the fill animates */
 html[${MARKER}] button[class*="1rv3m_"] svg,
 html[${MARKER}] button[class*="1rv3m_"] svg *{
   transition:none;
