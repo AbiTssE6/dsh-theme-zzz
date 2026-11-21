@@ -357,6 +357,31 @@ html[${MARKER}] body{
   --zzz-glow-soft:rgba(5,187,255,.28);
   --zzz-glow-mid:rgba(5,187,255,.45);
   --zzz-glow-cyan:rgba(41,180,255,.45);
+  /* ---- button key layer (step 1: declared, not yet referenced) ----
+     Every button in the UI is one of five roles: primary confirm, secondary
+     dismiss, ghost tool, icon disc, danger. The rules still spell their values
+     out; this layer only names them so the role recipes can be switched over
+     one role at a time without touching the palette. Shape: square keys use
+     --zzz-ctl-radius (8px), discs and segmented pills use --zzz-pill. */
+  --zzz-pill:999px;
+  --zzz-key-h:36px;                       /* confirm / dismiss */
+  --zzz-key-h-sm:28px;                    /* ghost / icon disc */
+  --zzz-key-h-lg:34px;                    /* composer disc */
+  --zzz-key-pad:0 14px;
+  --zzz-key-pad-sm:0 10px;
+  --zzz-key-gap:4px;
+  --zzz-key-fill:var(--zzz-disc);         /* rest: dark plate */
+  --zzz-key-fill-hover:var(--zzz-yellow); /* hover: the yellow language */
+  --zzz-key-fill-quiet:var(--dsw-alias-bg-layer-1);
+  --zzz-key-fill-disabled:var(--zzz-chip);
+  --zzz-key-fg:var(--dsw-alias-label-primary);
+  --zzz-key-fg-hover:var(--dsw-alias-label-inverse);
+  --zzz-key-fg-dim:var(--zzz-fg-button);
+  --zzz-key-fg-disabled:var(--zzz-fg-faint);
+  --zzz-key-stroke:var(--dsw-alias-border-l2);
+  --zzz-key-stroke-soft:var(--dsw-alias-border-l1);
+  --zzz-key-stroke-hover:#000;
+  --zzz-key-danger:var(--zzz-red);
 }
 
 /* ---- fonts: display for chrome, body for reading ----

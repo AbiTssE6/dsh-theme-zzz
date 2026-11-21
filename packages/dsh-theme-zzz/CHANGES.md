@@ -1252,3 +1252,14 @@ one and
   8px, 1px border; disabled rgb(43,43,43) / rgb(125,125,125); hover rule paints
   var(--zzz-yellow) + var(--dsw-alias-label-inverse). Full sheet parses to its last block (253
   rules), so the dropped-tail guard stays green.
+
+### button unification, step 1: the key token layer (2026-11-21, local only)
+
+- Added the role tokens the next steps will switch to, and nothing else: radius scale
+  (--zzz-ctl-radius for square keys, --zzz-pill for discs), heights (36 / 28 / 34), padding,
+  and one fill/label/stroke triple per state. No rule references them yet.
+- Proof that step 1 is visual-neutral: the same mock page (dialog row, primary key, secondary
+  key, icon disc, unclassed button, plugin key) rendered from HEAD and from the working tree
+  produced byte-identical screenshots (sha256 D94F4B7B...), identical computed styles for all
+  four buttons, and the same rule count (251). The only measurable difference is that
+  --zzz-key-fill now resolves to #0b0b0b instead of the empty string.
