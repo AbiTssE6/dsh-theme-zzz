@@ -26,10 +26,10 @@ import path from 'node:path'
 // 2026-11-05: +3 for the settings section title (display face, weight 900, no synthesis).
 // 2026-11-05: +3 for the bold settings sidebar cells (display face, 800, no synthesis).
 // 2026-11-05: +3 for the nav label span inside those cells.
-// 2026-11-21: +10 for the primary action key recipe (yellow plate, black label,
-// 8px radius) that the panel/dialog/plugin confirm buttons share.
+// 2026-11-21: +10 for the primary action key recipe (dark key at rest, yellow
+//           plate on hover/focus) that panel/dialog/plugin confirm buttons share.
 const BASELINE = {
-  important: 659,
+  important: 666,
   // 2026-11-08: +4 for the black-on-yellow rules (component :not() chains outranked them).
   idHacks: 13,
 }

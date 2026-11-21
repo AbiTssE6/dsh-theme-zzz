@@ -1672,63 +1672,67 @@ html[${MARKER}] [data-composer-card="true"] button[class*="_primary"] svg{
 }
 
 /* ---- C1 class: primary action key in panels, dialogs and plugin settings ----
-   One recipe for every "confirm" button that is not the composer disc:
-   yellow plate, black label, 8px radius (--zzz-ctl-radius), 36px tall.
-   Matching is by class substring, both spellings in the wild (primaryButton and
-   _primary_), one selector per surface so nothing relies on :is()/complex :not()
-   support; the design-system ghost discs are excluded and a plugin may opt out
-   with data-zzz-plain. Only the paint needs !important - the geometry here
-   matches what those components already declare. */
-html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]),
-html[${MARKER}] [role="dialog"] button[class*="Primary"]:not([class*="1rv3m_"]),
-html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]),
-html[${MARKER}] [data-shortcut-modal="settings"] button[class*="Primary"]:not([class*="1rv3m_"]),
-html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]),
-html[${MARKER}] [data-dsh-plugin] button[class*="Primary"]:not([class*="1rv3m_"]),
-html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]){
-  background-color:var(--zzz-yellow) !important;
-  background-image:linear-gradient(180deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,0) 52%) !important;
-  color:var(--dsw-alias-label-inverse) !important;
-  border:1px solid #000 !important;
+   The confirm key reads as an ordinary surface key at rest - dark plate, light
+   label - and flips to the yellow plate with black type on hover, the same
+   language as the nav cells, the tabs and the composer discs. It is not
+   permanently yellow: a yellow plate means "you are here / you are on it".
+   Matching is by class substring so both spellings in the wild
+   (primaryButton, _primary_) hit; the design-system ghost discs and the
+   composer keep their own recipes above, and a plugin can opt out with
+   data-zzz-plain on the button.
+   Only the paint needs !important: geometry and type already match what the
+   components declare, so they ride along at normal priority. */
+html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]),
+html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *){
+  background-color:var(--zzz-disc) !important;
+  background-image:none !important;
+  color:var(--dsw-alias-label-primary) !important;
+  border:1px solid var(--dsw-alias-border-l2) !important;
   border-radius:var(--zzz-ctl-radius) !important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 2px #000 !important;
-  -webkit-text-fill-color:var(--dsw-alias-label-inverse);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06) !important;
+  -webkit-text-fill-color:var(--dsw-alias-label-primary);
   text-shadow:none;
   text-decoration:none;
   height:36px;
   min-height:36px;
   padding:0 14px;
   font-size:14px;
-  font-weight:600;
+  font-weight:500;
   line-height:1;
+  opacity:1;
 }
-html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
-html[${MARKER}] [role="dialog"] button[class*="Primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
-html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
-html[${MARKER}] [data-shortcut-modal="settings"] button[class*="Primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
-html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
-html[${MARKER}] [data-dsh-plugin] button[class*="Primary"]:not([class*="1rv3m_"]):hover:not(:disabled),
-html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):hover:not(:disabled){
-  background-color:var(--zzz-yellow-hover) !important;
+html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):hover:not(:disabled),
+html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
+html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
+html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):focus-visible,
+html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible{
+  background-color:var(--zzz-yellow) !important;
+  background-image:linear-gradient(180deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,0) 52%) !important;
+  color:var(--dsw-alias-label-inverse) !important;
+  -webkit-text-fill-color:var(--dsw-alias-label-inverse) !important;
+  border-color:#000 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 2px #000 !important;
+  filter:none;
 }
-html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):disabled,
-html[${MARKER}] [role="dialog"] button[class*="Primary"]:not([class*="1rv3m_"]):disabled,
-html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):disabled,
-html[${MARKER}] [data-shortcut-modal="settings"] button[class*="Primary"]:not([class*="1rv3m_"]):disabled,
-html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):disabled,
-html[${MARKER}] [data-dsh-plugin] button[class*="Primary"]:not([class*="1rv3m_"]):disabled,
-html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):disabled{
-  background-color:var(--zzz-yellow-dim) !important;
-  color:var(--zzz-fg-panel) !important;
+html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):disabled,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):disabled,
+html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):disabled,
+html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):disabled{
+  background-color:var(--zzz-chip) !important;
+  color:var(--zzz-fg-faint) !important;
+  border-color:var(--dsw-alias-border-l2) !important;
+  box-shadow:none !important;
   cursor:not-allowed;
 }
-html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]) *,
-html[${MARKER}] [role="dialog"] button[class*="Primary"]:not([class*="1rv3m_"]) *,
-html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]) *,
-html[${MARKER}] [data-shortcut-modal="settings"] button[class*="Primary"]:not([class*="1rv3m_"]) *,
-html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]) *,
-html[${MARKER}] [data-dsh-plugin] button[class*="Primary"]:not([class*="1rv3m_"]) *,
-html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]) *{
+html[${MARKER}] [role="dialog"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]) *,
+html[${MARKER}] [data-shortcut-modal="settings"] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]) *,
+html[${MARKER}] [data-dsh-plugin] button[class*="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]) *,
+html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *) *{
   color:inherit !important;
 }
 

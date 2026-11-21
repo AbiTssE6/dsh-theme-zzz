@@ -1236,3 +1236,19 @@ one and
   layout; the plain selectors parse and the sheet reaches its last block again.
 - tools/check-theme.mjs now fails on unbalanced braces or a missing tail so a
   dropped-tail sheet cannot pass the self-check again.
+
+### primary keys rest dark, yellow is the hover language (2026-11-21, local only)
+
+- Confirmed against the baseline snapshot: the theme never styled panel confirm buttons. Only the
+  composer _primary disc had a recipe; the token trio (dimmed/hover/foreground) existed but
+  --dsw-alias-button-primary-fill was never declared, so a component reading it painted nothing.
+- Corrected the state model to match the rest of the theme: the key rests as a dark plate
+  (--zzz-disc, #0b0b0b) with the light label (--dsw-alias-label-primary) and a 1px
+  --dsw-alias-border-l2 keyline, and flips to the yellow plate with black type on hover/focus.
+  A permanent yellow plate is reserved for "selected / you are on it".
+- Disabled reads as --zzz-chip with --zzz-fg-faint; children inherit the label so icon+text keys
+  stay in one colour.
+- Measured in the mock with the settings-models CSS: rest rgb(11,11,11) / rgb(247,247,247), radius
+  8px, 1px border; disabled rgb(43,43,43) / rgb(125,125,125); hover rule paints
+  var(--zzz-yellow) + var(--dsw-alias-label-inverse). Full sheet parses to its last block (253
+  rules), so the dropped-tail guard stays green.
