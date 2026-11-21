@@ -104,7 +104,10 @@ const CASES = [
 // looking like solid plates while still declaring a backdrop-filter). Assert both: the
 // fill keeps some transparency, and the blur is actually present.
 const FLOATS = [
-  ['tooltip', '<div role="tooltip">提示</div>'],
+  // the real DOM puts role=tooltip ON the element that also carries a _bubble_ class,
+  // and that is what let the card recipe claim it (measured live: border 9.6px,
+  // radius 16, fill #282828 on the "view options" tooltip).
+  ['tooltip', '<div class="_bubble_44yfq_1" role="tooltip">提示</div>'],
   ['menu', '<div role="menu"><div>菜单项</div></div>'],
   ['listbox', '<div role="listbox"><div>选项</div></div>'],
   ['team panel', '<div data-team-panel="true"><div>成员</div></div>'],
@@ -112,8 +115,6 @@ const FLOATS = [
   ['preview card', '<div class="_card_38jqx_9" role="button">预览</div>'],
 ]
 
-// :hover cannot be driven in a headless dump, so the same rules are mirrored with a
-// class of identical specificity (a class and a pseudo-class weigh the same).
 const forced = css
   .replace(/:hover/g, '.zzz-h')
   .replace(/:focus-visible/g, '.zzz-f')

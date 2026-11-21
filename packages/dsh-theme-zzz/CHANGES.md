@@ -1481,3 +1481,17 @@ one and
   backing is rgb(19,19,19), with the rule it is transparent.
 - Note for the record: the tooltip is primitives' Tooltip (label + delayMs 500 + portal), not a
   native title tooltip - the host source shows it wrapped around the workspace header buttons.
+
+### the tooltip itself was a card, not its parent (2026-11-22, local only)
+
+- Live measurement from the app (MutationObserver on the real tooltip): the element is
+  class="_bubble_44yfq_1" role="tooltip" with background rgb(40,40,40), border 9.6px and
+  radius 16px - i.e. the card recipe, while a backdrop-filter of 14px was already there.
+- The previous fix excluded only [role="tooltip"] * (descendants), but this build puts
+  role=tooltip ON the bubble itself, so the card rule still matched it and outranked the
+  tooltip rule. Both the card inventory and its radius twin now exclude [role="tooltip"]
+  as well, so the tooltip rule finally wins.
+- tools/check-paint.mjs now mirrors the real DOM for the tooltip case (role on the bubble
+  with a _bubble_ class). That is the harness gap that let this survive two rounds: the mock
+  had the role on a wrapper, so the descendant exclusion looked sufficient.
+- Measured after the fix: tooltip rgba(16,16,16,.58) + blur(14px), radius 10, border 0.
