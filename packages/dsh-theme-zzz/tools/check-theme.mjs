@@ -28,8 +28,12 @@ import path from 'node:path'
 // 2026-11-05: +3 for the nav label span inside those cells.
 // 2026-11-21: the IconDisc hover rules merged into one block, so the ratchet moves down.
 //            (kept the date line above for the step that raised it.)
+// 2026-11-21: +13 for the named key families (danger icon keys and the yellow
+// confirm hover). Every one of them is an override of an existing !important rule:
+// the neutral icon-key paint and the design-system haze. The text families
+// (primaryButton / dangerButton) needed none and carry none.
 const BASELINE = {
-  important: 665,
+  important: 678,
   // 2026-11-08: +4 for the black-on-yellow rules (component :not() chains outranked them).
   idHacks: 13,
 }

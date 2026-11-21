@@ -1305,3 +1305,24 @@ one and
   buttons. Measured on the settings row: secondary rest transparent / rgb(234,234,234) / 8px /
   1px rgb(68,68,68); hover rgb(28,28,28) / rgb(247,247,247); danger rest rgb(255,97,82) label;
   hover rgb(200,24,0) plate with rgb(247,247,247); primary unchanged. Debt stays at 665.
+
+### keys: destructive fills on hover, confirm always answers in yellow (2026-11-21, local only)
+
+- Why the delete key only lit its keyline: the component ships
+  .zGbnIq_dangerButton{background:0 0;border:none} and a hover of
+  background:var(--dsw-alias-interactive-bg-hover-danger) = #f25a5a26, a 15% red wash. A rule
+  that only wins on border-color therefore leaves the plate empty, and the family names differ
+  (dangerButton vs iconButtonDanger), so a container-scoped rule can miss the icon variant.
+- Added the two families by name, container-independent: primaryButton gets dark plate +
+  light label at rest, yellow plate + black type on hover/focus, muted plate when disabled;
+  dangerButton and the *Danger icon family exist as a red keyline at rest and FILL solid
+  --zzz-red with white type on hover/focus. The *Danger rules carry !important because the
+  neutral icon-key paint uses it; the text families needed none and carry none.
+- Confirm keys no longer mix in the neutral haze: any 1rv3m_ key whose class says primary /
+  submit / confirm / save turns yellow with black type, while neutral discs keep their quiet
+  lift. That override needs !important to beat the design-system haze.
+- Measured with :hover rewritten to a class (identical specificity): primary rest
+  rgb(11,11,11)/rgb(247,247,247) -> hover rgb(252,221,0)/rgb(16,16,16); danger rest
+  transparent/rgb(255,97,82) -> hover rgb(200,24,0)/rgb(247,247,247); icon-danger same pair;
+  neutral disc unchanged at rest. Debt 665 -> 678, all 13 of the additions overriding an
+  existing !important.

@@ -1835,6 +1835,102 @@ html[${MARKER}] button[data-variant="danger"]:not([class*="1rv3m_"]):not([data-z
   border-color:var(--zzz-key-danger);
 }
 
+/* ---- C1b class: keys named by the component, wherever they render ----
+   The panels above cover keys inside a dialog / settings modal / plugin surface.
+   These two families are named by the components themselves, so they get their own
+   coverage: a confirm key reads dark-with-light-label at rest and yellow-with-black
+   type when pointed at, and a destructive key FILLS solid red instead of just
+   brightening its keyline. Importance appears only where a competing !important
+   exists (noted per block); everywhere else the attribute chain already wins. */
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *){
+  background-color:var(--zzz-key-fill);
+  background-image:none;
+  color:var(--zzz-key-fg);
+  -webkit-text-fill-color:var(--zzz-key-fg);
+  border:1px solid var(--zzz-key-stroke);
+  border-radius:var(--zzz-ctl-radius);
+  box-shadow:var(--zzz-key-shadow);
+  text-shadow:none;
+  height:var(--zzz-key-h);
+  min-height:var(--zzz-key-h);
+  padding:var(--zzz-key-pad);
+  font-size:14px;
+  font-weight:500;
+  line-height:1;
+}
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible{
+  background-color:var(--zzz-key-fill-hover);
+  background-image:none;
+  color:var(--zzz-key-fg-hover);
+  -webkit-text-fill-color:var(--zzz-key-fg-hover);
+  border-color:var(--zzz-key-stroke-hover);
+}
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]) *{
+  color:inherit;
+}
+html[${MARKER}] button[class*="primaryButton"]:not([class*="1rv3m_"]):disabled{
+  background-color:var(--zzz-key-fill-disabled);
+  color:var(--zzz-key-fg-disabled);
+  -webkit-text-fill-color:var(--zzz-key-fg-disabled);
+  border-color:var(--zzz-key-stroke);
+  box-shadow:none;
+}
+
+/* destructive key, text family (dangerButton): nothing else paints it */
+html[${MARKER}] button[class*="dangerButton"]:not([data-zzz-plain]):not([data-composer-card="true"] *){
+  background-color:var(--zzz-key-fill-ghost);
+  background-image:none;
+  color:var(--zzz-key-fg-danger);
+  -webkit-text-fill-color:var(--zzz-key-fg-danger);
+  border:1px solid var(--zzz-key-fg-danger);
+  border-radius:var(--zzz-ctl-radius);
+  box-shadow:none;
+  text-shadow:none;
+}
+html[${MARKER}] button[class*="dangerButton"]:not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
+html[${MARKER}] button[class*="dangerButton"]:not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible{
+  background-color:var(--zzz-key-danger);
+  background-image:none;
+  color:var(--zzz-key-fg-danger-hover);
+  -webkit-text-fill-color:var(--zzz-key-fg-danger-hover);
+  border-color:var(--zzz-key-danger);
+}
+
+/* destructive key, icon family (…Danger, e.g. iconButtonDanger): the neutral icon-key
+   rule paints this family with !important, so the override has to match its weight */
+html[${MARKER}] button[class*="Danger"]:not([data-zzz-plain]):not([data-composer-card="true"] *){
+  background-color:var(--zzz-key-fill-ghost) !important;
+  background-image:none !important;
+  color:var(--zzz-key-fg-danger) !important;
+  border:1px solid var(--zzz-key-fg-danger) !important;
+  border-radius:var(--zzz-ctl-radius);
+  box-shadow:none !important;
+}
+html[${MARKER}] button[class*="Danger"]:not([data-zzz-plain]):not([data-composer-card="true"] *):hover:not(:disabled),
+html[${MARKER}] button[class*="Danger"]:not([data-zzz-plain]):not([data-composer-card="true"] *):focus-visible{
+  background-color:var(--zzz-key-danger) !important;
+  background-image:none !important;
+  color:var(--zzz-key-fg-danger-hover) !important;
+  border-color:var(--zzz-key-danger) !important;
+}
+
+/* ---- C4 class: a confirm key never answers with the neutral haze ----
+   Every family that means "commit this" lights up YELLOW with black type. The white
+   haze stays on the neutral families - icon discs and tool keys - because it says
+   "pointing at a tool", not "this will save". Importance is required here: the
+   design-system base hover paints that haze with !important. */
+html[${MARKER}] button[class*="1rv3m_"][class*="primary"]:hover:not(:disabled),
+html[${MARKER}] button[class*="1rv3m_"][class*="Primary"]:hover:not(:disabled),
+html[${MARKER}] button[class*="1rv3m_"][class*="submit"]:hover:not(:disabled),
+html[${MARKER}] button[class*="1rv3m_"][class*="confirm"]:hover:not(:disabled),
+html[${MARKER}] button[class*="1rv3m_"][class*="save"]:hover:not(:disabled){
+  background-color:var(--zzz-key-fill-hover) !important;
+  background-image:none !important;
+  color:var(--zzz-key-fg-hover) !important;
+  border-color:var(--zzz-key-stroke-hover) !important;
+}
+
 /* ---- B2 class: read-only info pills, deliberately flat ---- */
 html[${MARKER}] [data-composer-stat] button{
   background:var(--zzz-chip) !important;
