@@ -794,7 +794,7 @@ html[${MARKER}] button[class*="1rv3m_"][aria-disabled="true"]{
 
 /* other button-ish components (shortcut editor, number stepper) default to #353638;
    bring them onto the same near-black surface */
-html[${MARKER}] button[class*="_button"]:not([class*="1rv3m_"]):not([class*="ypSjoa_"]):not([data-dsh-plugin]):not([data-dsh-plugin] *):not(:has([data-dsh-plugin])):not([class*="_tabHost_"] *),
+html[${MARKER}] button[class*="_button"]:not([class*="1rv3m_"]):not([class*="ypSjoa_"]):not([data-dsh-plugin]):not([data-dsh-plugin] *):not(:has([data-dsh-plugin])):not([class*="_tabHost_"] *):not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="add"]),
 html[${MARKER}] [class*="_stepper"],
 html[${MARKER}] [class*="_stepper"] *{
   background:var(--zzz-disc) !important;
@@ -805,7 +805,7 @@ html[${MARKER}] [class*="_stepper"] *{
   box-shadow:none !important;
 }
 html[${MARKER}] button[class*="_toggle"],
-html[${MARKER}] button[class*="_button"]:not([class*="1rv3m_"]):not([class*="ypSjoa_"]):not([data-dsh-plugin]):not([data-dsh-plugin] *):not(:has([data-dsh-plugin])):not([class*="_tabHost_"] *):hover,
+html[${MARKER}] button[class*="_button"]:not([class*="1rv3m_"]):not([class*="ypSjoa_"]):not([data-dsh-plugin]):not([data-dsh-plugin] *):not(:has([data-dsh-plugin])):not([class*="_tabHost_"] *):not([class*="primary"]):not([class*="Primary"]):not([class*="secondary"]):not([class*="Secondary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="add"]):hover,
 html[${MARKER}] [class*="_stepper"]:hover{
   background:var(--zzz-well) !important;
 }
@@ -1751,7 +1751,7 @@ html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-
   border:1px solid var(--zzz-key-stroke);
   border-radius:var(--zzz-ctl-radius);
   box-shadow:var(--zzz-key-shadow);
-  -webkit-text-fill-color:var(--zzz-key-fg);
+  -webkit-text-fill-color:currentColor;
   text-shadow:none;
   text-decoration:none;
   height:var(--zzz-key-h);
@@ -1775,7 +1775,7 @@ html[${MARKER}] button[data-variant="primary"]:not([class*="1rv3m_"]):not([data-
   background-color:var(--zzz-key-fill-hover);
   background-image:var(--zzz-key-sheen-hover);
   color:var(--zzz-key-fg-hover);
-  -webkit-text-fill-color:var(--zzz-key-fg-hover);
+  -webkit-text-fill-color:currentColor;
   border-color:var(--zzz-key-stroke-hover);
   box-shadow:var(--zzz-key-shadow-hover);
   filter:none;
@@ -2476,9 +2476,12 @@ html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard){
   /* colour needs the important: the host ships color: … !important in places */
   color:var(--dsw-alias-label-inverse) !important;
 }
-html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) *,
-html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg,
-html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg *{
+/* buttons are excluded on purpose: a key declares its own label colour for every state
+   (dark plate + light label, yellow plate + black label), and forcing black through the
+   subtree left dark keys with black text on their own dark plate. */
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) *:not(button):not(button *),
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg:not(button *),
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg:not(button *) *{
   /* colour only. fill/stroke are NOT forced: outline icons (fill="none") would be
      painted solid, and fill-only icons would grow an outline. Icons whose paint is
      hard-coded white are rewritten to currentColor by the tagging effect instead. */

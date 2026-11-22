@@ -87,6 +87,12 @@ const CASES = [
   ['dialog', 'zGbnIq_iconButtonDanger zzz-h', 'hover', { bg: RED, fg: LABEL }],
   ['dialog', 'zGbnIq_addButton', 'rest', { bg: 'rgba(0, 0, 0, 0)', fg: P(234, 234, 234), radius: '8px' }],
   ['dialog', 'zGbnIq_addButton zzz-h', 'hover', { bg: YELLOW, fg: ONYELLOW }],
+  // the design-system confirm key: class carries both _button_ and _primary_, which the
+  // generic _button recipe used to claim (dark plate + black text on hover)
+  ['dialog', 'X_button_1ulci_2 X_primary_1ulci_36 X_md_1ulci_23 X_confirmAction_cjd8z_71', 'rest',
+    { bg: INK, fg: LABEL, fill: LABEL }],
+  ['dialog', 'X_button_1ulci_2 X_primary_1ulci_36 X_md_1ulci_23 X_confirmAction_cjd8z_71 zzz-h', 'hover',
+    { bg: YELLOW, fg: ONYELLOW, fill: ONYELLOW }],
   ['dialog', 'X_button_1rv3m_2 X_sm_1rv3m_28', 'rest', { bg: INK, fg: DIMLABEL }],
   ['dialog', 'X_button_1rv3m_2 X_sm_1rv3m_28 zzz-h', 'hover', { bg: YELLOW, fg: ONYELLOW }],
   // the surface the editor lives on: a settings row tagged as glass
@@ -150,7 +156,7 @@ for (const row of window.__rows) {
     cls: row.cls,
     label: row.label,
     expect: row.expect,
-    got: { bg: cs.backgroundColor, fg: cs.color, radius: cs.borderRadius },
+    got: { bg: cs.backgroundColor, fg: cs.color, radius: cs.borderRadius, fill: cs.webkitTextFillColor },
   })
 }
 document.documentElement.setAttribute('data-out', JSON.stringify(out))
@@ -239,7 +245,7 @@ for (const r of results) {
   if (r.error) {
     bad = true
   } else {
-    for (const k of ['bg', 'fg', 'radius']) {
+    for (const k of ['bg', 'fg', 'fill', 'radius']) {
       if (r.expect[k] !== undefined && got[k] !== r.expect[k]) bad = true
     }
   }
@@ -248,7 +254,7 @@ for (const r of results) {
     const want = Object.entries(r.expect)
       .map(([k, v]) => `${k}=${v}`)
       .join(', ')
-    problems.push(`${r.surface}/${r.cls}/${r.label} -> got bg=${got.bg} fg=${got.fg} radius=${got.radius}; want ${want}`)
+    problems.push(`${r.surface}/${r.cls}/${r.label} -> got bg=${got.bg} fg=${got.fg} fill=${got.fill} radius=${got.radius}; want ${want}`)
   }
 }
 
