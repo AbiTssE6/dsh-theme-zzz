@@ -1508,3 +1508,16 @@ one and
   itself, preview card inside a span portal) and probes the semantic node. That closed the
   last fidelity gap in the harness: it reproduced this exact miss before the fix
   (preview card transparent, no blur) and passes after (rgba(16,16,16,.55) + blur 14).
+
+### tagging no longer repaints key labels (2026-11-22, local only)
+
+- Report: the "启用自动审查" key in the permission-presets popup shows a white label at rest and
+  turns black on hover. Its measured hover paint was background rgb(26,26,26) (our --zzz-well)
+  with color rgb(16,16,16) - a dark plate carrying black type, which is the signature of the
+  black-on-yellow tag landing on an ancestor.
+- The tag's descendant rule reaches everything with id-level specificity, so it also overruled
+  the key recipes that declare their own label per state. Button subtrees are excluded from the
+  descendant forcing now; an element that is itself tagged still gets black type, which is the
+  point for a real yellow plate.
+- Verified on a mock plate tagged data-zzz-on-yellow: plain text rgb(16,16,16), 1rv3m_ disc and
+  ghost key both keep rgb(220,220,220) on their own rgb(11,11,11) plate.

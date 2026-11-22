@@ -2476,9 +2476,12 @@ html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard){
   /* colour needs the important: the host ships color: … !important in places */
   color:var(--dsw-alias-label-inverse) !important;
 }
-html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) *,
-html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg,
-html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg *{
+/* buttons are excluded on purpose: a key declares its own label colour for every state
+   (dark plate + light label, yellow plate + black label), and forcing black through the
+   subtree left dark keys with black text on their own dark plate. */
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) *:not(button):not(button *),
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg:not(button *),
+html[${MARKER}] [data-zzz-on-yellow]:not(#zzz-guard) svg:not(button *) *{
   /* colour only. fill/stroke are NOT forced: outline icons (fill="none") would be
      painted solid, and fill-only icons would grow an outline. Icons whose paint is
      hard-coded white are rewritten to currentColor by the tagging effect instead. */
