@@ -1521,3 +1521,21 @@ one and
   point for a real yellow plate.
 - Verified on a mock plate tagged data-zzz-on-yellow: plain text rgb(16,16,16), 1rv3m_ disc and
   ghost key both keep rgb(220,220,220) on their own rgb(11,11,11) plate.
+
+### the confirm key's label went black while its plate stayed dark (2026-11-22, local only)
+
+- Measured on the permission-preset popup's "启用自动审查" key, whose class is
+  _button_1ulci_2 _primary_1ulci_36 _md_1ulci_23 _confirmAction_cjd8z_71:
+  rest  color 220,220,220 / -webkit-text-fill-color 247,247,247 / bg #0b0b0b
+  hover color 220,220,220 / -webkit-text-fill-color 16,16,16  / bg #1a1a1a   <- the bug
+- Two causes stacked:
+  1) the generic button[class*="_button"] recipe (with !important) claimed the family, so the key
+     never got its yellow hover plate - it got --zzz-well instead;
+  2) the key recipe set -webkit-text-fill-color (black) without !important, so it still applied
+     while the light color won the cascade: light plate colour, black glyph.
+- Fixes: the generic _button base and hover rules exclude the primary/secondary/danger/add
+  families (one owner per role), and the key recipes use -webkit-text-fill-color:currentColor so
+  the glyph can never disagree with color.
+- After: rest color/fill 247 on #0b0b0b, hover color/fill 16,16,16 on #fcdd00 - the key now reads
+  as a confirm key. check-paint asserts the label paint too (19 cases), including this class set,
+  and would have caught the disagreement.
